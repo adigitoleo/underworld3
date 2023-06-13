@@ -8,8 +8,7 @@
 # coding: utf-8
 
 
-# # Solving the Poisson Equation in underworld 3 (Part 3)<br>
-# <br>
+# # Solving the Poisson Equation in underworld 3 (Part 3)
 # This notebook shows how to solve the non-linear Poisson equation $\nabla \cdot (k \nabla \phi) = S$ for $k$ as a function of the field $\phi$ and non-zero source term $S$ with Dirichlet boundary conditions in a 2-dimensional Cartesian domain. 
 
 # In[2]:
@@ -84,7 +83,7 @@ poisson_solver.add_dirichlet_bc(left_condition, "Left")
 poisson_solver.add_dirichlet_bc(right_condition, "Right")
 
 
-# Set the diffusivity k as a function of the scalar field phi
+# We set our diffusivity $k$ to be a function of the scalar field $\phi$. To do this, we get the symbolic repressentation of $\phi$ using sympy and construct a symbolic repressentation of the diffusivity.
 
 # In[10]:
 
@@ -93,7 +92,7 @@ k_fn = 1 + phi.sym[0] ** 2
 poisson_solver.constitutive_model.Parameters.diffusivity = k_fn
 
 
-# Introduce non-linearity by solving for multiple a values
+# Due to the non-linearity of the problem, the solve method may not converge. To remedy this, we slowly introduce non-linearity into the problem. We do this by writing the diffusivity as $k =  a + (1 - a) (1 + \phi^2)$. We solve for $a=1$, then step $a$ towards $0$, use the previous solution as an initial guess and repeat until we get to $a = 0$ where $k = 1 + \phi^2$.
 
 # In[11]:
 
