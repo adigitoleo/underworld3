@@ -163,11 +163,9 @@ with swarm.access(v_star, remeshed, X_0):
     X_0.data[...] = swarm.data[...]
 
 # -
-
 swarm.advection(v_soln.fn, 
                 delta_t=navier_stokes.estimate_dt(),
                 corrector=False)
-
 
 # +
 # check the mesh if in a notebook / serial

@@ -464,7 +464,7 @@ for step in range(0, maxsteps):
     navier_stokes.solve(timestep=dt_ns, 
                         zero_init_guess=False)
 
-    
+    ## no need for this
     with swarm.access(v_star):
         v_star.data[...] = (
             phi * v_soln.rbf_interpolate(swarm.data) 
@@ -485,6 +485,8 @@ for step in range(0, maxsteps):
 
     # update integration swarm
     swarm.advection(v_soln.fn, delta_t, corrector=False)
+
+    # 
 
     if uw.mpi.rank == 0:
         print("Timestep {}, dt {}, dt_s {} phi {}".format(ts, delta_t, delta_t_swarm, phi))
