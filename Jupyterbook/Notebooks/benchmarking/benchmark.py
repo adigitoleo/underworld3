@@ -47,7 +47,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 100                   ### maximum number of time steps to run the first model 
+nsteps = 1000                   ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-9              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -453,5 +453,9 @@ meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln
 
 plt.plot(difference[1:])
 plt.savefig("difference.png")
+plt.clf()
+plt.plot(vrmsVal)
+plt.savefig("vrms.png")
+plt.clf()
 
 print("program ended")
