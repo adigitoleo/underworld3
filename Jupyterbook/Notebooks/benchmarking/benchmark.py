@@ -47,7 +47,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 1000                   ### maximum number of time steps to run the first model 
+nsteps = 10                   ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-9              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
