@@ -66,6 +66,35 @@ infile = None
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
 
 
+def getDifference(mesh, oldVars, newVars):
+    error = 0
+    counter = 0
+    with mesh.access():
+        for vIndex in range(oldVars):
+            oldVar = oldVars[vIndex]
+            newVar = newVars[vIndex]
+
+            dimension = oldVar.data[0]
+
+            for elIndex in range(newVars):
+                
+                for dIndex in range(dimension):
+
+                    error += abs(oldVar.data[elIndex][dIndex] - newVar.data[elIndex][dIndex])
+                    counter += 1
+
+    return error/counter
+
+        
+                    
+                    
+            
+            
+
+            
+        
+
+
 if uw.mpi.rank == 0:
     os.makedirs(outdir, exist_ok = True)
 
@@ -359,6 +388,9 @@ while t_step < nsteps:
     vrmsVal[t_step] = v_rms()
     timeVal[t_step] = time
 
+    old_t_soln = copy.deepcopy(t_soln)
+    old_v_soln = copy.deepcopy(p_soln)
+
     stokes.solve(zero_init_guess=True) # originally True
 
     delta_t = 1 * stokes.estimate_dt() # originally 0.5
@@ -388,11 +420,19 @@ while t_step < nsteps:
             print("Saving checkpoint for time step: ", t_step, flush = True)
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
+    print(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln]))
+
+    if t_step > 1 and abs(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln])) < epsilon_lr:
+        if uw.mpi.rank == 0:
+            print("Stopping criterion reached ... ", flush = True)
+
+        break
+
+
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
     if t_step > 1 and abs((vrmsVal[t_step] - vrmsVal[t_step - 1])/vrmsVal[t_step - 1]) < epsilon_lr:
-
         if uw.mpi.rank == 0:
             print("Stopping criterion reached ... ", flush = True)
 
