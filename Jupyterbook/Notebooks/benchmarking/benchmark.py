@@ -419,8 +419,9 @@ while t_step < nsteps:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, flush = True)
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-
-    print(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln]))
+        
+    if uw.mpi.rank == 0:
+        print(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln]))
 
     if t_step > 1 and abs(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln])) < epsilon_lr:
         if uw.mpi.rank == 0:
@@ -432,11 +433,6 @@ while t_step < nsteps:
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
-    if t_step > 1 and abs((vrmsVal[t_step] - vrmsVal[t_step - 1])/vrmsVal[t_step - 1]) < epsilon_lr:
-        if uw.mpi.rank == 0:
-            print("Stopping criterion reached ... ", flush = True)
-
-        break
 
     t_step += 1
     time   += delta_t
