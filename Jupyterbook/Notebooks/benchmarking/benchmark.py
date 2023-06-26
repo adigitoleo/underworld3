@@ -21,6 +21,9 @@ import os
 import numpy as np
 import sympy
 from copy import deepcopy 
+import pickle
+import matplotlib.pyplot as plt
+
 
 from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
@@ -66,22 +69,21 @@ infile = None
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
 
 
-def getDifference(mesh, oldVars, newVars):
+def getDifference(oldVars, newVars):
     error = 0
     counter = 0
-    with mesh.access():
-        for vIndex in range(oldVars):
-            oldVar = oldVars[vIndex]
-            newVar = newVars[vIndex]
+    for vIndex in range(len(oldVars)):
+        oldVar = oldVars[vIndex]
+        newVar = newVars[vIndex]
 
-            dimension = oldVar.data[0]
+        dimension = len(oldVar[0])
 
-            for elIndex in range(newVars):
+
+        for elIndex in range(len(oldVar)):
                 
-                for dIndex in range(dimension):
-
-                    error += abs(oldVar.data[elIndex][dIndex] - newVar.data[elIndex][dIndex])
-                    counter += 1
+            for dIndex in range(dimension):
+                error += abs(oldVar[elIndex, dIndex] - newVar[elIndex, dIndex])
+                counter += 1
 
     return error/counter
 
@@ -379,6 +381,7 @@ time = 0.
 timeVal =  np.zeros(nsteps)*np.nan      # time values
 vrmsVal =  np.zeros(nsteps)*np.nan      # v_rms values 
 NuVal =  np.zeros(nsteps)*np.nan        # Nusselt number values
+difference = np.zeros(nsteps)*np.nan  ## differences in the mesh variables
 
 # %%
 #### Convection model / update in time
@@ -387,9 +390,12 @@ print("started the time loop")
 while t_step < nsteps:
     vrmsVal[t_step] = v_rms()
     timeVal[t_step] = time
+    
 
-    old_t_soln = copy.deepcopy(t_soln)
-    old_v_soln = copy.deepcopy(p_soln)
+
+    with meshbox.access():
+        old_t_soln_data = deepcopy(t_soln.data)
+        old_v_soln_data = deepcopy(p_soln.data)
 
     stokes.solve(zero_init_guess=True) # originally True
 
@@ -419,25 +425,33 @@ while t_step < nsteps:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, flush = True)
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-        
-    if uw.mpi.rank == 0:
-        print(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln]))
 
-    if t_step > 1 and abs(getDifference(mesh, [old_t_soln,old_v_soln], [t_soln, v_soln])) < epsilon_lr:
+    with meshbox.access():
+        difference[t_step] = getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data])
+
         if uw.mpi.rank == 0:
-            print("Stopping criterion reached ... ", flush = True)
+            print(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
 
-        break
+        if t_step > 1 and abs(getDifference([old_t_soln_data,old_v_soln_data], [t_soln.data, v_soln.data])) < epsilon_lr:
+            if uw.mpi.rank == 0:
+                print("Stopping criterion reached ... ", flush = True)
+
+            break
 
 
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
 
+    
+    
     t_step += 1
     time   += delta_t
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
+
+plt.plot(difference[1:])
+plt.savefig("difference.png")
 
 print("program ended")
