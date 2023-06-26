@@ -51,15 +51,16 @@ epsilon_lr = 1e-9              ### criteria for early stopping; relative change 
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
 outdir = "./Bla_test4" 
-outfile = outdir + "/conv4_run13_" + str(res)
+outfile = outdir + "/output" + str(res)
 save_every = 5
 #
 
 #prev_res = None
 #infile = None
 prev_res = 10 # if infile is not None, then this should be set to the previous model resolution
-infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
 
+##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
+infile = None
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
@@ -353,7 +354,7 @@ NuVal =  np.zeros(nsteps)*np.nan        # Nusselt number values
 # %%
 #### Convection model / update in time
 
-
+print("started the time loop")
 while t_step < nsteps:
     vrmsVal[t_step] = v_rms()
     timeVal[t_step] = time
