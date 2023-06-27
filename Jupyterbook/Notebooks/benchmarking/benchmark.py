@@ -454,10 +454,10 @@ while t_step < nsteps:
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 
-plt.scatter(difference[1:])
+plt.plot(difference[1:])
 plt.savefig("difference.png")
 plt.clf()
-plt.scatter(vrmsVal)
+plt.plot(vrmsVal)
 plt.savefig("vrms.png")
 plt.clf()
 
