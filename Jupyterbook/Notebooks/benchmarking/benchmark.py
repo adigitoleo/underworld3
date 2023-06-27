@@ -381,18 +381,31 @@ lw_surface_defn_fn = sympy.exp(-(z**2)/(2*sdev**2)) # at z = 0
 t_step = 0
 time = 0.
 
-timeVal =  np.zeros(nsteps)*np.nan      # time values
-vrmsVal =  np.zeros(nsteps)*np.nan      # v_rms values 
-NuVal =  np.zeros(nsteps)*np.nan        # Nusselt number values
-difference = np.zeros(nsteps)*np.nan  ## differences in the mesh variables
+if infile == None:
+    timeVal =  []    # time values
+    vrmsVal =  []  # v_rms values 
+    NuVal =  []      # Nusselt number values
+    difference = []  ## differences in the mesh variables
+else:
+    if (uw.mpi.rank==0):
+        with open(infile + "markers.pkl", 'rb') as f:
+            loaded_data = pickle.load(f)
+            timeVal = loaded_data[0]
+            vrmsVal = loaded_data[1]
+            NuVal = loaded_data[2]
+            difference = loaded_data[3]
+
+    
+
 
 # %%
 #### Convection model / update in time
 
 print("started the time loop")
 while t_step < nsteps:
-    vrmsVal[t_step] = v_rms()
-    timeVal[t_step] = time
+
+    vrmsVal.append(v_rms())
+    timeVal.append(time)
     
 
 
@@ -426,11 +439,17 @@ while t_step < nsteps:
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
-            print("Saving checkpoint for time step: ", t_step, flush = True)
+            print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
+            plt.plot(difference[1:])
+            plt.savefig("difference.png")
+            plt.clf()
+            plt.plot(vrmsVal)
+            plt.savefig("vrms.png")
+            plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
     with meshbox.access():
-        difference[t_step] = getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data])
+        difference.append(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
 
         if uw.mpi.rank == 0:
             print(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
@@ -445,6 +464,10 @@ while t_step < nsteps:
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
+    if (uw.mpi.rank == 0):
+        with open(outfile+"markers.pkl", 'wb') as f:
+            pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
+
 
     
     
