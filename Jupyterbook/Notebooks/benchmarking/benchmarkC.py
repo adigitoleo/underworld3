@@ -288,16 +288,15 @@ else:
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=3) # degree = 3
 
     # force to run in serial?
-    
-    v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
-    p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
-    t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
+    ##v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
+    #p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
+    #t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
 
     #comm.Barrier()
     # this will not work in parallel?
-    #v_soln_prev.load_from_h5_plex_vector(infile + '.U.0.h5')
-    #p_soln_prev.load_from_h5_plex_vector(infile + '.P.0.h5')
-    #t_soln_prev.load_from_h5_plex_vector(infile + '.T.0.h5')
+    v_soln_prev.load_from_h5_plex_vector(infile + '.U.0.h5')
+    p_soln_prev.load_from_h5_plex_vector(infile + '.P.0.h5')
+    t_soln_prev.load_from_h5_plex_vector(infile + '.T.0.h5')
 
     with meshbox.access(v_soln, t_soln, p_soln):    
         t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], t_soln.coords)
