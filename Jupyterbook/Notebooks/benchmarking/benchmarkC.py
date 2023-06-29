@@ -50,7 +50,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 1000                   ### maximum number of time steps to run the first model 
+nsteps = 100                  ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -89,17 +89,7 @@ def getDifference(oldVars, newVars):
                 counter += 1
 
     return error/counter
-
-        
-                    
-                    
-            
-            
-
-            
-        
-
-
+    
 if uw.mpi.rank == 0:
     os.makedirs(outdir, exist_ok = True)
 
@@ -381,20 +371,19 @@ lw_surface_defn_fn = sympy.exp(-(z**2)/(2*sdev**2)) # at z = 0
 t_step = 0
 time = 0.
 
-if (infile == None):
+if infile == None:
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
-    print("reading markers from previous files")
     if (uw.mpi.rank==0):
         with open(infile + "markers.pkl", 'rb') as f:
             loaded_data = pickle.load(f)
-        timeVal = loaded_data[0]
-        vrmsVal = loaded_data[1]
-        NuVal = loaded_data[2]
-        difference = loaded_data[3]
+            timeVal = loaded_data[0]
+            vrmsVal = loaded_data[1]
+            NuVal = loaded_data[2]
+            difference = loaded_data[3]
 
     
 
@@ -439,6 +428,9 @@ while t_step < nsteps:
     ''' save mesh variables together with mesh '''
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
+            with open(outfile+"markers.pkl", 'wb') as f:
+                pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
+                
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             plt.plot(difference[1:])
@@ -452,9 +444,6 @@ while t_step < nsteps:
     with meshbox.access():
         difference.append(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
 
-        if uw.mpi.rank == 0:
-            print(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
-
         if t_step > 1 and abs(getDifference([old_t_soln_data,old_v_soln_data], [t_soln.data, v_soln.data])) < epsilon_lr:
             if uw.mpi.rank == 0:
                 print("Stopping criterion reached ... ", flush = True)
@@ -465,9 +454,7 @@ while t_step < nsteps:
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
-    if (uw.mpi.rank == 0):
-        with open(outfile+"markers.pkl", 'wb') as f:
-            pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
+
 
 
     

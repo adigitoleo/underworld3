@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1000pt" height="1000pt" viewBox="0 0 1000 1000">
+<title>PyVista Export</title>
+<desc>
+Creator: GL2PS 1.4.2, (C) 1999-2020 C. Geuzaine
+For: VTK
+CreationDate: Thu Jun 29 10:52:23 2023
+</desc>
+<defs>
+</defs>
+<g>
+<image x="0" y="0" width="1000" height="1000"
+transform="matrix(1,0,0,1,0,0)"
+xlink:href="data:image/png;base64,"/>
+<text fill="#ffffff" x="401" y="915" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">1.59e-39</text>
+<text fill="#ffffff" x="524.25" y="915" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.250 </text>
+<text fill="#ffffff" x="647.5" y="915" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.500 </text>
+<text fill="#ffffff" x="770.75" y="915" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.750 </text>
+<text fill="#ffffff" x="894" y="915" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">1.00  </text>
+<text fill="#ffffff" x="649" y="868" font-size="26" text-anchor="middle" dy="26" font-family="Helvetica">V</text>
+<text fill="#ffffff" x="401" y="835" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">7.18e-23</text>
+<text fill="#ffffff" x="524.25" y="835" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.00750</text>
+<text fill="#ffffff" x="647.5" y="835" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.0150</text>
+<text fill="#ffffff" x="770.75" y="835" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.0225</text>
+<text fill="#ffffff" x="894" y="835" font-size="26" text-anchor="middle" dy="0" font-family="Helvetica">0.0300</text>
+<text fill="#ffffff" x="649" y="788" font-size="26" text-anchor="middle" dy="26" font-family="Helvetica">mag</text>
+<text fill="#ffffff" x="147" y="896" font-size="15" text-anchor="start" dy="0" font-family="Helvetica-BoldItalic">X</text>
+<text fill="#ffffff" x="103" y="851" font-size="15" text-anchor="start" dy="0" font-family="Helvetica-BoldItalic">Y</text>
+<text fill="#ffffff" x="103" y="896" font-size="15" text-anchor="start" dy="0" font-family="Helvetica-BoldItalic">Z</text>
+</g>
+</svg>
