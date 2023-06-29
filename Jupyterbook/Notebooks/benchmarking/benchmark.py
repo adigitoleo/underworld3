@@ -444,10 +444,10 @@ while t_step < nsteps:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             plt.plot(difference[1:])
-            plt.savefig("difference.png")
+            plt.savefig(outdir + "difference" + str(res) +".png")
             plt.clf()
             plt.plot(vrmsVal)
-            plt.savefig("vrms.png")
+            plt.savefig(outdir + "vrms"+str(res)+".png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
@@ -474,12 +474,10 @@ while t_step < nsteps:
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
-
-plt.plot(difference[1:])
-plt.savefig("difference.png")
-plt.clf()
-plt.plot(vrmsVal)
-plt.savefig("vrms.png")
-plt.clf()
-
-print("program ended")
+if (uw.mpi.rank == 0):
+    plt.plot(difference[1:])
+    plt.savefig(outdir + "difference" + str(res) +".png")
+    plt.clf()
+    plt.plot(vrmsVal)
+    plt.savefig(outdir + "vrms"+str(res)+".png")
+    plt.clf()

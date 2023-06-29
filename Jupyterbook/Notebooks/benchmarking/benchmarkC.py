@@ -50,7 +50,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 10                  ### maximum number of time steps to run the first model 
+nsteps = 10                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -63,7 +63,7 @@ save_every = 5
 
 #prev_res = None
 #infile = None
-prev_res = 10 # if infile is not None, then this should be set to the previous model resolution
+prev_res = res # if infile is not None, then this should be set to the previous model resolution
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
 infile = outfile
@@ -89,6 +89,16 @@ def getDifference(oldVars, newVars):
                 counter += 1
 
     return error/counter
+
+        
+                    
+                    
+            
+            
+
+            
+        
+
 
 if uw.mpi.rank == 0:
     os.makedirs(outdir, exist_ok = True)
@@ -430,14 +440,14 @@ while t_step < nsteps:
         if uw.mpi.rank == 0:
             with open(outfile+"markers.pkl", 'wb') as f:
                 pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
-                
+
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             plt.plot(difference[1:])
-            plt.savefig("difference.png")
+            plt.savefig(outdir + "difference" + str(res) +".png")
             plt.clf()
             plt.plot(vrmsVal)
-            plt.savefig("vrms.png")
+            plt.savefig(outdir + "vrms"+str(res)+".png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
@@ -464,12 +474,10 @@ while t_step < nsteps:
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
-
-plt.plot(difference[1:])
-plt.savefig("difference.png")
-plt.clf()
-plt.plot(vrmsVal)
-plt.savefig("vrms.png")
-plt.clf()
-
-print("program ended")
+if (uw.mpi.rank == 0):
+    plt.plot(difference[1:])
+    plt.savefig(outdir + "difference" + str(res) +".png")
+    plt.clf()
+    plt.plot(vrmsVal)
+    plt.savefig(outdir + "vrms"+str(res)+".png")
+    plt.clf()
