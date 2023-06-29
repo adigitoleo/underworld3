@@ -25,12 +25,6 @@ import pickle
 import matplotlib.pyplot as plt
 
 
-print("Hello world 1")
-quit()
-
-
-
-
 
 from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
@@ -485,3 +479,5 @@ if (uw.mpi.rank == 0):
     plt.plot(vrmsVal)
     plt.savefig(outdir + "vrms"+str(res)+".png")
     plt.clf()
+    
+quit()
