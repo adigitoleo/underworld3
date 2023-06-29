@@ -238,6 +238,8 @@ adv_diff.add_dirichlet_bc(0.0, "Top")
 
 adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 
+quit()
+
 # %% [markdown]
 # ### Set initial temperature field 
 # 
