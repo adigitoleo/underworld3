@@ -287,11 +287,12 @@ else:
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=3) # degree = 3
 
-    print("ending program")
-    quit()
+
 
     # force to run in serial?
     v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
+    print("ending program")
+    quit()
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
 
