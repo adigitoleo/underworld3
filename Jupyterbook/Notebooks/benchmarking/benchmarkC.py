@@ -495,4 +495,3 @@ if (uw.mpi.rank == 0):
 if (uw.mpi.rank == 0):
     print(len(vrms))
     print("DONE")
-quit()

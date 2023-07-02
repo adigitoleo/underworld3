@@ -473,5 +473,7 @@ if (uw.mpi.rank == 0):
     plt.plot(vrmsVal)
     plt.savefig(outdir + "vrms"+str(res)+".png")
     plt.clf()
-print("DONE")
-quit()
+
+if (uw.mpi.rank == 0):
+    print(len(vrms))
+    print("DONE")
