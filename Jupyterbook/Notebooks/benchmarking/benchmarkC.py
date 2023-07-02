@@ -293,7 +293,7 @@ else:
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=3) # degree = 3
 
 
-t
+
     ##########
     # force to run in serial?
     ## need to uncomment export H5PY_DEFAULT_READONLY=1
