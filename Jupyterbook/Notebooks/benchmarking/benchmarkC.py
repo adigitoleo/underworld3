@@ -125,6 +125,11 @@ def saveData(step, outputPath): # from AdvDiff_Cartesian_benchmark-scaled
 # ### Create mesh and variables
 
 # %%
+
+## try different mesh
+## regular=True try this
+## quadbox doesnt have evaluate on the boundaries
+## 
 meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 minCoords=(0.0, 0.0), 
                                                 maxCoords=(boxLength, boxHeight), 
@@ -291,9 +296,9 @@ else:
 t
     ##########
     # force to run in serial?
+    ## need to uncomment export H5PY_DEFAULT_READONLY=1
+    ## also need export HDF5_USE_FILE_LOCKING=FALSE
     v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
-    print("done")
-    quit()
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
 
@@ -393,6 +398,7 @@ if infile == None:
     difference = []  ## differences in the mesh variables
 else:
     if (uw.mpi.rank==0):
+
         with open(infile + "markers.pkl", 'rb') as f:
             loaded_data = pickle.load(f)
             timeVal = loaded_data[0]
@@ -486,5 +492,5 @@ if (uw.mpi.rank == 0):
     plt.plot(vrmsVal)
     plt.savefig(outdir + "vrms"+str(res)+".png")
     plt.clf()
-
+print("DONE")
 quit()
