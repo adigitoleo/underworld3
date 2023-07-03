@@ -373,7 +373,7 @@ lw_surface_defn_fn = sympy.exp(-(z**2)/(2*sdev**2)) # at z = 0
 t_step = 0
 time = 0.
 
-if infile == None:
+if (infile == None):
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
@@ -385,6 +385,7 @@ else:
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
         difference = loaded_data[3]
+print("loading in:", str(len(vrmsVal)) )
 
     
 
