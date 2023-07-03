@@ -379,7 +379,7 @@ if infile == None:
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
-    if (uw.mpi.rank==0):
+    if (uw.mpi.rank == 0):
         with open(infile + "/markers.pkl", 'rb') as f:
             loaded_data = pickle.load(f)
             timeVal = loaded_data[0]
@@ -475,5 +475,5 @@ if (uw.mpi.rank == 0):
     plt.clf()
 
 if (uw.mpi.rank == 0):
-    print(len(vrms))
+    print(len(vrmsVal))
     print("DONE")
