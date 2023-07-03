@@ -380,7 +380,9 @@ if (infile == None):
     difference = []  ## differences in the mesh variables
 else:
     with open(infile + "markers.pkl", 'rb') as f:
+        
         loaded_data = pickle.load(f)
+        print("here is loaded", loaded_data)
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
