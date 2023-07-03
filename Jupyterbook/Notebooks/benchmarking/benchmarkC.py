@@ -48,7 +48,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 10000                 ### maximum number of time steps to run the first model 
+nsteps = 100                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -397,8 +397,7 @@ if infile == None:
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
-    if (uw.mpi.rank==0):
-
+    if (True):
         with open(infile + "markers.pkl", 'rb') as f:
             loaded_data = pickle.load(f)
             timeVal = loaded_data[0]
@@ -414,7 +413,9 @@ else:
 
 print("started the time loop")
 while t_step < nsteps:
-
+    
+    if (uw.mpi.rank == 0):
+        print("starting loop")
     vrmsVal.append(v_rms())
     timeVal.append(time)
     
