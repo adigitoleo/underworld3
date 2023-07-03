@@ -68,7 +68,7 @@ save_every = 5
 prev_res = res # if infile is not None, then this should be set to the previous model resolution
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-infile = None
+infile = outfile
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
