@@ -51,8 +51,8 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 10                        ### x and y res of box
-nsteps = 20                 ### maximum number of time steps to run the first model 
+res = 25                        ### x and y res of box
+nsteps = 10000                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -68,7 +68,7 @@ save_every = 5
 prev_res = res # if infile is not None, then this should be set to the previous model resolution
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-infile = outfile
+infile = None
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   

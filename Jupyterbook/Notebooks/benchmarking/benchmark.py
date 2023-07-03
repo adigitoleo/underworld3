@@ -52,7 +52,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 10000                 ### maximum number of time steps to run the first model 
+nsteps = 20                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -380,7 +380,7 @@ if infile == None:
     difference = []  ## differences in the mesh variables
 else:
     if (uw.mpi.rank==0):
-        with open(infile + "markers.pkl", 'rb') as f:
+        with open(infile + "/markers.pkl", 'rb') as f:
             loaded_data = pickle.load(f)
             timeVal = loaded_data[0]
             vrmsVal = loaded_data[1]
@@ -411,13 +411,13 @@ while t_step < nsteps:
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
 
     # calculate Nusselt number
-    #dTdZ_calc.solve()
-    #up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
-    #lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
+    dTdZ_calc.solve()
+    up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
+    lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
 
-    #Nu = -up_int/lw_int
-
-    #NuVal[t_step] = -up_int/lw_int
+    Nu = -up_int/lw_int
+    NuVal.append(-up_int/lw_int)
+    ##NuVal[t_step] = -up_int/lw_int
 
     # stats then loop
     #tstats = t_soln.stats()
@@ -430,16 +430,16 @@ while t_step < nsteps:
     ''' save mesh variables together with mesh '''
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
-            with open(outfile+"markers.pkl", 'wb') as f:
+            with open(outfile+"/markers.pkl", 'wb') as f:
                 pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
 
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             plt.plot(difference[1:])
-            plt.savefig(outdir + "difference" + str(res) +".png")
+            plt.savefig(outdir + "/difference.png")
             plt.clf()
             plt.plot(vrmsVal)
-            plt.savefig(outdir + "vrms"+str(res)+".png")
+            plt.savefig(outdir + "/vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
@@ -468,10 +468,10 @@ while t_step < nsteps:
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 if (uw.mpi.rank == 0):
     plt.plot(difference[1:])
-    plt.savefig(outdir + "difference" + str(res) +".png")
+    plt.savefig(outdir + "/difference.png")
     plt.clf()
     plt.plot(vrmsVal)
-    plt.savefig(outdir + "vrms"+str(res)+".png")
+    plt.savefig(outdir + "/vrms.png")
     plt.clf()
 
 if (uw.mpi.rank == 0):
