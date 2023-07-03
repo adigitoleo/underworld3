@@ -52,7 +52,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 20                 ### maximum number of time steps to run the first model 
+nsteps = 2                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -411,12 +411,12 @@ while t_step < nsteps:
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
 
     # calculate Nusselt number
-    dTdZ_calc.solve()
-    up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
-    lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
+    ##dTdZ_calc.solve()
+    ##up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
+    ##lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
 
-    Nu = -up_int/lw_int
-    NuVal.append(-up_int/lw_int)
+    ##Nu = -up_int/lw_int
+    ##NuVal.append(-up_int/lw_int)
     ##NuVal[t_step] = -up_int/lw_int
 
     # stats then loop
