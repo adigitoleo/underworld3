@@ -379,13 +379,12 @@ if infile == None:
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
-    if (uw.mpi.rank==0):
-        with open(infile + "/markers.pkl", 'rb') as f:
-            loaded_data = pickle.load(f)
-            timeVal = loaded_data[0]
-            vrmsVal = loaded_data[1]
-            NuVal = loaded_data[2]
-            difference = loaded_data[3]
+    with open(infile + "markers.pkl", 'rb') as f:
+        loaded_data = pickle.load(f)
+        timeVal = loaded_data[0]
+        vrmsVal = loaded_data[1]
+        NuVal = loaded_data[2]
+        difference = loaded_data[3]
 
     
 
@@ -430,16 +429,16 @@ while t_step < nsteps:
     ''' save mesh variables together with mesh '''
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
-            with open(outfile+"/markers.pkl", 'wb') as f:
+            with open(outfile+"markers.pkl", 'wb') as f:
                 pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
 
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             plt.plot(difference[1:])
-            plt.savefig(outdir + "/difference.png")
+            plt.savefig(outdir + "difference.png")
             plt.clf()
             plt.plot(vrmsVal)
-            plt.savefig(outdir + "/vrms.png")
+            plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
@@ -468,12 +467,12 @@ while t_step < nsteps:
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 if (uw.mpi.rank == 0):
     plt.plot(difference[1:])
-    plt.savefig(outdir + "/difference.png")
+    plt.savefig(outdir + "difference.png")
     plt.clf()
     plt.plot(vrmsVal)
-    plt.savefig(outdir + "/vrms.png")
+    plt.savefig(outdir + "vrms.png")
     plt.clf()
 
 if (uw.mpi.rank == 0):
-    print(len(vrms))
+    print(len(vrmsVal))
     print("DONE")
