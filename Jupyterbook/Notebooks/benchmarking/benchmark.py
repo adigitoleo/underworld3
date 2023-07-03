@@ -52,7 +52,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 10                        ### x and y res of box
-nsteps = 10                 ### maximum number of time steps to run the first model 
+nsteps = 1000                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
@@ -430,7 +430,7 @@ while t_step < nsteps:
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
             with open(outfile+"markers.pkl", 'wb') as f:
-                pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
+                pickle.dump([timeVal, vrmsVal, NuVal, difference], f)
 
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
