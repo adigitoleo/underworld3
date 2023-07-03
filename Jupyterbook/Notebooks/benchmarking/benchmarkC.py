@@ -379,6 +379,7 @@ if (infile == None):
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
+    print("getting old data")
     with open(infile + "markers.pkl", 'rb') as f:
         
         loaded_data = pickle.load(f)
@@ -387,6 +388,7 @@ else:
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
         difference = loaded_data[3]
+print(infile)
 print("loading in:", str(len(vrmsVal)) )
 
     
