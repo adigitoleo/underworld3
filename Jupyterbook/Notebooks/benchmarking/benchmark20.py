@@ -93,6 +93,7 @@ def getDifference(oldVars, newVars):
     return error/counter
 
 if uw.mpi.rank == 0:
+    
     os.makedirs(outdir, exist_ok = True)
 
 
