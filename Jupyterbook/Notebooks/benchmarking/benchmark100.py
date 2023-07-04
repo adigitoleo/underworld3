@@ -58,7 +58,7 @@ epsilon_lr = 1e-3              ### criteria for early stopping; relative change 
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
-outdir = "./Bla_test20" 
+outdir = "./Bla_test100" 
 outfile = outdir + "/output" + str(res)
 save_every = 5
 #

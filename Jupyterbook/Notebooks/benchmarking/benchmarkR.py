@@ -1,3 +1,5 @@
+## In this code the mesh being used is regular
+
 # %% [markdown]
 # # Constant viscosity convection, Cartesian domain (benchmark)
 # 
@@ -51,14 +53,14 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 100                        ### x and y res of box
+res = 10                        ### x and y res of box
 nsteps = 1000                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
-outdir = "./Bla_test100" 
+outdir = "./Bla_testR" 
 outfile = outdir + "/output" + str(res)
 save_every = 5
 #
@@ -68,7 +70,7 @@ save_every = 5
 prev_res = res # if infile is not None, then this should be set to the previous model resolution
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-infile = outfile
+infile = None
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
 # infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
@@ -123,7 +125,8 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 minCoords=(0.0, 0.0), 
                                                 maxCoords=(boxLength, boxHeight), 
                                                 cellSize=1.0 /res,
-                                                qdegree = 3
+                                                qdegree = 3,
+                                                regular=True
                                         )
 
 # meshbox = uw.meshing.StructuredQuadBox(minCoords=(0.0, 0.0), maxCoords=(boxLength, boxHeight), elementRes=(res,res), qdegree = 3)
@@ -270,7 +273,7 @@ else:
                                                             maxCoords=(boxLength, boxHeight), 
                                                             cellSize=1.0/prev_res,
                                                             qdegree = 3,
-                                                            regular = False
+                                                            regular = True
                                                         )
     
     # T should have high degree for it to converge
@@ -373,23 +376,18 @@ lw_surface_defn_fn = sympy.exp(-(z**2)/(2*sdev**2)) # at z = 0
 t_step = 0
 time = 0.
 
-if (infile == None):
+if infile == None:
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
 else:
-    print("getting old data")
     with open(infile + "markers.pkl", 'rb') as f:
-        
         loaded_data = pickle.load(f)
-        print("here is loaded", loaded_data)
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
         difference = loaded_data[3]
-print(infile)
-print("loading in:", str(len(vrmsVal)) )
 
     
 
@@ -435,7 +433,7 @@ while t_step < nsteps:
     if t_step % save_every == 0 and t_step > 0:
         if uw.mpi.rank == 0:
             with open(outfile+"markers.pkl", 'wb') as f:
-                pickle.dump([timeVal, vrmsVal,NuVal, difference], f)
+                pickle.dump([timeVal, vrmsVal, NuVal, difference], f)
 
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
