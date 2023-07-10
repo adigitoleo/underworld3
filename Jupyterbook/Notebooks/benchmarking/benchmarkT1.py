@@ -138,8 +138,8 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
 # %%
 v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
 p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=2) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=2) # degree = 3
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=1) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=3) # degree = 3
 
 # additional variable for the gradient
 ##dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z meshbox, 1, degree = 3) # degree = 3
@@ -275,7 +275,7 @@ else:
     # this should have a different name to have no errors
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=2) # degree = 3
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=1) # degree = 3
 
     # force to run in serial?
     
@@ -453,11 +453,6 @@ while t_step < nsteps:
 
     # early stopping criterion
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
-
-
-
-    
-    
     t_step += 1
     time   += delta_t
 
