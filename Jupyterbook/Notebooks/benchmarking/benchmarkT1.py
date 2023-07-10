@@ -139,7 +139,7 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
 v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
 p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
 t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=1) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=3) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=1) # degree = 3
 
 # additional variable for the gradient
 ##dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z meshbox, 1, degree = 3) # degree = 3
