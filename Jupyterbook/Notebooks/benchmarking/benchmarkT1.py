@@ -395,8 +395,6 @@ while t_step < nsteps:
 
     vrmsVal.append(v_rms())
     timeVal.append(time)
-    
-
     if (uw.mpi.rank == 0):
         print("1")
     with meshbox.access():
@@ -411,7 +409,7 @@ while t_step < nsteps:
     if (uw.mpi.rank == 0):
         print("3")
 
-    delta_t = 1 * stokes.estimate_dt() # originally 0.5
+    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
     if (uw.mpi.rank == 0):
         print("4")
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
