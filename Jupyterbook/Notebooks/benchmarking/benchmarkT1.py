@@ -138,27 +138,22 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
 # %%
 v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
 p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=3) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=3) # degree = 3
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=2) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=2) # degree = 3
 
 # additional variable for the gradient
-dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z 
-                                      meshbox, 
-                                      1, 
-                                      degree = 3) # degree = 3
+##dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z meshbox, 1, degree = 3) # degree = 3
 
 # variable containing stress in the z direction
-sigma_zz = uw.discretisation.MeshVariable(r"\sigma_{zz}",  
-                                        meshbox, 
-                                        1, degree=2) # degree = 3 
+##sigma_zz = uw.discretisation.MeshVariable(r"\sigma_{zz}",  meshbox, 1, degree=2) # degree = 3 
 
 x, z = meshbox.X
 
 # projection object to calculate the gradient along Z
-dTdZ_calc = uw.systems.Projection(meshbox, dTdZ)
-dTdZ_calc.uw_function = t_soln.sym.diff(z)[0]
-dTdZ_calc.smoothing = 1.0e-3
-dTdZ_calc.petsc_options.delValue("ksp_monitor")
+##dTdZ_calc = uw.systems.Projection(meshbox, dTdZ)
+##dTdZ_calc.uw_function = t_soln.sym.diff(z)[0]
+##dTdZ_calc.smoothing = 1.0e-3
+##dTdZ_calc.petsc_options.delValue("ksp_monitor")
 
 
 # %% [markdown]
@@ -280,7 +275,7 @@ else:
     # this should have a different name to have no errors
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=3) # degree = 3
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=2) # degree = 3
 
     # force to run in serial?
     
@@ -467,7 +462,7 @@ while t_step < nsteps:
     time   += delta_t
 
 # save final mesh variables in the run 
-meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
+meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 if (uw.mpi.rank == 0):
     plt.plot(difference[1:])
     plt.savefig(outdir + "difference.png")
