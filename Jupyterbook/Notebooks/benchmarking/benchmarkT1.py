@@ -397,15 +397,27 @@ while t_step < nsteps:
     timeVal.append(time)
     
 
-
+    if (uw.mpi.rank == 0):
+        print("1")
     with meshbox.access():
         old_t_soln_data = deepcopy(t_soln.data)
         old_v_soln_data = deepcopy(p_soln.data)
 
-    stokes.solve(zero_init_guess=True) # originally True
+    if (uw.mpi.rank == 0):
+        print("2")
 
-    delta_t = 1 * stokes.estimate_dt() # originally 0.5
+
+    stokes.solve(zero_init_guess=True) # originally True
+    if (uw.mpi.rank == 0):
+        print("3")
+        
+    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
+    if (uw.mpi.rank == 0):
+        print("4")
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
+
+    if (uw.mpi.rank == 0):
+        print("5")
 
     # calculate Nusselt number
     ##dTdZ_calc.solve()
