@@ -1,6 +1,3 @@
-## in this file I have changed the temperature degree to 1
-
-
 # %% [markdown]
 # # Constant viscosity convection, Cartesian domain (benchmark)
 # 
@@ -138,8 +135,8 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
 # %%
 v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
 p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=3) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=3) # degree = 3
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=1) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=1) # degree = 3
 
 # additional variable for the gradient
 dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z 
@@ -224,6 +221,8 @@ adv_diff = uw.systems.AdvDiffusionSLCN(
     solver_name="adv_diff",
 )
 
+
+
 adv_diff.constitutive_model = uw.systems.constitutive_models.DiffusionModel(meshbox.dim)
 adv_diff.constitutive_model.Parameters.diffusivity = k
 
@@ -280,7 +279,7 @@ else:
     # this should have a different name to have no errors
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=3) # degree = 3
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=1) # degree = 3
 
     # force to run in serial?
     
