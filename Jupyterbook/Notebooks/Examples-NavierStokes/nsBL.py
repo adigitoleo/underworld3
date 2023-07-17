@@ -22,10 +22,10 @@ import pickle
 
 # In[2]:
 
-
-resolution = 0.05
+boxLength = 4
+boxHeight = 0.5
+resolution = 0.02
 if uw.mpi.rank == 0:
-
     # Generate local mesh on boss process
 
     with pygmsh.geo.Geometry() as geom:
@@ -34,8 +34,8 @@ if uw.mpi.rank == 0:
         domain = geom.add_rectangle(
             xmin=0.0,
             ymin=0.0,
-            xmax=2,
-            ymax=2,
+            xmax=boxLength,
+            ymax=boxHeight,
             z=0,
             holes=[],
             mesh_size=resolution,
@@ -89,14 +89,14 @@ ns.rho = 10
 ##ns.add_dirichlet_bc( (1, 0), "top", (0, 1))
 ##ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
 ns.add_dirichlet_bc( (1.0, 0.0), "left", (0, 1) )
-ns.add_dirichlet_bc( (1.0, 0), "top", (0, 1))
+##ns.add_dirichlet_bc( (1.0, 0), "top", (0, 1))
 ns.add_dirichlet_bc( (1.0, 0), "bottom", (0, 1))
 
 ##ns.add_dirichlet_bc( (0, 0), "right", (0, 1))
 
 ns.bodyforce = sympy.Matrix([0.0, 0.0])
 ns.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh.dim)
-ns.constitutive_model.Parameters.viscosity = 1
+ns.constitutive_model.Parameters.viscosity = 10
 
 ns.saddle_preconditioner = 1.0 / ns.constitutive_model.Parameters.viscosity
 
@@ -224,7 +224,7 @@ def getBL(mesh, v):
     x,y = mesh.X
 
     stepSize = 1*resolution
-    slides = [i*stepSize for i in range(int( 2 / stepSize))]
+    slides = [i*stepSize for i in range(int( boxLength / stepSize))]
 
     functions = [
         1/stepSize * (1 - v.sym[0]) * sympy.Piecewise(
@@ -247,8 +247,8 @@ def getBL(mesh, v):
 ts = 0
 dt_ns = 1.0e-1
 maxsteps = 1000
-differences = []
-pdifferences = []
+differences= []
+pdifferences=[]
 
 
 
