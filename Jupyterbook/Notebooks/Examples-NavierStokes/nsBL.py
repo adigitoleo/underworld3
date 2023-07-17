@@ -24,7 +24,7 @@ import pickle
 
 boxLength = 0.5
 boxHeight = 0.5
-resolution = 0.02
+resolution = 0.1
 
 """
 if uw.mpi.rank == 0:
@@ -260,7 +260,8 @@ pdifferences=[]
 
 
 for step in range(0, maxsteps):
-    print("step", str(step))
+    if (uw.mpi.rank == 0):
+        print("step", str(step))
     if (step == 1):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
     if (uw.mpi.rank == 0):
