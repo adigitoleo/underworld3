@@ -126,7 +126,8 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 minCoords=(0.0, 0.0), 
                                                 maxCoords=(boxLength, boxHeight), 
                                                 cellSize=1.0 /res,
-                                                qdegree = 3
+                                                qdegree = 3,
+                                                regular=True
                                         )
 
 # meshbox = uw.meshing.StructuredQuadBox(minCoords=(0.0, 0.0), maxCoords=(boxLength, boxHeight), elementRes=(res,res), qdegree = 3)
@@ -268,7 +269,7 @@ else:
                                                             maxCoords=(boxLength, boxHeight), 
                                                             cellSize=1.0/prev_res,
                                                             qdegree = 3,
-                                                            regular = False
+                                                            regular = True 
                                                         )
     
     # T should have high degree for it to converge
