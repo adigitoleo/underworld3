@@ -12,7 +12,7 @@ import underworld3 as uw
 import numpy as np
 import sympy
 import mpi4py
-import pygmsh
+##import pygmsh
 import matplotlib.pyplot as plt
 import copy
 import math 
@@ -22,9 +22,11 @@ import pickle
 
 # In[2]:
 
-boxLength = 4
-boxHeight = 0.5
+boxLength = 1
+boxHeight = 1
 resolution = 0.02
+
+"""
 if uw.mpi.rank == 0:
     # Generate local mesh on boss process
 
@@ -51,11 +53,16 @@ if uw.mpi.rank == 0:
         geom.generate_mesh(dim=2, verbose=False)
         geom.save_geometry(f"meshes/ns_bl_test_{resolution}.msh")
 
+"""
+mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords=(boxLength, boxHeight), cellSize=resolution, qdegree=3)
+"""
 mesh = uw.discretisation.Mesh(f"meshes/ns_bl_test_{resolution}.msh", 
                                   markVertices=True, 
                                   useMultipleTags=True, 
                                   useRegions=True,
                                   qdegree=3)
+"""
+
 mesh.dm.view()
 
 
@@ -88,9 +95,9 @@ ns.rho = 10
 
 ##ns.add_dirichlet_bc( (1, 0), "top", (0, 1))
 ##ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
-ns.add_dirichlet_bc( (1.0, 0.0), "left", (0, 1) )
+ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
 ##ns.add_dirichlet_bc( (1.0, 0), "top", (0, 1))
-ns.add_dirichlet_bc( (1.0, 0), "bottom", (0, 1))
+ns.add_dirichlet_bc( (1.0, 0), "Bottom", (0, 1))
 
 ##ns.add_dirichlet_bc( (0, 0), "right", (0, 1))
 
@@ -246,7 +253,7 @@ def getBL(mesh, v):
 
 ts = 0
 dt_ns = 1.0e-1
-maxsteps = 1000
+maxsteps = 100
 differences= []
 pdifferences=[]
 
@@ -254,7 +261,7 @@ pdifferences=[]
 
 for step in range(0, maxsteps):
     if (step == 1):
-        ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
+        ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
     if (uw.mpi.rank == 0):
         with mesh.access():
             old_v_data = copy.deepcopy(v.data)
