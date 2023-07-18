@@ -271,9 +271,14 @@ for step in range(0, maxsteps):
 
     if (uw.mpi.rank == 0):
         print("starting to copy")
+
     if (uw.mpi.rank == 0):
+        print("getting in here ")
         with mesh.access():
+            print("accessed the mesh")
             old_v_data = copy.deepcopy(v.data)
+            print("done with the copying")
+
     if (uw.mpi.rank == 0):
         print("coppied")
     
