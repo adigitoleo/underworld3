@@ -109,7 +109,7 @@ ns.saddle_preconditioner = 1.0 / ns.constitutive_model.Parameters.viscosity
 
 
 # In[4]:
-
+"""
 def plot(mesh, v, ns,step):
     print("in plot")
     
@@ -147,48 +147,10 @@ def plot(mesh, v, ns,step):
         )
         pl.add_arrows(arrow_loc, arrow_length, mag=3)
         pl.show(cpos="xy", screenshot = "nsPlots/"+str(step)+".png")
+"""
 
 
 
-def plot2(mesh, v, ns,step):
-    
-    if mpi4py.MPI.COMM_WORLD.size == 1:
-        import numpy as np
-        import pyvista as pv
-        import vtk
-        
-        pv.start_xvfb()
-        pv.global_theme.background = "white"
-        pv.global_theme.window_size = [750, 1200]
-        pv.global_theme.antialiasing = True
-        pv.global_theme.jupyter_backend = "panel"
-        pv.global_theme.smooth_shading = True
-        mesh.vtk("tmp_mesh.vtk")
-        pvmesh = pv.read("tmp_mesh.vtk")
-        pvmesh.point_data["P"] = uw.function.evaluate(p.sym[0], mesh.data)
-        pvmesh.point_data["V"] = uw.function.evaluate(v.sym.dot(v.sym), mesh.data)
-        #pvmesh.point_data["V_Star"] = uw.function.evaluate(v_star.sym.dot(v_star.sym), mesh.data)
-        arrow_loc = np.zeros((ns.u.coords.shape[0], 3))
-        arrow_loc[:, 0:2] = ns.u.coords[...]
-        arrow_length = np.zeros((ns.u.coords.shape[0], 3))
-        arrow_length[:, 0] = uw.function.evaluate(ns.u.sym[0], ns.u.coords)*0.01
-        arrow_length[:, 1] = uw.function.evaluate(ns.u.sym[1], ns.u.coords)*0.01
-        pl = pv.Plotter(window_size=[1000, 1000])
-        pl.add_axes()
-        pl.add_mesh(
-            pvmesh,
-            cmap="coolwarm",
-            edge_color="Black",
-            show_edges=True,
-            scalars="V",
-            use_transparency=False,
-            opacity=1.0,
-        )
-        pl.add_arrows(arrow_loc, arrow_length, mag=3)
-        pl.show(cpos="xy", screenshot = "nsPlots/"+str(step)+".png")
-        #pl.screenshot("nsPlots/"+str(step)+".png")
-        #plt.imshow(pl.image)
-        #plt.savefig("nsPlots/"+str(step)+".png")
 
 # In[5]:
 def getDifference(oldVars, newVars):
