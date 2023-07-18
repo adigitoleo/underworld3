@@ -22,9 +22,9 @@ import pickle
 
 # In[2]:
 
-boxLength = 0.5
+boxLength = 1.0
 boxHeight = 0.5
-resolution = 0.1
+resolution = 0.025
 
 """
 if uw.mpi.rank == 0:
@@ -96,7 +96,7 @@ ns.rho = 10
 ##ns.add_dirichlet_bc( (1, 0), "top", (0, 1))
 ##ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
 ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
-##ns.add_dirichlet_bc( (1.0, 0), "top", (0, 1))
+ns.add_dirichlet_bc( (1.0, 0), "Top", (0))
 ns.add_dirichlet_bc( (1.0, 0), "Bottom", (0, 1))
 
 ##ns.add_dirichlet_bc( (0, 0), "right", (0, 1))
@@ -267,6 +267,7 @@ for step in range(0, maxsteps):
         print("next step")
     if (step == 1):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
+        ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
 
     if (uw.mpi.rank == 0):
         print("starting to copy")
