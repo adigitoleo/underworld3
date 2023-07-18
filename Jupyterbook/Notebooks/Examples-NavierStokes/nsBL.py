@@ -288,7 +288,8 @@ for step in range(0, maxsteps):
         
 
 
-
+    if (uw.mpi.rank == 0):
+        print("starting a solve")
     ns.solve(timestep= dt_ns, zero_init_guess=False)
     delta_t_swarm = 1.0 * ns.estimate_dt()
     delta_t = min(delta_t_swarm, dt_ns)
@@ -299,7 +300,13 @@ for step in range(0, maxsteps):
             phi * v.rbf_interpolate(swarm.data) + (1.0 -  phi) * v_star.data
         )
 
+    if (uw.mpi.rank == 0):
+        print("starting to advect around")
+
     swarm.advection(v.fn, delta_t, corrector=False)
+
+    if (uw.mpi.rank == 0):
+        print("starting to plot")
 
     if (uw.mpi.rank == 0):
         if (step != 0):
