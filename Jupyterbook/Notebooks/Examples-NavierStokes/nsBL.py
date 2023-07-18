@@ -262,13 +262,24 @@ pdifferences=[]
 for step in range(0, maxsteps):
     if (uw.mpi.rank == 0):
         print("step", str(step))
+
+    if (uw.mpi.rank == 0):
+        print("next step")
     if (step == 1):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
+
+    if (uw.mpi.rank == 0):
+        print("starting to copy")
     if (uw.mpi.rank == 0):
         with mesh.access():
             old_v_data = copy.deepcopy(v.data)
     if (uw.mpi.rank == 0):
+        print("coppied")
+    
+    if (uw.mpi.rank == 0):
         plot(mesh, v, ns, step)
+    if (uw.mpi.rank == 0):
+        print("plotted")
 
     ## Then lets plot and save the boundary layer stuff
 
