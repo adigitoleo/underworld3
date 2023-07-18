@@ -111,6 +111,7 @@ ns.saddle_preconditioner = 1.0 / ns.constitutive_model.Parameters.viscosity
 # In[4]:
 
 def plot(mesh, v, ns,step):
+    print("in plot")
     
     if mpi4py.MPI.COMM_WORLD.size == 1:
         import numpy as np
@@ -282,8 +283,8 @@ for step in range(0, maxsteps):
     if (uw.mpi.rank == 0):
         print("coppied")
     
-    if (uw.mpi.rank == 0):
-        plot(mesh, v, ns, step)
+    ##if (uw.mpi.rank == 0):
+        ##plot(mesh, v, ns, step)
     if (uw.mpi.rank == 0):
         print("plotted")
 
