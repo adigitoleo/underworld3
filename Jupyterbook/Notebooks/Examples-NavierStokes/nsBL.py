@@ -22,9 +22,9 @@ import pickle
 
 # In[2]:
 
-boxLength = 0.5 ## 1
-boxHeight = 0.5
-resolution = 0.1 ## 0.025
+boxLength = 3 ## 1
+boxHeight = 1
+resolution = 0.025 ## 0.025
 
 """
 if uw.mpi.rank == 0:
@@ -229,7 +229,7 @@ for step in range(0, maxsteps):
     if (uw.mpi.rank == 0):
         print("next step")
 
-    if (step == 1):
+    if (step == 2):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
         ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
 
