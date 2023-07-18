@@ -228,6 +228,7 @@ for step in range(0, maxsteps):
 
     if (uw.mpi.rank == 0):
         print("next step")
+        
     if (step == 1):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
         ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
