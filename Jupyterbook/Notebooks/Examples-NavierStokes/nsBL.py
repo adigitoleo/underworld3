@@ -22,9 +22,9 @@ import pickle
 
 # In[2]:
 
-boxLength = 1.0
+boxLength = 0.5 ## 1
 boxHeight = 0.5
-resolution = 0.025
+resolution = 0.05 ## 0.25
 
 """
 if uw.mpi.rank == 0:
@@ -253,7 +253,7 @@ def getBL(mesh, v):
 
 ts = 0
 dt_ns = 1.0e-1
-maxsteps = 100
+maxsteps = 5
 differences= []
 pdifferences=[]
 
