@@ -24,7 +24,7 @@ import pickle
 
 boxLength = 0.5 ## 1
 boxHeight = 0.5
-resolution = 0.05 ## 0.25
+resolution = 0.1 ## 0.025
 
 """
 if uw.mpi.rank == 0:
