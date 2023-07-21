@@ -435,7 +435,7 @@ while t_step < nsteps:
             plt.plot(difference[1:])
             plt.savefig(outdir + "difference.png")
             plt.clf()
-            plt.plot(vrmsVal)
+            plt.plot(timeVal, vrmsVal)
             plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
@@ -462,7 +462,7 @@ if (uw.mpi.rank == 0):
     plt.plot(difference[1:])
     plt.savefig(outdir + "difference.png")
     plt.clf()
-    plt.plot(vrmsVal)
+    plt.plot(timeVal, vrmsVal)
     plt.savefig(outdir + "vrms.png")
     plt.clf()
 
