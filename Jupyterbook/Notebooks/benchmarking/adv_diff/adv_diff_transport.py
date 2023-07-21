@@ -50,7 +50,7 @@ mesh = uw.meshing.StructuredQuadBox(
 )
 
 # Set some values of the system
-k = 0.0000001 # diffusive constant
+k = 0 # diffusive constant
 
 tmin = 0.5 # temp min
 tmax = 1.0 # temp max
@@ -59,7 +59,7 @@ velocity = 50
 
 # Create an adv
 v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=2)
-T = uw.discretisation.MeshVariable("T", mesh, 1, degree=2)
+T = uw.discretisation.MeshVariable("T", mesh, 1, degree=1)
 
 # #### Create the advDiff solver
 
@@ -191,7 +191,8 @@ sample_points[:, 1] = sample_y
 t0 = uw.function.evaluate(adv_diff.u.fn, sample_points)
 
 ### estimate the timestep based on diffusion only
-dt = mesh.get_min_radius() ** 2 / k  ### dt = length squared / diffusivity
+##dt = mesh.get_min_radius() ** 2 / k  ### dt = length squared / diffusivity
+dt = 0.0001
 print(f"dt: {dt}")
 
 def stepFunction(left, right, x):
@@ -215,7 +216,7 @@ def diffusion_1D(sample_points, tempProfile, k, model_dt):
 
     dx = sample_points[1] - sample_points[0]
 
-    dt = 0.5 * (dx**2 / k)
+    dt = 0.0001
 
     """ max time of model """
     total_time = model_dt
@@ -243,8 +244,8 @@ tempData = uw.function.evaluate(adv_diff.u.fn, sample_points)
 step = 0
 time = 0.0
 
-nsteps = 50
-every = 5
+nsteps = 10
+every = 1
 
 round(time, 5)
 
@@ -277,13 +278,7 @@ while step < nsteps:
         sample_points=sample_points[:, 1], tempProfile=tempData, k=k, model_dt=dt
     )
     
-    dt0 = adv_diff.estimate_dt()
-    
-    dt1 = mesh.get_min_radius() ** 2 / k
-    
-    print(dt0, dt1)
-    
-    dt = adv_diff.estimate_dt()
+    ##dt = adv_diff.estimate_dt()
     
     ### diffuse through underworld
     adv_diff.solve(timestep=dt)
@@ -291,7 +286,7 @@ while step < nsteps:
     step += 1
     time += dt
     
-plt.savefig('Transport_evolution_2.pdf', bbox_inches='tight', dpi=500)
+plt.savefig('Transport_evolutionT1.pdf', bbox_inches='tight', dpi=500)
 # -
 
 plot_fig()

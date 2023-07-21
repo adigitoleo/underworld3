@@ -28,6 +28,7 @@ mesh = uw.meshing.StructuredQuadBox(
 )
 
 # Set some values of the system
+
 k = 0.00001 # diffusive constant
 
 tmin = 0.5 # temp min
@@ -39,7 +40,7 @@ T = uw.discretisation.MeshVariable("T", mesh, 1, degree=1)
 
 swarm = uw.swarm.Swarm(mesh=mesh, recycle_rate=20)
 
-T_star = uw.swarm.SwarmVariable('Ts', swarm, 1, proxy_degree=2, proxy_continuous=True)
+T_star = uw.swarm.SwarmVariable('Ts', swarm, 1, proxy_degree=1, proxy_continuous=True)
 
 swarm.populate(fill_param=2)
 
