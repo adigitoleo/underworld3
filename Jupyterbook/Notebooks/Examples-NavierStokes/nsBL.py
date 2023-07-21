@@ -22,9 +22,18 @@ import pickle
 
 # In[2]:
 
-boxLength = 3 ## 1
-boxHeight = 1
-resolution = 0.025 ## 0.025
+Re = 1000
+
+boxLength = 4/Re*3 ## 3
+boxHeight = 4/Re*3 ## 3
+normedRes = 30
+cellsPer = boxLength/normedRes
+resolution = cellsPer ## 0.025
+vel = 1
+viscosity = 0.25 * (4/Re)**2 * vel ## bl height condition
+
+
+
 
 """
 if uw.mpi.rank == 0:
@@ -89,27 +98,27 @@ ns = uw.systems.NavierStokesSwarm(
     velocityStar_fn = v_star.sym,
 )
 
-ns.rho = 10
+##ns.rho = 1
 
 
 
 ##ns.add_dirichlet_bc( (1, 0), "top", (0, 1))
 ##ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
-ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
-ns.add_dirichlet_bc( (1.0, 0), "Top", (0))
-ns.add_dirichlet_bc( (1.0, 0), "Bottom", (0, 1))
+ns.add_dirichlet_bc( (vel, 0.0), "Left", (0, 1) )
+ns.add_dirichlet_bc( (vel, 0), "Top", (0))
+ns.add_dirichlet_bc( (vel, 0), "Bottom", (0, 1))
 
 ##ns.add_dirichlet_bc( (0, 0), "right", (0, 1))
 
 ns.bodyforce = sympy.Matrix([0.0, 0.0])
 ns.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh.dim)
-ns.constitutive_model.Parameters.viscosity = 10
+ns.constitutive_model.Parameters.viscosity = viscosity
 
 ns.saddle_preconditioner = 1.0 / ns.constitutive_model.Parameters.viscosity
 
 
 # In[4]:
-"""
+
 def plot(mesh, v, ns,step):
     print("in plot")
     
@@ -145,9 +154,8 @@ def plot(mesh, v, ns,step):
             use_transparency=False,
             opacity=1.0,
         )
-        pl.add_arrows(arrow_loc, arrow_length, mag=3)
+        ##pl.add_arrows(arrow_loc, arrow_length, mag=3)
         pl.show(cpos="xy", screenshot = "nsPlots/"+str(step)+".png")
-"""
 
 
 
@@ -197,7 +205,7 @@ def getBL(mesh, v):
     slides = [i*stepSize for i in range(int( boxLength / stepSize))]
 
     functions = [
-        1/stepSize * (1 - v.sym[0]) * sympy.Piecewise(
+        1/stepSize * (vel - v.sym[0]/vel) * sympy.Piecewise(
             (1,  sympy.And( (s < x), (x<=s + stepSize))  ),
             (0, True)
         ) for s in slides
@@ -215,8 +223,8 @@ def getBL(mesh, v):
 
 
 ts = 0
-dt_ns = 1.0e-1
-maxsteps = 5
+dt_ns = 1.0e-10
+maxsteps = 10
 differences= []
 pdifferences=[]
 
@@ -231,7 +239,7 @@ for step in range(0, maxsteps):
 
     if (step == 2):
         ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
-        ns.add_dirichlet_bc( (1.0, 0.0), "Left", (0, 1) )
+        ns.add_dirichlet_bc( (vel, 0.0), "Left", (0, 1) )
 
     if (uw.mpi.rank == 0):
         print("starting to copy")
@@ -242,12 +250,9 @@ for step in range(0, maxsteps):
             print("accessed the mesh")
             old_v_data = copy.deepcopy(v.data)
             print("done with the copying")
-
-    if (uw.mpi.rank == 0):
-        print("coppied")
     
     if (uw.mpi.rank == 0):
-        print("plotted")
+        plot(mesh, v, ns, step)
 
     ## Then lets plot and save the boundary layer stuff
 
@@ -265,8 +270,6 @@ for step in range(0, maxsteps):
         plt.savefig(blPlotsPath)
         plt.clf()
         
-
-
     if (uw.mpi.rank == 0):
         print("starting a solve")
     ns.solve(timestep= dt_ns, zero_init_guess=False)
@@ -299,10 +302,13 @@ for step in range(0, maxsteps):
         plt.plot(differences)
         plt.savefig("differences.png")
         plt.clf()
-        logDifferences = [math.log(el) for el in differences]
-        plt.plot(logDifferences)
-        plt.savefig("logDifferences.png")
-        plt.clf()
+        try:
+            logDifferences = [math.log(el) for el in differences]
+            plt.plot(logDifferences)
+            plt.savefig("logDifferences.png")
+            plt.clf()
+        except:
+            print("Converged!")
 
     
 
