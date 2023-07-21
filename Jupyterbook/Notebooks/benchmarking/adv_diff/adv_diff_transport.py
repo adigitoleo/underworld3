@@ -59,7 +59,8 @@ velocity = 50
 
 # Create an adv
 v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=2)
-T = uw.discretisation.MeshVariable("T", mesh, 1, degree=1)
+T = uw.discretisation.MeshVariable("T", mesh, 1, degree=2)
+print(T.degree)
 
 # #### Create the advDiff solver
 
@@ -88,8 +89,8 @@ with mesh.access(T):
     pipePosition = ((maxY - minY) - pipe_thickness) / 2.0
 
     T.data[
-        (T.coords[:, 1] >= (T.coords[:, 1].min() + pipePosition))
-        & (T.coords[:, 1] <= (T.coords[:, 1].max() - pipePosition))
+        (T.coords[:, 1] >= (0.1))
+        & (T.coords[:, 1] <= (0.5))
     ] = tmax
 
 with mesh.access(v):
@@ -192,7 +193,7 @@ t0 = uw.function.evaluate(adv_diff.u.fn, sample_points)
 
 ### estimate the timestep based on diffusion only
 ##dt = mesh.get_min_radius() ** 2 / k  ### dt = length squared / diffusivity
-dt = 0.0001
+dt = 0.001
 print(f"dt: {dt}")
 
 def stepFunction(left, right, x):
@@ -203,8 +204,8 @@ def stepFunction(left, right, x):
 
 def transport_1D(current_time, velocity):
     points = [i/200 for i in range(200+1)]
-    left = 0.3
-    right = 0.7
+    left = 0.1
+    right = 0.5
     values = [stepFunction(left + current_time*velocity, right+ current_time*velocity, x) 
     for x in points ]
     return points, values
@@ -216,7 +217,7 @@ def diffusion_1D(sample_points, tempProfile, k, model_dt):
 
     dx = sample_points[1] - sample_points[0]
 
-    dt = 0.0001
+    dt = 0.001
 
     """ max time of model """
     total_time = model_dt
@@ -271,7 +272,7 @@ while step < nsteps:
         ### numerical solution
         ax[int(step/every)].plot(correctVals, correctPoints, ls=":", c="k", label="1D numerical solution")
         ax[int(step/every)].set_title(f'time: {round(time, 5)}', fontsize=8)
-        ax[int(step/every)].legend(fontsize=8)
+        ##ax[int(step/every)].legend(fontsize=8)
 
     ### 1D diffusion
     tempData = diffusion_1D(
@@ -286,7 +287,7 @@ while step < nsteps:
     step += 1
     time += dt
     
-plt.savefig('Transport_evolutionT1.pdf', bbox_inches='tight', dpi=500)
+plt.savefig('Transport_evolution_Long_old_T'+str(T.degree)+'.pdf', bbox_inches='tight', dpi=500)
 # -
 
 plot_fig()
