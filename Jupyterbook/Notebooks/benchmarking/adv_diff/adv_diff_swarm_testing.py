@@ -1,3 +1,4 @@
+# %%
 from petsc4py import PETSc
 import underworld3 as uw
 from underworld3.systems import Stokes
@@ -21,7 +22,7 @@ xmin, xmax = 0.0, 1.0
 ymin, ymax = 0.0, 1.0
 
 pipe_thickness = 0.4
-velocity = 1
+velocity = 0
 
 mesh = uw.meshing.StructuredQuadBox(
     elementRes=(int(res), int(res)), minCoords=(xmin, ymin), maxCoords=(xmax, ymax)
@@ -40,7 +41,7 @@ T = uw.discretisation.MeshVariable("T", mesh, 1, degree=1)
 
 swarm = uw.swarm.Swarm(mesh=mesh, recycle_rate=20)
 
-T_star = uw.swarm.SwarmVariable('Ts', swarm, 1, proxy_degree=1, proxy_continuous=True)
+T_star = uw.swarm.SwarmVariable('Ts', swarm, 1, proxy_degree=T.degree, proxy_continuous=True)
 
 swarm.populate(fill_param=2)
 
@@ -68,6 +69,11 @@ with mesh.access(T):
         (T.coords[:, 1] >= (T.coords[:, 1].min() + pipePosition))
         & (T.coords[:, 1] <= (T.coords[:, 1].max() - pipePosition))
     ] = tmax
+
+with swarm.access(T_star):
+        T_star.data[...] = (
+            T.rbf_interpolate(swarm.data, nnn=1)
+    )
 
 with mesh.access(V):
     V.data[:, 0] = 0
@@ -161,7 +167,7 @@ while step < nsteps:
 
     with swarm.access(T_star):
         T_star.data[...] = (
-            T.rbf_interpolate(swarm.data)
+            T.rbf_interpolate(swarm.data, nnn=1)
     )
 
     swarm.advection(V.fn, delta_t, corrector=False)
