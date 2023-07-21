@@ -195,10 +195,8 @@ stokes.tolerance = tol
 
 stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshbox.dim)
 
-##viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight )
-viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin))
+viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight )
 
-print(viscosityfn)
 stokes.constitutive_model.Parameters.viscosity=viscosityfn
 stokes.saddle_preconditioner = 1.0 / viscosity
 
