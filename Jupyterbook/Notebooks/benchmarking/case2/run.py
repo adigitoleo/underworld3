@@ -38,8 +38,7 @@ comm = MPI.COMM_WORLD
 
 # %%
 Ra = 1e4 #### Rayleigh number
-
-k = 1.0 #### diffusivity
+k = 1.0 #### diffusivity     
 
 boxLength = 1.0
 boxHeight = 1.0
@@ -49,8 +48,8 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 12                        ### x and y res of box
-nsteps = 20                 ### maximum number of time steps to run the first model 
+res = 24                        ### x and y res of box
+nsteps = 50                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 
@@ -379,6 +378,8 @@ if infile == None:
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
     difference = []  ## differences in the mesh variables
+    vrmsVal.append(0)
+    timeVal.append(0)
 else:
     with open(infile + "markers.pkl", 'rb') as f:
         loaded_data = pickle.load(f)
@@ -386,6 +387,7 @@ else:
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
         difference = loaded_data[3]
+time = timeVal[-1]
 
     
 
@@ -395,9 +397,6 @@ else:
 
 print("started the time loop")
 while t_step < nsteps:
-
-    vrmsVal.append(v_rms())
-    timeVal.append(time)
     with meshbox.access():
         old_t_soln_data = deepcopy(t_soln.data)
         old_v_soln_data = deepcopy(p_soln.data)
@@ -435,6 +434,7 @@ while t_step < nsteps:
             plt.plot(difference[1:])
             plt.savefig(outdir + "difference.png")
             plt.clf()
+            print(timeVal)
             plt.plot(timeVal, vrmsVal)
             plt.savefig(outdir + "vrms.png")
             plt.clf()
@@ -455,6 +455,9 @@ while t_step < nsteps:
     #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
     t_step += 1
     time   += delta_t
+
+    vrmsVal.append(v_rms())
+    timeVal.append(time)
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
