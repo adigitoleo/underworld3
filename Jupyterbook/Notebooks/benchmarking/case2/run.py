@@ -1,5 +1,4 @@
-## in this file I have changed the temperature degree to 1
-
+## this code gets run first
 
 # %% [markdown]
 # # Constant viscosity convection, Cartesian domain (benchmark)
@@ -49,7 +48,7 @@ viscosity = 1
 
 tol = 1e-5
 res = 24                        ### x and y res of box
-nsteps = 50                 ### maximum number of time steps to run the first model 
+nsteps = 100                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 
@@ -377,7 +376,6 @@ if infile == None:
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
-    difference = []  ## differences in the mesh variables
     vrmsVal.append(0)
     timeVal.append(0)
 else:
@@ -386,21 +384,15 @@ else:
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
-        difference = loaded_data[3]
 time = timeVal[-1]
 
     
 
 
-# %%
 #### Convection model / update in time
 
 print("started the time loop")
 while t_step < nsteps:
-    with meshbox.access():
-        old_t_soln_data = deepcopy(t_soln.data)
-        old_v_soln_data = deepcopy(p_soln.data)
-
     stokes.solve(zero_init_guess=True) # originally True
 
     delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
@@ -426,45 +418,28 @@ while t_step < nsteps:
     ''' save mesh variables together with mesh '''
     if (t_step % save_every == 0 and t_step > 0) or (t_step+1==nsteps) :
         if uw.mpi.rank == 0:
-            with open(outfile+"markers.pkl", 'wb') as f:
-                pickle.dump([timeVal, vrmsVal, NuVal, difference], f)
-
             print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
-            plt.plot(difference[1:])
-            plt.savefig(outdir + "difference.png")
-            plt.clf()
             print(timeVal)
             plt.plot(timeVal, vrmsVal)
             plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
-    with meshbox.access():
-        difference.append(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
 
-        if t_step > 1 and abs(getDifference([old_t_soln_data,old_v_soln_data], [t_soln.data, v_soln.data])) < epsilon_lr:
-            if uw.mpi.rank == 0:
-                print("Stopping criterion reached ... ", flush = True)
-
-            break
-
-
-
-    # early stopping criterion
-    #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
-    t_step += 1
-    time   += delta_t
+    # Save state and measurements after each complete timestep
+    if uw.mpi.rank == 0:
+        with open(outfile+"markers.pkl", 'wb') as f:
+            pickle.dump([timeVal, vrmsVal, NuVal], f)
 
     vrmsVal.append(v_rms())
     timeVal.append(time)
+    time   += delta_t
+    t_step += 1
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 if (uw.mpi.rank == 0):
-    plt.plot(difference[1:])
-    plt.savefig(outdir + "difference.png")
-    plt.clf()
     plt.plot(timeVal, vrmsVal)
     plt.savefig(outdir + "vrms.png")
     plt.clf()
@@ -472,3 +447,4 @@ if (uw.mpi.rank == 0):
 if (uw.mpi.rank == 0):
     print(len(vrmsVal))
     print("DONE")
+
