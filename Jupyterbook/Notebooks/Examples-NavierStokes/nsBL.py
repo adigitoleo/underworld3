@@ -4,6 +4,10 @@
 # # Playing around with navier stokes in underworld 3
 
 # In[1]:
+print("starting")
+print("******************")
+
+
 
 
 import os
@@ -24,13 +28,21 @@ import pickle
 
 Re = 1000
 
-boxLength = 4/Re*3 ## 3
-boxHeight = 4/Re*3 ## 3
-normedRes = 30
-cellsPer = boxLength/normedRes
-resolution = cellsPer ## 0.025
+boxLength = 2
+boxHeight = 2
+##boxLength = 4/Re*5 ## 3
+##boxHeight = 4/Re*3 ## 3
+##normedRes = 30
+resolution = 0.05
+
 vel = 1
-viscosity = 0.25 * (4/Re)**2 * vel ## bl height condition
+viscosity = 0.001 ## bl height condition
+if (uw.mpi.rank == 0):
+    print(vel * boxLength/viscosity)
+    print((2 * viscosity*boxLength/vel)**0.5)
+
+
+
 
 
 
@@ -81,7 +93,7 @@ mesh.dm.view()
 ##mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords=(5,1), cellSize=1/10, qdegree=3)
 
 v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=2)
-p = uw.discretisation.MeshVariable("P", mesh, 1, degree=2)
+p = uw.discretisation.MeshVariable("P", mesh, 1, degree=1)      
 ##vs = uw.discretisation.MeshVariable("Us", mesh, mesh.dim, degree=2) ## not useful 
 
 swarm = uw.swarm.Swarm(mesh=mesh, recycle_rate=20) ## length of streak
@@ -104,9 +116,11 @@ ns = uw.systems.NavierStokesSwarm(
 
 ##ns.add_dirichlet_bc( (1, 0), "top", (0, 1))
 ##ns.add_dirichlet_bc( (0.0, 0.0), "bottom", (0, 1) )
+ns.add_dirichlet_bc( (0, 0), "Bottom", (0,1))
 ns.add_dirichlet_bc( (vel, 0.0), "Left", (0, 1) )
-ns.add_dirichlet_bc( (vel, 0), "Top", (0))
-ns.add_dirichlet_bc( (vel, 0), "Bottom", (0, 1))
+
+ns.add_dirichlet_bc( (vel, 0.0), "Top", (0,) )
+
 
 ##ns.add_dirichlet_bc( (0, 0), "right", (0, 1))
 
@@ -236,10 +250,6 @@ for step in range(0, maxsteps):
 
     if (uw.mpi.rank == 0):
         print("next step")
-
-    if (step == 2):
-        ns.add_dirichlet_bc( (0.0, 0.0), "Bottom", (0, 1) )
-        ns.add_dirichlet_bc( (vel, 0.0), "Left", (0, 1) )
 
     if (uw.mpi.rank == 0):
         print("starting to copy")

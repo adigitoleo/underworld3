@@ -1,14 +1,5 @@
-## this code gets run first
-
-# %% [markdown]
-# # Constant viscosity convection, Cartesian domain (benchmark)
-# 
-# 
-# 
-# This example solves 2D dimensionless isoviscous thermal convection with a Rayleigh number, for comparison with the [Blankenbach et al. (1989) benchmark](https://academic.oup.com/gji/article/98/1/23/622167).
-# 
-# We set up a v, p, T system in which we will solve for a steady-state T field in response to thermal boundary conditions and then use the steady-state T field to compute a stokes flow in response.
-# 
+## program that runs stokes convection in a box heated from the bottom and cooled from
+## the top 
 
 # %%
 import petsc4py
@@ -19,6 +10,7 @@ import math
 import underworld3 as uw
 from underworld3.systems import Stokes
 from underworld3 import function
+import time as timer
 
 import os 
 import numpy as np
@@ -31,6 +23,9 @@ from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
 #os.environ["HDF5"]
 comm = MPI.COMM_WORLD
+time = 0
+if (uw.mpi.rank == 0):
+    start = timer.time()
 
 # %% [markdown]
 # ### Set parameters to use 
@@ -47,32 +42,45 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 96                        ### x and y res of box
+res = 24
+maxRes = 96                        ### x and y res of box
 nsteps = 50                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
-
 
 ## parameters for case 2 (a):
 b = math.log(1000)
 c = 0
 
+## choice of degrees for variables
+TDegree = 1
+PDegree = 1
+VDegree = 2
+
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
 outdir = "./results" 
-outfile = outdir + "/output" + str(res)
+outfile = outdir + "/output"
 save_every = 5
-#
 
-#prev_res = None
-#infile = None
-prev_res = res # if infile is not None, then this should be set to the previous model resolution
+
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-infile = None
+infile = outfile
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
-# infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
+# infile = outdir + "/convection_16" # file is that of 16 x 16 mesh 
+
+if (infile == None):
+    prev_res = res
+else:
+    with open('res.pkl', 'rb') as f:
+        prev_res = pickle.load(f)
+
+
+
+
+
 
 
 def getDifference(oldVars, newVars):
@@ -127,31 +135,15 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 qdegree = 3
                                         )
 
-# meshbox = uw.meshing.StructuredQuadBox(minCoords=(0.0, 0.0), maxCoords=(boxLength, boxHeight), elementRes=(res,res), qdegree = 3)
-
-
 # %%
 # visualise the mesh if in a notebook / serial
 
 # %%
-v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
-p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=2) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=2) # degree = 3
-
-# additional variable for the gradient
-##dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z meshbox, 1, degree = 3) # degree = 3
-
-# variable containing stress in the z direction
-##sigma_zz = uw.discretisation.MeshVariable(r"\sigma_{zz}",  meshbox, 1, degree=2) # degree = 3 
-
+v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=VDegree) # degree = 2
+p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=PDegree) # degree = 1
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=TDegree) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=TDegree) # degree = 3
 x, z = meshbox.X
-
-# projection object to calculate the gradient along Z
-##dTdZ_calc = uw.systems.Projection(meshbox, dTdZ)
-##dTdZ_calc.uw_function = t_soln.sym.diff(z)[0]
-##dTdZ_calc.smoothing = 1.0e-3
-##dTdZ_calc.petsc_options.delValue("ksp_monitor")
 
 
 # %% [markdown]
@@ -169,7 +161,9 @@ stokes = Stokes(
 )
 
 # try these
-#stokes.petsc_options['pc_type'] = 'lu' # lu if linear
+if (uw.mpi.size==1):
+    stokes.petsc_options['pc_type'] = 'lu' # lu if linear
+
 # stokes.petsc_options["snes_max_it"] = 1000
 #stokes.petsc_options["snes_type"] = "ksponly"
 stokes.tolerance = tol
@@ -193,7 +187,7 @@ stokes.tolerance = tol
 
 stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshbox.dim)
 
-viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight )
+viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
 
 stokes.constitutive_model.Parameters.viscosity=viscosityfn
 stokes.saddle_preconditioner = 1.0 / viscosity
@@ -205,8 +199,6 @@ stokes.add_dirichlet_bc((0.0,), "Top", (1,))
 stokes.add_dirichlet_bc((0.0,), "Bottom", (1,))
 
 
-#### buoyancy_force = rho0 * (1 + (beta * deltaP) - (alpha * deltaT)) * gravity
-# buoyancy_force = (1 * (1. - (1 * (t_soln.sym[0] - tempMin)))) * -1
 buoyancy_force = Ra * t_soln.sym[0]
 stokes.bodyforce = sympy.Matrix([0, buoyancy_force])
 
@@ -262,7 +254,6 @@ if infile is None:
     #meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 
     #saveData(0, outdir) # from AdvDiff_Cartesian_benchmark-scaled
-
 else:
     meshbox_prev = uw.meshing.UnstructuredSimplexBox(
                                                             minCoords=(0.0, 0.0), 
@@ -274,12 +265,11 @@ else:
     
     # T should have high degree for it to converge
     # this should have a different name to have no errors
-    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
-    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=1) # degree = 3
+    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
+    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
 
     # force to run in serial?
-    
     v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
@@ -388,63 +378,62 @@ time = timeVal[-1]
 
     
 
-
-#### Convection model / update in time
-
 print("started the time loop")
 while t_step < nsteps:
-    stokes.solve(zero_init_guess=True) # originally True
 
-    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
-    adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
+    # solve the systems
+    stokes.solve(zero_init_guess=True)
+    delta_t = 0.5 * stokes.estimate_dt()
+    adv_diff.solve(timestep=delta_t, zero_init_guess=False)
 
-    # calculate Nusselt number
-    ##dTdZ_calc.solve()
-    ##up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
-    ##lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
+    # calculate Nusselt number and other stats
+    # ...
 
-    ##Nu = -up_int/lw_int
-    ##NuVal.append(-up_int/lw_int)
-    ##NuVal[t_step] = -up_int/lw_int
+    # update time and vrms
+    vrmsVal.append(v_rms())
+    time += delta_t
+    timeVal.append(time)
+    t_step += 1
 
-    # stats then loop
-    #tstats = t_soln.stats()
-
-    #if uw.mpi.rank == 0:
-    #    print("Timestep {}, dt {}".format(t_step, delta_t), flush = True)
-            
-    #    print(f't_rms = {t_soln.stats()[6]}, v_rms = {vrmsVal[t_step]}, Nu = {NuVal[t_step]}', flush = True)
-
-    ''' save mesh variables together with mesh '''
+    # save the state after updating vrms and time
     if (t_step % save_every == 0 and t_step > 0) or (t_step+1==nsteps) :
         if uw.mpi.rank == 0:
-            print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             print(timeVal)
             plt.plot(timeVal, vrmsVal)
+            plt.title(str(len(vrmsVal))+" " + str(res))
             plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-
 
     # Save state and measurements after each complete timestep
     if uw.mpi.rank == 0:
         with open(outfile+"markers.pkl", 'wb') as f:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
 
-    vrmsVal.append(v_rms())
-    timeVal.append(time)
-    time   += delta_t
-    t_step += 1
+    if (len(vrmsVal) > 100):
+        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.01):
+            if (not (res >= maxRes) ):
+                res = int(res*2)
+                if (res >= maxRes):
+                    res = maxRes
+                break;
+            
+
+
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 if (uw.mpi.rank == 0):
     plt.plot(timeVal, vrmsVal)
+    plt.title(str(len(vrmsVal))+" " + str(res))
     plt.savefig(outdir + "vrms.png")
     plt.clf()
 
 if (uw.mpi.rank == 0):
-    print(len(vrmsVal))
-    print("DONE")
+    end = timer.time()
+    print("Time taken: ", str(end - start))
+
+    with open('res.pkl', 'wb') as f:
+        pickle.dump(res, f)
 
