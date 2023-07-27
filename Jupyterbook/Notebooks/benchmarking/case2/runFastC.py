@@ -42,9 +42,9 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 24
+res = 48
 maxRes = 96                        ### x and y res of box
-nsteps = 50                 ### maximum number of time steps to run the first model 
+nsteps = 1                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -161,6 +161,7 @@ stokes = Stokes(
 
 # try these
 if (uw.mpi.size==1):
+    print("running the linear solver")
     stokes.petsc_options['pc_type'] = 'lu' # lu if linear
 
 # stokes.petsc_options["snes_max_it"] = 1000
@@ -189,7 +190,7 @@ stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh
 viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
 
 stokes.constitutive_model.Parameters.viscosity=viscosityfn
-stokes.saddle_preconditioner = 1.0 / viscosity
+stokes.saddle_preconditioner = 1.0 / viscosityfn
 
 # Free-slip boundary conditions
 stokes.add_dirichlet_bc((0.0,), "Left", (0,))

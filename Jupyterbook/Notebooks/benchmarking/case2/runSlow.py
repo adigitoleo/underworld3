@@ -42,7 +42,7 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 24
+res = 12
 maxRes = 96                        ### x and y res of box
 nsteps = 50                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
@@ -76,7 +76,6 @@ if (infile == None):
 else:
     with open('res.pkl', 'rb') as f:
         prev_res = pickle.load(f)
-
 
 
 
@@ -412,7 +411,7 @@ while t_step < nsteps:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
 
     if (len(vrmsVal) > 100):
-        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.01):
+        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.05):
             if (not (res >= maxRes) ):
                 res = int(res*2)
                 if (res >= maxRes):
