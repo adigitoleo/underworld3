@@ -1,0 +1,23 @@
+$MeshFormat
+4.1 0 8
+$EndMeshFormat
+$PhysicalNames
+5
+1 11 "Bottom"
+1 12 "Top"
+1 13 "Right"
+1 14 "Left"
+2 99999 "Elements"
+$EndPhysicalNames
+$Entities
+4 4 1 0
+1 0 1 0 0 
+2 1 1 0 0 
+3 0 1 0 0 
+4 1 1 0 0 
+11 0 1 0 1 1 0 1 11 2 1 -2 
+12 0 1 0 1 1 0 1 12 2 4 -3 
+13 1 1 0 1 1 0 1 13 2 2 -4 
+14 0 1 0 0 1 0 1 14 2 3 -1 
+1 0 1 0 1 1 0 1 99999 4 11 13 12 14 
+$EndEntities
