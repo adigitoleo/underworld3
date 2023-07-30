@@ -87,9 +87,9 @@ if (uw.mpi.rank == 0):
 
 
 ## setup variables for our mesh
-boxLength = 3 ## length of our box
+boxLength = 1 ## length of our box
 ##boxHeight = 1.72*(boxLength)**0.5 * 10
-boxHeight = 1.72*(boxLength)**0.5 * 5
+boxHeight = 1.72*(boxLength)**0.5 * 1
 resolution = 0.1
 
 
