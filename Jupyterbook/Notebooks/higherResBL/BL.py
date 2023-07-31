@@ -87,9 +87,9 @@ if (uw.mpi.rank == 0):
 
 
 ## setup variables for our mesh
-boxLength = 1 ## length of our box
+boxLength = 2 ## length of our box
 ##boxHeight = 1.72*(boxLength)**0.5 * 10
-boxHeight = 1.72*(boxLength)**0.5 * 1
+boxHeight = 1.72*(boxLength)**0.5 * 2
 resolution = 0.1
 
 
@@ -117,7 +117,7 @@ v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=VDegree)
 p = uw.discretisation.MeshVariable("P", mesh, 1, degree=PDegree)      
 
 ## define the swarm
-swarm = uw.swarm.Swarm(mesh=mesh, recycle_rate=20)
+swarm = uw.swarm.Swarm(mesh=mesh)
 
 ## define the swarm variables
 v_star = uw.swarm.SwarmVariable("Vs", swarm, mesh.dim, 
@@ -125,10 +125,6 @@ v_star = uw.swarm.SwarmVariable("Vs", swarm, mesh.dim,
                             
 ## populate elements in the mesh with swarm particles
 swarm.populate(fill_param=2)  
-
-
-
-
 
 ## set the navier stokes solver
 ns = uw.systems.NavierStokesSwarm(
@@ -259,7 +255,7 @@ def loadState(path=outdir):
         print("checkpoint3")
         v_star.load(filename=path+'v_star.h5', swarmFilename=path+"swarm.h5")
         print("checkpoint4")
-        ##swarm.load(path+'swarm.h5')
+        swarm.load(path+'swarm.h5')
         print("checkpoint5")
         with open(path+"index.pkl", 'rb') as f:
             index = pickle.load(f)
@@ -267,13 +263,13 @@ def loadState(path=outdir):
         with open(path + "differences.pkl", 'rb') as f:
             differences = pickle.load(f)
         print("checkpoint7")
+        if (uw.mpi.rank == 0):
+            print("loaded state")
     except:
         if (uw.mpi.rank == 0):
             print("Was not able to load state")
         index = 0
         differences = []
-    if (uw.mpi.rank == 0):
-        print("done loading state")
 
     return index, differences
 
@@ -424,10 +420,9 @@ for step in range(startIndex, min(maxsteps, startIndex + runSteps) ) :
         plt.clf()
 
     if (uw.mpi.rank == 0):
-        if (True):
-            with mesh.access():
-                v_data = v.data
-                differences.append(getDifference([old_v_data], [v_data]) )
+        with mesh.access():
+            v_data = v.data
+            differences.append(getDifference([old_v_data], [v_data]) )
 
         with open(outdir + "differences.pkl", 'wb') as f:
             pickle.dump(differences, f)
@@ -445,5 +440,3 @@ for step in range(startIndex, min(maxsteps, startIndex + runSteps) ) :
 
     ## save step
     saveState(mesh, swarm, v, p, v_star, differences, step, path=outdir)
-
-
