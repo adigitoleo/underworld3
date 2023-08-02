@@ -44,7 +44,7 @@ viscosity = 1
 tol = 1e-5
 res = 12
 maxRes = 96                        ### x and y res of box
-nsteps = 10                 ### maximum number of time steps to run the first model 
+nsteps = 100                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -196,8 +196,8 @@ stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh
 
 viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
 
-stokes.constitutive_model.Parameters.viscosity=viscosityfn
-stokes.saddle_preconditioner = 1.0 / viscosityfn
+stokes.constitutive_model.Parameters.viscosity=viscosity
+stokes.saddle_preconditioner = 1.0 / viscosity
 
 # Free-slip boundary conditions
 stokes.add_dirichlet_bc((0.0,), "Left", (0,))
@@ -211,7 +211,6 @@ stokes.bodyforce = sympy.Matrix([0, buoyancy_force])
 
 # %%
 # Create adv_diff object
-
 
 adv_diff = uw.systems.AdvDiffusionSwarm(
     meshbox,
@@ -270,7 +269,7 @@ else:
                                                             qdegree = 3,
                                                             regular = False
                                                         )
-    swarm_prev = uw.swarm.Swarm(mesh=meshbox_prev)
+    ##swarm_prev = uw.swarm.Swarm(mesh=meshbox_prev)
 
 
     
@@ -279,11 +278,11 @@ else:
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
-    t_soln_star_prev = uw.swarm.SwarmVariable("Tsp", swarm_prev, 1, proxy_degree=TDegree, proxy_continuous=True)
+    ##t_soln_star_prev = uw.swarm.SwarmVariable("Tsp", swarm_prev, 1, proxy_degree=TDegree, proxy_continuous=True)
 
-    swarm_prev.load(outfile+'swarm.h5')
+    ##swarm_prev.load(outfile+'swarm.h5')
     
-    t_soln_star_prev.load(filename=outfile+"t_soln_star.h5", swarmFilename=outfile+"swarm.h5")
+    t_soln_star.load(filename=outfile+"t_soln_star.h5", swarmFilename=outfile+"swarm.h5")
 
 
 
@@ -318,8 +317,10 @@ else:
 
         v_soln.data[:] = uw.function.evaluate(v_soln_prev.fn, v_coords)
 
-    with swarm.access(t_soln_star):
-        t_soln_star.data[:,0] = uw.function.evaluate(t_soln_prev.sym[0], swarm.data)
+    ## wait, is that wrong?? Should I just take the data from the swarm??
+    ## I dont think that is correct, I want to load the swarm using .load
+    ##with swarm.access(t_soln_star):
+        ##t_soln_star.data[:,0] = uw.function.evaluate(t_soln_prev.sym[0], swarm.data)
 
 
     
@@ -418,16 +419,41 @@ time = timeVal[-1]
     
 
 print("started the time loop")
+delta_t_natural = 1.0e-2
+
+
 while t_step < nsteps:
     
     # solve the systems
     stokes.solve(zero_init_guess=True)
-    delta_t = 0.5 * stokes.estimate_dt()
+    delta_t = stokes.estimate_dt()
+    delta_t = min(delta_t, delta_t_natural)
+
+    """
+    delta_t_adv_diff = 0.5 * adv_diff.estimate_dt()
     
+    delta_t = min([delta_t_natural, delta_t_stokes, delta_t_adv_diff])
+    print([delta_t_natural, delta_t_stokes, delta_t_adv_diff, delta_t])
+
+    phi = min(1.0, delta_t/delta_t_natural) 
+    """
+
     adv_diff.solve(timestep=delta_t, zero_init_guess=False)
+
     
     with swarm.access(t_soln_star):
         t_soln_star.data[:, 0] = uw.function.evaluate(t_soln.sym[0], swarm.data)
+    
+    
+    """
+    with swarm.access(t_soln_star):
+        t_soln_star.data[...] = (
+            t_soln.rbf_interpolate(swarm.data) 
+            # phi * uw.function.evaluate(v_soln.fn, swarm.data)
+            ##+ (1.0 - phi) * t_soln_star.data
+        )
+    """
+    
     
     swarm.advection(v_soln.sym, delta_t = delta_t)
 
@@ -464,13 +490,6 @@ while t_step < nsteps:
         with open(outfile+"markers.pkl", 'wb') as f:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
 
-    if (len(vrmsVal) > 100):
-        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.05):
-            if (not (res >= maxRes) ):
-                res = int(res*2)
-                if (res >= maxRes):
-                    res = maxRes
-                break;
             
 
 

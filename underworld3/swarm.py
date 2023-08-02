@@ -384,6 +384,26 @@ class SwarmVariable(_api_tools.Stateful):
                 comm.barrier()
 
         return
+        
+    @timing.routine_timer_decorator
+    def read_timestep(
+        self,
+        base_filename: str,
+        swarm_id: str,
+        index: int,
+        outputPath: Optional[str] = "",
+    ):
+        output_base_name = os.path.join(outputPath, base_filename)
+        swarm_file = output_base_name + f".{swarm_id}.{index:05}.h5"
+
+        ### open up file with coords on all procs
+        with h5py.File(f"{swarm_file}", "r") as h5f:
+            coordinates = h5f["coordinates"][:]
+
+        #### utilises the UW function for adding a swarm by an array
+        self.add_particles_with_coordinates(coordinates)
+
+        return
 
     @timing.routine_timer_decorator
     def simple_save(self, filename: str):

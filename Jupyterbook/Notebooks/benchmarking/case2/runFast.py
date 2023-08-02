@@ -1,6 +1,7 @@
 ## program that runs stokes convection in a box heated from the bottom and cooled from
 ## the top 
-
+import os
+##os.environ['UW_TIMING_ENABLE'] = "0"
 # %%
 import petsc4py
 from petsc4py import PETSc
@@ -12,7 +13,6 @@ from underworld3.systems import Stokes
 from underworld3 import function
 import time as timer
 
-import os 
 import numpy as np
 import sympy
 from copy import deepcopy 
@@ -22,6 +22,16 @@ import matplotlib.pyplot as plt
 from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
 #os.environ["HDF5"]
+
+## set timing on
+
+
+from underworld3 import timing
+
+##timing.reset()
+###timing.start()
+
+
 comm = MPI.COMM_WORLD
 time = 0
 if (uw.mpi.rank == 0):
@@ -42,9 +52,9 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 48
+res = 12
 maxRes = 96                        ### x and y res of box
-nsteps = 100                 ### maximum number of time steps to run the first model 
+nsteps = 5                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -76,10 +86,6 @@ if (infile == None):
 else:
     with open('res.pkl', 'rb') as f:
         prev_res = pickle.load(f)
-
-
-
-
 
 
 def getDifference(oldVars, newVars):
@@ -162,7 +168,11 @@ stokes = Stokes(
 # try these
 if (uw.mpi.size==1):
     print("running the linear solver")
-    stokes.petsc_options['pc_type'] = 'lu' # lu if linear
+    stokes.petsc_options['pc_type'] = 'lu' # lu if linear ## almost mumps
+
+## mumps
+
+##stokes.petsc_options['pc_type'] = 'mumps' ## maybe parallel???
 
 # stokes.petsc_options["snes_max_it"] = 1000
 #stokes.petsc_options["snes_type"] = "ksponly"
@@ -376,15 +386,17 @@ else:
         NuVal = loaded_data[2]
 time = timeVal[-1]
 
-    
+#timing.print_table()
+#timing.reset()
+#timing.start()
 
-print("started the time loop")
+
+stokes.solve(zero_init_guess=True)
 while t_step < nsteps:
-
     # solve the systems
-    stokes.solve(zero_init_guess=True)
+    stokes.solve(zero_init_guess=False) ##   time this
     delta_t = 0.5 * stokes.estimate_dt()
-    adv_diff.solve(timestep=delta_t, zero_init_guess=False)
+    adv_diff.solve(timestep=delta_t, zero_init_guess=False) ## time that 
 
     # calculate Nusselt number and other stats
     # ...
@@ -398,28 +410,20 @@ while t_step < nsteps:
     # save the state after updating vrms and time
     if (t_step % save_every == 0 and t_step > 0) or (t_step+1==nsteps) :
         if uw.mpi.rank == 0:
-            print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
-            print(timeVal)
+            ##print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
+            ##print(timeVal)
             plt.plot(timeVal, vrmsVal)
             plt.title(str(len(vrmsVal))+" " + str(res))
             plt.savefig(outdir + "vrms.png")
             plt.clf()
-        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+        ##eshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
     # Save state and measurements after each complete timestep
     if uw.mpi.rank == 0:
         with open(outfile+"markers.pkl", 'wb') as f:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
-
-    if (len(vrmsVal) > 100):
-        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.05):
-            if (not (res >= maxRes) ):
-                res = int(res*2)
-                if (res >= maxRes):
-                    res = maxRes
-                break;
-            
-
+#timing.stop()            
+#timing.print_table()
 
 
 # save final mesh variables in the run 

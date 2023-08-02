@@ -69,8 +69,10 @@ def create_folder_if_not_exists(folder_name):
     if not os.path.exists(folder_name):
         os.mkdir(folder_name)
         print(f"Folder '{folder_name}' created successfully.")
+        return True
     else:
         print(f"Folder '{folder_name}' already exists.")
+        return False
 
 if (uw.mpi.rank == 0):
     # Main folder name
@@ -87,9 +89,10 @@ if (uw.mpi.rank == 0):
 
 
 ## setup variables for our mesh
-boxLength = 2 ## length of our box
+boxLength = 1 ## length of our box
 ##boxHeight = 1.72*(boxLength)**0.5 * 10
-boxHeight = 1.72*(boxLength)**0.5 * 2
+##boxHeight = 1.72*(boxLength)**0.5 * 2
+boxHeight = 1
 resolution = 0.1
 
 
@@ -117,14 +120,13 @@ v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=VDegree)
 p = uw.discretisation.MeshVariable("P", mesh, 1, degree=PDegree)      
 
 ## define the swarm
-swarm = uw.swarm.Swarm(mesh=mesh)
+swarm = uw.swarm.Swarm(mesh=mesh, recycle_rate=3)
 
 ## define the swarm variables
 v_star = uw.swarm.SwarmVariable("Vs", swarm, mesh.dim, 
                             proxy_degree=VDegree, proxy_continuous=True)  
-                            
-## populate elements in the mesh with swarm particles
-swarm.populate(fill_param=2)  
+
+##swarm.populate(fill_param=2)  
 
 ## set the navier stokes solver
 ns = uw.systems.NavierStokesSwarm(
@@ -229,13 +231,13 @@ def saveState(mesh, swarm, v, p, v_star, differences, index, path=outdir):
     """
     Save the state of the simulation
     """
-    swarm.save(path+'swarm.h5') ## save the swarm
 
-    v_star.save(path+'v_star.h5') ## save history of temperature
+    ##swarm.save(path+'swarm.h5') ## save the swarm
 
-    swarm.petsc_save_checkpoint('swarm', index=0, outputPath=path)
+    ##v_star.save(path+'v_star.h5') ## save history of temperature
 
-    mesh.write_timestep_xdmf(filename = path, meshVars=[v, p], index=0)
+    swarm.save_checkpoint(swarmName='swarm',swarmVars=[v_star], index=0, outputPath=path)
+    mesh.write_timestep_xdmf(filename = path+"data", meshVars=[v, p], index=0)
 
     with open(path+"differences.pkl", 'wb') as f:
         pickle.dump(differences, f)
@@ -247,15 +249,25 @@ def loadState(path=outdir):
     """
     Load in the saved system
     """
+    
+    if (uw.mpi.rank == 0):
+        print("here is the swarm size before loading")
+        
+        ##with swarm.access():
+            ##print(swarm.data.shape)
+
     try:
         print("checkpoint1")
-        v.read_from_vertex_checkpoint(path + ".U.0.h5", data_name="U")
+        v.read_from_vertex_checkpoint(path + "data.U.0.h5", data_name="U")
         print("checkpoint2")
-        p.read_from_vertex_checkpoint(path + ".P.0.h5", data_name="P")
+        p.read_from_vertex_checkpoint(path + "data.P.0.h5", data_name="P")
         print("checkpoint3")
-        v_star.load(filename=path+'v_star.h5', swarmFilename=path+"swarm.h5")
-        print("checkpoint4")
         swarm.load(path+'swarm.h5')
+        print("checkpoint4")
+        v_star.load(filename=path+'v_star.h5', swarmFilename=path+"swarm.h5")
+
+
+        
         print("checkpoint5")
         with open(path+"index.pkl", 'rb') as f:
             index = pickle.load(f)
@@ -266,10 +278,15 @@ def loadState(path=outdir):
         if (uw.mpi.rank == 0):
             print("loaded state")
     except:
+        swarm.populate(fill_param=2)
         if (uw.mpi.rank == 0):
             print("Was not able to load state")
         index = 0
         differences = []
+    if (uw.mpi.rank == 0):
+        print("Here is the swarm size after loading")
+        with swarm.access():
+            print(swarm.data.shape)
 
     return index, differences
 
@@ -334,7 +351,7 @@ def getBL(mesh, v):
     slides = [i*stepSize for i in range(int( boxLength / stepSize))]
 
     functions = [
-        1/stepSize * (vel - v.sym[0]/vel) * sympy.Piecewise(
+        1/stepSize * (1 - v.sym[0]/vel) * sympy.Piecewise(
             (1,  sympy.And( (s < x), (x<=s + stepSize))  ),
             (0, True)
         ) for s in slides
@@ -349,12 +366,12 @@ startIndex, differences = loadState()
 
 ts = 0
 dt_ns = 0.01
-maxsteps = 100
-runSteps = 5
+maxsteps = 10
+runSteps = 10
 ##differences = []
 pdifferences = []
 blStep = 10
-savePeriod = 1
+savePeriod = 10
 
 
 ## the simulation time-step
@@ -371,12 +388,15 @@ for step in range(startIndex, min(maxsteps, startIndex + runSteps) ) :
         ns.add_dirichlet_bc( (vel, 0.0), "Left", (0, 1) )
         ns.solve(timestep= dt_ns, zero_init_guess=False)
         delta_t_swarm = 1.0 * ns.estimate_dt()
-        delta_t = min(delta_t_swarm, dt_ns)
+        delta_t = delta_t_swarm
+        ##delta_t = min(delta_t_swarm, dt_ns)
         phi = min(1.0, delta_t/dt_ns)
 
         with swarm.access(v_star):
+            print(swarm.data.shape)
             v_star.data[...] = (
-                phi * v.rbf_interpolate(swarm.data) + (1.0 -  phi) * v_star.data
+                v.rbf_interpolate(swarm.data)
+                ##phi * v.rbf_interpolate(swarm.data) + (1.0 -  phi) * v_star.data
             )
     else:
         with mesh.access(v,p):
@@ -403,7 +423,8 @@ for step in range(startIndex, min(maxsteps, startIndex + runSteps) ) :
     print("Plot and update step")
     ## plot step
     if (uw.mpi.rank == 0):
-        plot(mesh, v, ns, step)
+        if (step % 10 == 0):
+            plot(mesh, v, ns, step)
 
     BLData = getBL(mesh, v)
     
