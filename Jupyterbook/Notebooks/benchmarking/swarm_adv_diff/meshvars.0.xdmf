@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" [
+<!ENTITY MeshData "meshvars.mesh.0.h5">
+
+<!ENTITY U_Data "meshvars.U.0.h5">
+<!ENTITY P_Data "meshvars.P.0.h5">
+<!ENTITY T_Data "meshvars.T.0.h5">
+]>
+<Xdmf>
+  <Domain Name="domain">
+    <DataItem Name="cells"
+              ItemType="Uniform"
+              Format="HDF"
+              NumberType="Float" Precision="8"
+              Dimensions="1358 3">
+      &MeshData;:/viz/topology/cells
+    </DataItem>
+    <DataItem Name="vertices"
+              Format="HDF"
+              Dimensions="728 2">
+      &MeshData;:/geometry/vertices
+    </DataItem>
+    <!-- ============================================================ -->
+      <Grid Name="domain" GridType="Uniform">
+        <Topology
+           TopologyType="Triangle"
+           NumberOfElements="1358">
+          <DataItem Reference="XML">
+            /Xdmf/Domain/DataItem[@Name="cells"]
+          </DataItem>
+        </Topology>
+        <Geometry GeometryType="XY">
+          <DataItem Reference="XML">
+            /Xdmf/Domain/DataItem[@Name="vertices"]
+          </DataItem>
+        </Geometry>
+
+        <Attribute
+           Name="U"
+           Type="Vector"
+           Center="Node">
+          <DataItem ItemType="HyperSlab"
+        	    Dimensions="1 728 2"
+        	    Type="HyperSlab">
+            <DataItem
+               Dimensions="3 3"
+               Format="XML">
+              0 0 0
+              1 1 1
+              1 728 2
+            </DataItem>
+            <DataItem
+               DataType="Float" Precision="8"
+               Dimensions="1 728 2"
+               Format="HDF">
+              &U_Data;:/vertex_fields/U_P2
+            </DataItem>
+          </DataItem>
+        </Attribute>
+    
+        <Attribute
+           Name="P"
+           Type="Scalar"
+           Center="Node">
+          <DataItem ItemType="HyperSlab"
+        	    Dimensions="1 728 1"
+        	    Type="HyperSlab">
+            <DataItem
+               Dimensions="3 3"
+               Format="XML">
+              0 0 0
+              1 1 1
+              1 728 1
+            </DataItem>
+            <DataItem
+               DataType="Float" Precision="8"
+               Dimensions="1 728 1"
+               Format="HDF">
+              &P_Data;:/vertex_fields/P_P1
+            </DataItem>
+          </DataItem>
+        </Attribute>
+    
+        <Attribute
+           Name="T"
+           Type="Scalar"
+           Center="Node">
+          <DataItem ItemType="HyperSlab"
+        	    Dimensions="1 728 1"
+        	    Type="HyperSlab">
+            <DataItem
+               Dimensions="3 3"
+               Format="XML">
+              0 0 0
+              1 1 1
+              1 728 1
+            </DataItem>
+            <DataItem
+               DataType="Float" Precision="8"
+               Dimensions="1 728 1"
+               Format="HDF">
+              &T_Data;:/vertex_fields/T_P1
+            </DataItem>
+          </DataItem>
+        </Attribute>
+    
+    </Grid>
+  </Domain>
+</Xdmf>
+    

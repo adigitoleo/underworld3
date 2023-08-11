@@ -146,10 +146,10 @@ x, z = meshbox.X
 
 
 ## lets create a swarm variable for velocity
-swarm = uw.swarm.Swarm(mesh = meshbox, recycle_rate=20)
+swarm = uw.swarm.Swarm(mesh = meshbox)
 
 t_soln_star = uw.swarm.SwarmVariable("Ts", swarm, 1, proxy_degree=TDegree, proxy_continuous=True)
-swarm.populate(fill_param=2)
+
 
 
 # %% [markdown]
@@ -239,6 +239,7 @@ adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 import math, sympy
 
 if infile is None:
+    swarm.populate(fill_param=2)
     pertStrength = 0.1
     deltaTemp = tempMax - tempMin
 
@@ -280,7 +281,7 @@ else:
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
     ##t_soln_star_prev = uw.swarm.SwarmVariable("Tsp", swarm_prev, 1, proxy_degree=TDegree, proxy_continuous=True)
 
-    ##swarm_prev.load(outfile+'swarm.h5')
+    swarm.load(outfile+'swarm.h5')
     
     t_soln_star.load(filename=outfile+"t_soln_star.h5", swarmFilename=outfile+"swarm.h5")
 
@@ -329,11 +330,9 @@ else:
     meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
     del meshbox_prev
-    del swarm_prev
     del v_soln_prev
     del p_soln_prev
     del t_soln_prev
-    del t_soln_star_prev
     
 
 
@@ -515,4 +514,5 @@ if (uw.mpi.rank == 0):
 
     with open('res.pkl', 'wb') as f:
         pickle.dump(res, f)
+    print("final VRMS: ", str(vrmsVal[-1]))
 
