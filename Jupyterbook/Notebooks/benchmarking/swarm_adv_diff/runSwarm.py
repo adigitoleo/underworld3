@@ -1,6 +1,7 @@
 ## program that runs stokes convection in a box heated from the bottom and cooled from
 ## the top 
-
+import os 
+os.environ["UW_TIMING_ENABLE"] = "1"
 # %%
 import petsc4py
 from petsc4py import PETSc
@@ -12,7 +13,7 @@ from underworld3.systems import Stokes
 from underworld3 import function
 import time as timer
 
-import os 
+
 import numpy as np
 import sympy
 from copy import deepcopy 
@@ -25,6 +26,10 @@ from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
 
 import argparse
+
+
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Blasius boundary layer simulation")
@@ -55,9 +60,9 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 96
+res = 48
 maxRes = 96                        ### x and y res of box
-nsteps = 100                 ### maximum number of time steps to run the first model 
+nsteps = 100                ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -287,6 +292,8 @@ delta_t_natural = 1.0e-2
 
 
 while t_step < nsteps:
+    uw.timing.start()
+    print("starting stokes", str(t_step))
     
     # solve the systems
     
@@ -307,9 +314,10 @@ while t_step < nsteps:
     adv_diff.solve(timestep=delta_t, zero_init_guess=False)
     print("done adv_diff")
 
-    
     with swarm.access(t_soln_star):
+        ##a = uw.function.evaluate(t_soln.fn, swarm.data)
         t_soln_star.data[:,0] = uw.function.evaluate(t_soln.fn, swarm.data)
+
     print("done setting values")
     
     
@@ -340,13 +348,16 @@ while t_step < nsteps:
             plt.title(str(len(vrmsVal))+" " + str(res))
             plt.savefig(outdir + "vrms.png")
             plt.clf()
-
+        print("saving state")
         saveState()
 
     # Save state and measurements after each complete timestep
     if uw.mpi.rank == 0:
         with open(outfile+"markers.pkl", 'wb') as f:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
+    uw.timing.stop()
+    uw.timing.print_table()
+
 
 
 saveState()
