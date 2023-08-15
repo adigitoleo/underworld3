@@ -18,7 +18,7 @@ print(rank)
 
 
 def setup():
-    mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords = (1,1), cellSize=0.1, qdegree=3)
+    mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords = (2,2), cellSize=0.1, qdegree=3)
 
     v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=2)
     p = uw.discretisation.MeshVariable("P", mesh, 1, degree=1)
@@ -35,9 +35,9 @@ def setup():
         velocityStar_fn = v_star.sym
             )
     ns.add_dirichlet_bc( (0,0), "Bottom", (0,1))
-    ns.add_dirichlet_bc( (1,0), "Left", (0,1))
+    ns.add_dirichlet_bc( (0,0), "Left", (0,1))
     ns.add_dirichlet_bc( (0,0), "Top", (0,1) )
-    ns.add_dirichlet_bc( (1,0), "Right",(0,1) )
+    ns.add_dirichlet_bc( (0,0), "Right",(0,1) )
 
     ns.bodyforce = sympy.Matrix([0,0])
     ns.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh.dim)
@@ -71,16 +71,11 @@ def saveAll(d):
             )
 
 def solveStep(d):
-    dt = 0.1
+    dt = 0.001
 
-    with d['mesh'].access(d['v']):
-        d['v'].data[:,0] = 1
 
     for index in range(10):
         d['ns'].solve(timestep=dt)
-        with d['mesh'].access(d['v']):
-            for index  in range(len(d['v'].data)):
-                d['v'].data[index,0] = random.uniform(0.5, 1)
         with d['swarm'].access(d['v_star']):
             d['v_star'].data[...] = d['v'].rbf_interpolate(d['swarm'].data)
         
