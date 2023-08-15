@@ -18,7 +18,7 @@ print(rank)
 
 
 def setup():
-    mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords = (2,2), cellSize=0.1, qdegree=3)
+    mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0,0), maxCoords = (1,1), cellSize=0.1, qdegree=3)
 
     v = uw.discretisation.MeshVariable("U", mesh, mesh.dim, degree=2)
     p = uw.discretisation.MeshVariable("P", mesh, 1, degree=1)
