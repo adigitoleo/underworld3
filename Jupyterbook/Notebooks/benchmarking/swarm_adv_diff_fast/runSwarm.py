@@ -200,13 +200,15 @@ adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 
 def saveState():
     ## save the mesh, save the mesh variables
+    print("starting save state")
     swarm.save_checkpoint(
         swarmName="swarm",
         swarmVars=[t_soln_star],
         index=0
     )
+    print("done checkpoint")
     meshbox.write_timestep_xdmf(filename = "meshvars", meshVars=[v_soln, p_soln, t_soln], index=0)
-
+    print("done writing the mesh")
 def loadState(v_soln,p_soln,t_soln,t_soln_star, swarm):
     v_soln.read_from_vertex_checkpoint("meshvars" + ".U.0.h5", data_name="U")
     p_soln.read_from_vertex_checkpoint("meshvars" + ".P.0.h5", data_name="P")
