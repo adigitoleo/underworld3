@@ -102,11 +102,6 @@ if (True):
     solveStep(d)
     uw.timing.stop()
     uw.timing.print_table()
-    saveAll(d)
-
-    print("saved and starting to load")
-    with d['swarm'].access(d['v_star']):
-        print(d['v_star'].data[...])
 else:
     d = reload()
     solveStep(d)
