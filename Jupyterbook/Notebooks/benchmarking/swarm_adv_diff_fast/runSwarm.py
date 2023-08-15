@@ -362,7 +362,6 @@ while t_step < nsteps:
 
 
 
-saveState()
 
 if (uw.mpi.rank == 0):
     plt.plot(timeVal, vrmsVal)
