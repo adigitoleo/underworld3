@@ -278,11 +278,12 @@ if infile == None:
     vrmsVal.append(0)
     timeVal.append(0)
 else:
-    with open(infile + "markers.pkl", 'rb') as f:
-        loaded_data = pickle.load(f)
-        timeVal = loaded_data[0]
-        vrmsVal = loaded_data[1]
-        NuVal = loaded_data[2]
+    if (uw.mpi.rank == 0):
+        with open(infile + "markers.pkl", 'rb') as f:
+            loaded_data = pickle.load(f)
+            timeVal = loaded_data[0]
+            vrmsVal = loaded_data[1]
+            NuVal = loaded_data[2]
 time = timeVal[-1]
 
     
