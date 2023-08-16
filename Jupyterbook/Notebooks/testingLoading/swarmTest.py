@@ -94,12 +94,17 @@ def reload():
 if (True):
     uw.timing.start()
     d = setup()
+    print("starting to save")
+    saveAll(d)
+    print("done saving")
+    """
     d['swarm'].populate(fill_param=2)
     with d['swarm'].access(d['v_star']):
         print(d['v_star'].data[...])
     with d['swarm'].access():
         print(d['swarm'].data.shape)
     solveStep(d)
+    """
     uw.timing.stop()
     uw.timing.print_table()
 else:
