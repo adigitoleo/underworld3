@@ -72,15 +72,15 @@ def saveAll(d):
 
 def solveStep(d):
     dt = 0.001
-
+    
 
     for index in range(10):
+        print(index)
         d['ns'].solve(timestep=dt)
         with d['swarm'].access(d['v_star']):
             d['v_star'].data[...] = d['v'].rbf_interpolate(d['swarm'].data)
         
         d['swarm'].advection(d['v'].fn, dt, corrector=True)
-        print()
     
 def reload():
     d = setup()
@@ -92,11 +92,14 @@ def reload():
 
 
 if (True):
+    if (uw.mpi.rank == 0):
+        print("stating")
     uw.timing.start()
     d = setup()
     print("starting to save")
     saveAll(d)
     print("done saving")
+    d = reload()
     """
     d['swarm'].populate(fill_param=2)
     with d['swarm'].access(d['v_star']):
@@ -107,7 +110,4 @@ if (True):
     """
     uw.timing.stop()
     uw.timing.print_table()
-else:
-    d = reload()
-    solveStep(d)
     
