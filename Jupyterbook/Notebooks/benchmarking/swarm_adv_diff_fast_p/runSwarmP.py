@@ -62,7 +62,7 @@ viscosity = 1
 tol = 1e-5
 res = 12
 maxRes = 96                        ### x and y res of box
-nsteps = 10                ### maximum number of time steps to run the first model 
+nsteps = 100                ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -281,12 +281,11 @@ if infile == None:
     vrmsVal.append(0)
     timeVal.append(0)
 else:
-    if (uw.mpi.rank == 0):
-        with open(infile + "markers.pkl", 'rb') as f:
-            loaded_data = pickle.load(f)
-            timeVal = loaded_data[0]
-            vrmsVal = loaded_data[1]
-            NuVal = loaded_data[2]
+    with open(infile + "markers.pkl", 'rb') as f:
+        loaded_data = pickle.load(f)
+        timeVal = loaded_data[0]
+        vrmsVal = loaded_data[1]
+        NuVal = loaded_data[2]
 time = timeVal[-1]
 
     
