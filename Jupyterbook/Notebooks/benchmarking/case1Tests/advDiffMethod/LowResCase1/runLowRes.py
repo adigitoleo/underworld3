@@ -2,6 +2,10 @@
 ## the top 
 
 # %%
+import os
+os.environ['UW_TIMING_ENABLE'] = '1'
+
+
 import petsc4py
 from petsc4py import PETSc
 from mpi4py import MPI
@@ -47,9 +51,6 @@ maxRes = 96                        ### x and y res of box
 nsteps = 100                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
-## parameters for case 2 (a):
-b = math.log(1000)
-c = 0
 
 ## choice of degrees for variables
 TDegree = 1
@@ -187,10 +188,10 @@ stokes.tolerance = tol
 
 stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshbox.dim)
 
-viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
+##viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
 
-stokes.constitutive_model.Parameters.viscosity=viscosityfn
-stokes.saddle_preconditioner = 1.0 / viscosityfn
+stokes.constitutive_model.Parameters.viscosity=viscosity
+stokes.saddle_preconditioner = 1.0 / viscosity
 
 # Free-slip boundary conditions
 stokes.add_dirichlet_bc((0.0,), "Left", (0,))
@@ -380,7 +381,7 @@ time = timeVal[-1]
 
 print("started the time loop")
 while t_step < nsteps:
-
+    uw.timing.start()
     # solve the systems
     stokes.solve(zero_init_guess=True)
     delta_t = 0.5 * stokes.estimate_dt()
@@ -411,13 +412,8 @@ while t_step < nsteps:
         with open(outfile+"markers.pkl", 'wb') as f:
             pickle.dump([timeVal, vrmsVal, NuVal], f)
 
-    if (len(vrmsVal) > 100):
-        if (max(vrmsVal[-100:]) - min(vrmsVal[-100:])/max(vrmsVal[-100:]) < 0.05):
-            if (not (res >= maxRes) ):
-                res = int(res*2)
-                if (res >= maxRes):
-                    res = maxRes
-                break;
+    uw.timing.stop()
+    uw.timing.print_table()
             
 
 

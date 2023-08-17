@@ -141,7 +141,7 @@ x, z = meshbox.X
 
 
 ## lets create a swarm variable for velocity
-swarm = uw.swarm.Swarm(mesh = meshbox, recycle_rate=5)
+swarm = uw.swarm.Swarm(mesh = meshbox, recycle_rate=2)
 
 t_soln_star = uw.swarm.SwarmVariable("Ts", swarm, 1, proxy_degree=TDegree, proxy_continuous=True)
 
