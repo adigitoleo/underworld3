@@ -10,11 +10,9 @@ import underworld3 as uw
 import numpy
 import sympy
 import random
-from mpi4py import MPI
-size = MPI.COMM_WORLD.Get_size()
-rank = MPI.COMM_WORLD.Get_rank()
-print(size)
-print(rank)
+
+
+
 
 
 def setup():
@@ -35,9 +33,9 @@ def setup():
         velocityStar_fn = v_star.sym
             )
     ns.add_dirichlet_bc( (0,0), "Bottom", (0,1))
-    ns.add_dirichlet_bc( (0,0), "Left", (0,1))
+    ns.add_dirichlet_bc( (1,0), "Left", (0,1))
     ns.add_dirichlet_bc( (0,0), "Top", (0,1) )
-    ns.add_dirichlet_bc( (0,0), "Right",(0,1) )
+    ns.add_dirichlet_bc( (1,0), "Right",(0,1) )
 
     ns.bodyforce = sympy.Matrix([0,0])
     ns.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh.dim)
@@ -71,16 +69,21 @@ def saveAll(d):
             )
 
 def solveStep(d):
-    dt = 0.001
-    
+    dt = 0.1
 
-    for index in range(10):
-        print(index)
+    with d['mesh'].access(d['v']):
+        d['v'].data[:,0] = 1
+
+    for index in range(1):
         d['ns'].solve(timestep=dt)
+        with d['mesh'].access(d['v']):
+            for index  in range(len(d['v'].data)):
+                d['v'].data[index,0] = random.uniform(0.5, 1)
         with d['swarm'].access(d['v_star']):
             d['v_star'].data[...] = d['v'].rbf_interpolate(d['swarm'].data)
         
         d['swarm'].advection(d['v'].fn, dt, corrector=True)
+        print()
     
 def reload():
     d = setup()
@@ -92,22 +95,18 @@ def reload():
 
 
 if (True):
-    if (uw.mpi.rank == 0):
-        print("stating")
     uw.timing.start()
     d = setup()
-    print("starting to save")
-    saveAll(d)
-    print("done saving")
-    d = reload()
-    """
     d['swarm'].populate(fill_param=2)
-    with d['swarm'].access(d['v_star']):
-        print(d['v_star'].data[...])
-    with d['swarm'].access():
-        print(d['swarm'].data.shape)
     solveStep(d)
-    """
     uw.timing.stop()
     uw.timing.print_table()
+    saveAll(d)
+
+    print("saved and starting to load")
+    with d['swarm'].access(d['v_star']):
+        print(d['v_star'].data[...])
+else:
+    d = reload()
+    solveStep(d)
     
