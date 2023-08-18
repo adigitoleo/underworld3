@@ -291,7 +291,7 @@ time = timeVal[-1]
     
 
 print("started the time loop")
-delta_t_natural = 1.0e-2
+delta_t_natural = 1.0e-4
 
 
 while t_step < nsteps:
