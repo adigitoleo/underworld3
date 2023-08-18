@@ -1,9 +1,0 @@
-Here I am running case 2(a) from the following paper: Blankenbach, B., et al. "A benchmark comparison for mantle convection codes." Geophysical Journal International 98.1 (1989): 23-38.
-
-The saved velocity, temperature and pressure variables are saved in Results. Running 'python3 runFastC.py' loads the previous state of the convecting system, simulates for 1 iteration and closes without saving. 
-It uses the timing module in underworld3 to time the program.
-
-The issues:
-1. At a resolution of 96x96 (the default for runFastC.py), the adv_diff solver takes about 10 times longer than the stokes solver with pc_type set to lu.
-2. There is no noticable improvement to performance in the adv_diff solver when running in parallel using 'mpiexec python3 runFastC.py'
-
