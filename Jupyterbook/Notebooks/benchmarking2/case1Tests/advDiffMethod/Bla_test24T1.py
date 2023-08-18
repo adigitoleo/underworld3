@@ -1,16 +1,24 @@
-## program that runs stokes convection in a box heated from the bottom and cooled from
-## the top 
+## in this file I have changed the temperature degree to 1
+
+
+# %% [markdown]
+# # Constant viscosity convection, Cartesian domain (benchmark)
+# 
+# 
+# 
+# This example solves 2D dimensionless isoviscous thermal convection with a Rayleigh number, for comparison with the [Blankenbach et al. (1989) benchmark](https://academic.oup.com/gji/article/98/1/23/622167).
+# 
+# We set up a v, p, T system in which we will solve for a steady-state T field in response to thermal boundary conditions and then use the steady-state T field to compute a stokes flow in response.
+# 
 
 # %%
 import petsc4py
 from petsc4py import PETSc
 from mpi4py import MPI
-import math
 
 import underworld3 as uw
 from underworld3.systems import Stokes
 from underworld3 import function
-import time as timer
 
 import os 
 import numpy as np
@@ -19,20 +27,24 @@ from copy import deepcopy
 import pickle
 import matplotlib.pyplot as plt
 
+
+
+
+
+
+
 from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
 #os.environ["HDF5"]
 comm = MPI.COMM_WORLD
-time = 0
-if (uw.mpi.rank == 0):
-    start = timer.time()
 
 # %% [markdown]
 # ### Set parameters to use 
 
 # %%
 Ra = 1e4 #### Rayleigh number
-k = 1.0 #### diffusivity     
+
+k = 1.0     #### diffusivity
 
 boxLength = 1.0
 boxHeight = 1.0
@@ -42,44 +54,27 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 12
-maxRes = 96                        ### x and y res of box
-nsteps = 100                 ### maximum number of time steps to run the first model 
+res = 24                        ### x and y res of box
+nsteps = 50                 ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
-
-## parameters for case 2 (a):
-b = math.log(1000)
-c = 0
-
-## choice of degrees for variables
-TDegree = 1
-PDegree = 1
-VDegree = 2
 
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
-outdir = "./results" 
-outfile = outdir + "/output"
+outdir = "./Bla_test24T1R" 
+outfile = outdir + "/output" + str(res)
 save_every = 5
+#
 
-
+#prev_res = None
+#infile = None
+prev_res = res # if infile is not None, then this should be set to the previous model resolution
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-infile = outfile
+infile = None
 # example infile settings: 
 # infile = outfile # will read outfile, but this file will be overwritten at the end of this run 
-# infile = outdir + "/convection_16" # file is that of 16 x 16 mesh 
-
-if (infile == None):
-    prev_res = res
-else:
-    with open('res.pkl', 'rb') as f:
-        prev_res = pickle.load(f)
-
-
-
-
+# infile = outdir + "/convection_16" # file is that of 16 x 16 mesh   
 
 
 def getDifference(oldVars, newVars):
@@ -131,25 +126,35 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 minCoords=(0.0, 0.0), 
                                                 maxCoords=(boxLength, boxHeight), 
                                                 cellSize=1.0 /res,
-                                                qdegree = 3
+                                                qdegree = 3,
+                                                regular=True
                                         )
+
+# meshbox = uw.meshing.StructuredQuadBox(minCoords=(0.0, 0.0), maxCoords=(boxLength, boxHeight), elementRes=(res,res), qdegree = 3)
+
 
 # %%
 # visualise the mesh if in a notebook / serial
 
 # %%
-v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=VDegree) # degree = 2
-p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=PDegree) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=TDegree) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=TDegree) # degree = 3
+v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
+p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=1) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=1) # degree = 3
+
+# additional variable for the gradient
+##dTdZ = uw.discretisation.MeshVariable(r"\partial T/ \partial \Z", # FIXME: Z should not be a function of x, y, z meshbox, 1, degree = 3) # degree = 3
+
+# variable containing stress in the z direction
+##sigma_zz = uw.discretisation.MeshVariable(r"\sigma_{zz}",  meshbox, 1, degree=2) # degree = 3 
+
 x, z = meshbox.X
 
-
-## lets create a swarm variable for velocity
-swarm = uw.swarm.Swarm(mesh = meshbox)
-
-t_soln_star = uw.swarm.SwarmVariable("Ts", swarm, 1, proxy_degree=TDegree, proxy_continuous=True)
-
+# projection object to calculate the gradient along Z
+##dTdZ_calc = uw.systems.Projection(meshbox, dTdZ)
+##dTdZ_calc.uw_function = t_soln.sym.diff(z)[0]
+##dTdZ_calc.smoothing = 1.0e-3
+##dTdZ_calc.petsc_options.delValue("ksp_monitor")
 
 
 # %% [markdown]
@@ -167,10 +172,7 @@ stokes = Stokes(
 )
 
 # try these
-if (uw.mpi.size==1):
-    print("running the linear solver")
-    stokes.petsc_options['pc_type'] = 'lu' # lu if linear
-
+#stokes.petsc_options['pc_type'] = 'lu' # lu if linear
 # stokes.petsc_options["snes_max_it"] = 1000
 #stokes.petsc_options["snes_type"] = "ksponly"
 stokes.tolerance = tol
@@ -193,9 +195,6 @@ stokes.tolerance = tol
 # stokes.petsc_options.delValue("pc_use_amat")
 
 stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshbox.dim)
-
-viscosityfn = viscosity*sympy.exp(-b*t_soln.sym[0]/(tempMax - tempMin) + c * (1 - z)/boxHeight)
-
 stokes.constitutive_model.Parameters.viscosity=viscosity
 stokes.saddle_preconditioner = 1.0 / viscosity
 
@@ -206,17 +205,19 @@ stokes.add_dirichlet_bc((0.0,), "Top", (1,))
 stokes.add_dirichlet_bc((0.0,), "Bottom", (1,))
 
 
+#### buoyancy_force = rho0 * (1 + (beta * deltaP) - (alpha * deltaT)) * gravity
+# buoyancy_force = (1 * (1. - (1 * (t_soln.sym[0] - tempMin)))) * -1
 buoyancy_force = Ra * t_soln.sym[0]
 stokes.bodyforce = sympy.Matrix([0, buoyancy_force])
 
 # %%
 # Create adv_diff object
 
-adv_diff = uw.systems.AdvDiffusionSwarm(
+adv_diff = uw.systems.AdvDiffusionSLCN(
     meshbox,
     u_Field=t_soln,
     V_Field=v_soln,
-    u_Star_fn=t_soln_star.sym
+    solver_name="adv_diff",
 )
 
 adv_diff.constitutive_model = uw.systems.constitutive_models.DiffusionModel(meshbox.dim)
@@ -239,7 +240,6 @@ adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 import math, sympy
 
 if infile is None:
-    swarm.populate(fill_param=2)
     pertStrength = 0.1
     deltaTemp = tempMax - tempMin
 
@@ -262,46 +262,27 @@ if infile is None:
     #meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 
     #saveData(0, outdir) # from AdvDiff_Cartesian_benchmark-scaled
+
 else:
     meshbox_prev = uw.meshing.UnstructuredSimplexBox(
                                                             minCoords=(0.0, 0.0), 
                                                             maxCoords=(boxLength, boxHeight), 
                                                             cellSize=1.0/prev_res,
                                                             qdegree = 3,
-                                                            regular = False
+                                                            regular = True 
                                                         )
-    ##swarm_prev = uw.swarm.Swarm(mesh=meshbox_prev)
-
-
     
     # T should have high degree for it to converge
     # this should have a different name to have no errors
-    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
-    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
-    ##t_soln_star_prev = uw.swarm.SwarmVariable("Tsp", swarm_prev, 1, proxy_degree=TDegree, proxy_continuous=True)
-
-    swarm.load(outfile+'swarm.h5')
-    
-    t_soln_star.load(filename=outfile+"t_soln_star.h5", swarmFilename=outfile+"swarm.h5")
-
-
-
-
-
-    
+    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
+    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=1) # degree = 3
 
     # force to run in serial?
+    
     v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
-
-    ## Okay, now I need to read in the swarm here
-    ## we will do this later  - right now, lets just try and run the swarm.
-
-
-    
-
 
     #comm.Barrier()
     # this will not work in parallel?
@@ -318,22 +299,12 @@ else:
 
         v_soln.data[:] = uw.function.evaluate(v_soln_prev.fn, v_coords)
 
-    ## wait, is that wrong?? Should I just take the data from the swarm??
-    ## I dont think that is correct, I want to load the swarm using .load
-    ##with swarm.access(t_soln_star):
-        ##t_soln_star.data[:,0] = uw.function.evaluate(t_soln_prev.sym[0], swarm.data)
-
-
-    
-
-
     meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
     del meshbox_prev
     del v_soln_prev
     del p_soln_prev
     del t_soln_prev
-    
 
 
 # %% [markdown]
@@ -405,114 +376,96 @@ if infile == None:
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
-    vrmsVal.append(0)
-    timeVal.append(0)
+    difference = []  ## differences in the mesh variables
 else:
     with open(infile + "markers.pkl", 'rb') as f:
         loaded_data = pickle.load(f)
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
-time = timeVal[-1]
+        difference = loaded_data[3]
 
     
+
+
+# %%
+#### Convection model / update in time
 
 print("started the time loop")
-delta_t_natural = 1.0e-4
-
-
 while t_step < nsteps:
-    
-    # solve the systems
-    stokes.solve(zero_init_guess=True)
-    delta_t = stokes.estimate_dt()
-    delta_t = min(delta_t, delta_t_natural)
 
-    """
-    delta_t_adv_diff = 0.5 * adv_diff.estimate_dt()
-    
-    delta_t = min([delta_t_natural, delta_t_stokes, delta_t_adv_diff])
-    print([delta_t_natural, delta_t_stokes, delta_t_adv_diff, delta_t])
-
-    phi = min(1.0, delta_t/delta_t_natural) 
-    """
-
-    adv_diff.solve(timestep=delta_t, zero_init_guess=False)
-
-    
-    with swarm.access(t_soln_star):
-        t_soln_star.data[:, 0] = uw.function.evaluate(t_soln.sym[0], swarm.data)
-    
-    
-    """
-    with swarm.access(t_soln_star):
-        t_soln_star.data[...] = (
-            t_soln.rbf_interpolate(swarm.data) 
-            # phi * uw.function.evaluate(v_soln.fn, swarm.data)
-            ##+ (1.0 - phi) * t_soln_star.data
-        )
-    """
-    
-    
-    swarm.advection(v_soln.sym, delta_t = delta_t)
-
-    # calculate Nusselt number and other stats
-    # ...
-
-    # update time and vrms
     vrmsVal.append(v_rms())
-    time += delta_t
     timeVal.append(time)
-    t_step += 1
+    with meshbox.access():
+        old_t_soln_data = deepcopy(t_soln.data)
+        old_v_soln_data = deepcopy(p_soln.data)
 
-    # save the state after updating vrms and time
+
+
+    stokes.solve(zero_init_guess=True) # originally True
+
+    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
+    adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
+
+    # calculate Nusselt number
+    ##dTdZ_calc.solve()
+    ##up_int = surface_integral(meshbox, dTdZ.sym[0], up_surface_defn_fn)
+    ##lw_int = surface_integral(meshbox, t_soln.sym[0], lw_surface_defn_fn)
+
+    ##Nu = -up_int/lw_int
+    ##NuVal.append(-up_int/lw_int)
+    ##NuVal[t_step] = -up_int/lw_int
+
+    # stats then loop
+    #tstats = t_soln.stats()
+
+    #if uw.mpi.rank == 0:
+    #    print("Timestep {}, dt {}".format(t_step, delta_t), flush = True)
+            
+    #    print(f't_rms = {t_soln.stats()[6]}, v_rms = {vrmsVal[t_step]}, Nu = {NuVal[t_step]}', flush = True)
+
+    ''' save mesh variables together with mesh '''
     if (t_step % save_every == 0 and t_step > 0) or (t_step+1==nsteps) :
         if uw.mpi.rank == 0:
+            with open(outfile+"markers.pkl", 'wb') as f:
+                pickle.dump([timeVal, vrmsVal, NuVal, difference], f)
+
+            print("Timestep {}, dt {}, v_rms {}".format(t_step, delta_t, vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
-            print(timeVal)
-            plt.plot(timeVal, vrmsVal)
-            plt.title(str(len(vrmsVal))+" " + str(res))
+            plt.plot(difference[1:])
+            plt.savefig(outdir + "difference.png")
+            plt.clf()
+            plt.plot(vrmsVal)
             plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-        
-        ## save the swarm and its variables
-        swarm.save(outfile+'swarm.h5') ## save the swarm
 
-        t_soln_star.save(outfile+'t_soln_star.h5') ## save history of temperature
+    with meshbox.access():
+        difference.append(getDifference([old_t_soln_data, old_v_soln_data], [t_soln.data, v_soln.data]))
 
-        swarm.petsc_save_checkpoint('swarm', index=0, outputPath=outfile)
+        if t_step > 1 and abs(getDifference([old_t_soln_data,old_v_soln_data], [t_soln.data, v_soln.data])) < epsilon_lr:
+            if uw.mpi.rank == 0:
+                print("Stopping criterion reached ... ", flush = True)
 
-
-    # Save state and measurements after each complete timestep
-    if uw.mpi.rank == 0:
-        with open(outfile+"markers.pkl", 'wb') as f:
-            pickle.dump([timeVal, vrmsVal, NuVal], f)
-
-            
+            break
 
 
+
+    # early stopping criterion
+    #if t_step > 1 and abs((NuVal[t_step] - NuVal[t_step - 1])/NuVal[t_step]) < epsilon_lr:
+    t_step += 1
+    time   += delta_t
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-## save the swarm and its variables
-swarm.save(outfile+'swarm.h5') ## save the swarm
-
-t_soln_star.save(outfile+'t_soln_star.h5') ## save history of temperature
-
-swarm.petsc_save_checkpoint('swarm', index=0, outputPath=outfile)
-
 if (uw.mpi.rank == 0):
-    plt.plot(timeVal, vrmsVal)
-    plt.title(str(len(vrmsVal))+" " + str(res))
+    plt.plot(difference[1:])
+    plt.savefig(outdir + "difference.png")
+    plt.clf()
+    plt.plot(vrmsVal)
     plt.savefig(outdir + "vrms.png")
     plt.clf()
 
 if (uw.mpi.rank == 0):
-    end = timer.time()
-    print("Time taken: ", str(end - start))
-
-    with open('res.pkl', 'wb') as f:
-        pickle.dump(res, f)
-    print("final VRMS: ", str(vrmsVal[-1]))
-
+    print(len(vrmsVal))
+    print("DONE")

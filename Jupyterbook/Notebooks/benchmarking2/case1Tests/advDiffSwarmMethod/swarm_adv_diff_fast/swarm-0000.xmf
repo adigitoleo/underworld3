@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<Xdmf xmlns:xi="http://www.w3.org/2001/XInclude" Version="2.0">
+<Domain>
+<Grid Name="swarm-0000" GridType="Uniform">
+	<Topology Type="POLYVERTEX" NodesPerElement="32412"> </Topology>
+		<Geometry Type="XY">
+			<DataItem Format="HDF" NumberType="Float" Precision="8" Dimensions="32412 2">swarm-0000.h5:/coordinates</DataItem>
+		</Geometry>
+	<Attribute Type="Scalar" Center="Node" Name="Ts">
+			<DataItem Format="HDF" NumberType="Float" Precision="8" Dimensions="32412 1">Ts-0000.h5:/data</DataItem>
+	</Attribute>
+</Grid>
+</Domain>
+</Xdmf>

@@ -1,0 +1,307 @@
+#!/bin/bash
+csh_mode=0 ; [ "$1" = --csh ] && csh_mode=1 && shift
+set +u
+shopt -s extglob
+export CASINO_AUTOINSTALLED=yes
+export CASINO_AVAILABLE_ARCHS="linuxpc-ifort-sge-parallel"
+
+# Add bin_qmc to PATH, but avoid duplicating entry.
+path_add="/home/103/mw1705/RING/CASINO/bin_qmc"
+IFS_save="$IFS"
+IFS=:
+for path_item in $PATH "" ; do
+  [ "$path_item" = "$path_add" ] && break
+done
+IFS="$IFS_save"
+[ -z "$path_item" ] && export PATH="$PATH:$path_add"
+unset path_add path_item IFS_save
+
+# Function to detect basic host parameters
+get_host_params () 
+{ 
+    host_ARCH=$(uname -m 2> /dev/null);
+    host_KERNEL=$(uname -s 2> /dev/null);
+    host_DISTRIBUTION=$(
+  if type -P lsb_release >& /dev/null ; then
+   lsb_release -ds 2> /dev/null
+  elif [ -e /etc/redhat-release ] ; then
+   head -n 1 /etc/redhat-release 2> /dev/null
+  elif [ -e /etc/SuSE-release ] ; then
+   head -n 1 /etc/SuSE-release 2> /dev/null
+  elif [ -e /etc/slackware-version ] ; then
+   head -n 1 /etc/slackware-version 2> /dev/null
+  elif [ -e /etc/gentoo-release ] ; then
+   head -n 1 /etc/gentoo-release 2> /dev/null
+  elif [ -e /etc/arch-release ] ; then
+   echo "Arch Linux"
+  elif [ -e /etc/debian_version ] ; then
+   echo "Debian GNU/Linux $(head -n 1 /etc/debian_version 2> /dev/null)"
+  fi
+ );
+    host_DISTRIBUTION=${host_DISTRIBUTION#\"};
+    host_DISTRIBUTION=${host_DISTRIBUTION%\"};
+    host_OS=$(uname -o 2> /dev/null);
+    host_HOSTNAME=$(hostname 2> /dev/null);
+    host_DOMAIN=$(hostname -d 2> /dev/null)
+}
+
+# Function to match a host parameters
+match_host_param () 
+{ 
+    local var="$1" hvalue fvalue v found;
+    eval hvalue=\"\$host_$var\";
+    eval fvalue=\"\$$var\";
+    [ -z "$fvalue" ] || [ -z "$hvalue" ] && return 20;
+    found=0;
+    while ((${#fvalue}>0)); do
+        v="${fvalue%%,*}";
+        fvalue="$(unpad "${fvalue:${#v}}")";
+        fvalue="$(unpad "${fvalue#,}")";
+        v="$(unpad "$v")";
+        [[ "$hvalue" == $v ]] && return 0;
+    done;
+    return 1
+}
+
+# Function to match hostname
+check_host () 
+{ 
+    local var match_var="";
+    if [ -z "$DOMAIN" ]; then
+        for var in HOSTNAME;
+        do
+            match_host_param $var;
+            case $? in 
+                0)
+                    match_var="$match_var $var"
+                ;;
+                1)
+                    echo "0 $var";
+                    return 1
+                ;;
+            esac;
+        done;
+    else
+        for var in HOSTNAME DOMAIN;
+        do
+            match_host_param $var;
+            case $? in 
+                0)
+                    match_var="$match_var $var"
+                ;;
+                1)
+                    echo "0 $var";
+                    return 1
+                ;;
+            esac;
+        done;
+    fi;
+    echo "1 $match_var";
+    return 0
+}
+
+# Function to match all OS parameters
+check_OS () 
+{ 
+    local var match_var="";
+    for var in ARCH KERNEL DISTRIBUTION OS;
+    do
+        match_host_param $var;
+        case $? in 
+            0)
+                match_var="$match_var $var"
+            ;;
+            1)
+                echo "0 $var";
+                return 1
+            ;;
+        esac;
+    done;
+    echo "1 $match_var";
+    return 0
+}
+
+# Function to unpad a string
+unpad () 
+{ 
+    local string="$@";
+    while [ "${string:0:1}" = " " ]; do
+        string="${string:1}";
+    done;
+    while [ "${string:$((${#string}-1)):1}" = " " ]; do
+        string="${string:0:$((${#string}-1))}";
+    done;
+    echo "$string"
+}
+
+# Detection code
+get_host_params
+CASINO_LOCAL_AVAILABLE_ARCHS=""
+CASINO_ARCH=""
+
+# Code to check CASINO_ARCH=linuxpc-ifort-sge-parallel (Linux PC cluster with Intel Fortran compiler and SGE queue)
+HOSTNAME=""
+DOMAIN=""
+set -- $(check_host)
+if [ "$1" = 1 ] ; then
+ ARCH="i?86, x86_64"
+ KERNEL="Linux"
+ DISTRIBUTION=""
+ TYPE="cluster"
+ OS="GNU/Linux"
+ set -- $(check_OS)
+ if [ "$1" = 1 ] ; then
+  CASINO_LOCAL_AVAILABLE_ARCHS="$CASINO_LOCAL_AVAILABLE_ARCHS linuxpc-ifort-sge-parallel"
+  if [ -z "$CASINO_ARCH" ] ; then
+   CORES_PER_NODE=$(
+grep -cE "^processor" /proc/cpuinfo 2> /dev/null
+   )
+   [[ "$CORES_PER_NODE" == +([0-9]) ]] || CORES_PER_NODE=0
+   if ((CORES_PER_NODE>0)) ; then
+    case "$TYPE.$CORES_PER_NODE" in
+    single.1)
+     CASINO_ARCH=linuxpc-ifort-sge-parallel ;;
+    single.*)
+     [ -z "$match_wrong_TYPE" ] && match_wrong_TYPE=linuxpc-ifort-sge-parallel ;;
+    parallel.1|cluster.1)
+     [ -z "$match_wrong_TYPE" ] && match_wrong_TYPE=linuxpc-ifort-sge-parallel ;;
+    parallel.*|cluster.*)
+     CASINO_ARCH=linuxpc-ifort-sge-parallel ;;
+    esac
+   else
+    [ -z "$match_no_CPN" ] && match_no_CPN=linuxpc-ifort-sge-parallel
+   fi
+  fi
+ fi
+fi
+
+# Make a choice if we haven't yet
+if [ -z "$CASINO_ARCH" ] ; then
+ if [ -z "$match_wrong_TYPE" ] ; then
+  if [ -z "$match_no_CPN" ] ; then
+   CASINO_ARCH="$(set -- $CASINO_AVAILABLE_ARCHS ; echo $1)"
+  else
+   CASINO_ARCH=$match_no_CPN
+  fi
+ else
+  CASINO_ARCH=$match_wrong_TYPE
+ fi
+fi
+
+# CSH mode
+if ((csh_mode==1)) ; then
+ cat <<_eof
+  set bash_LOC_AV_ARCHS="$CASINO_LOCAL_AVAILABLE_ARCHS" ;   set bash_CASINO_ARCH="$CASINO_ARCH"
+_eof
+fi
+
+# Clean up
+unset host_HOSTNAME host_DOMAIN host_ARCH host_KERNEL host_DISTRIBUTION host_OS
+unset arch_HOSTNAME arch_ARCH arch_KERNEL arch_DISTRIBUTION arch_OS
+unset arch_CPN_code
+unset HOSTNAME DOMAIN ARCH KERNEL DISTRIBUTION OS
+unset iarch
+unset csh_mode
+
+# Export required variables
+export CASINO_LOCAL_AVAILABLE_ARCHS CASINO_ARCH
+
+casinoarch() {
+ # Print available CASINO_ARCHs and switch between them.
+ local search="$1" number i n arch ifound
+ n="$(set -- $CASINO_LOCAL_AVAILABLE_ARCHS ; echo $#)"
+ case "$n" in
+ 0)
+  if (("$(set -- $CASINO_AVAILABLE_ARCHS ; echo $#)">0)) ; then
+   echo "No CASINO_ARCHs defined that are valid for this machine."
+   echo "Use the CASINO/install script to change this."
+  else
+   echo "No CASINO_ARCHs defined."
+   echo "Use the CASINO/install script to change this."
+  fi
+  if [ ! -z "$CASINO_ARCH" ] ; then
+   echo "CASINO_ARCH currently set to $CASINO_ARCH by hand."
+  fi
+  return ;;
+ 1)
+  echo "One CASINO_ARCH defined: $CASINO_LOCAL_AVAILABLE_ARCHS"
+  if [ ! -z "$CASINO_ARCH" ] ; then
+   if [ "$CASINO_ARCH" != "$(unpad "$CASINO_LOCAL_AVAILABLE_ARCHS")" ] ; then
+    echo "CASINO_ARCH currently set to $CASINO_ARCH by hand."
+    echo
+    echo "Choose an option, empty to leave:"
+    echo "[1] Switch to $CASINO_LOCAL_AVAILABLE_ARCHS"
+    read number
+    if [ "$number" = 1 ] ; then
+     export CASINO_ARCH="$CASINO_LOCAL_AVAILABLE_ARCHS"
+     echo "CASINO_ARCH changed to $CASINO_ARCH."
+    else
+     echo "CASINO_ARCH not changed."
+    fi
+   fi
+  else
+   export CASINO_ARCH="$CASINO_LOCAL_AVAILABLE_ARCHS"
+   echo "CASINO_ARCH now set."
+  fi
+  return ;;
+ *)
+  if [ ! -z "$search" ] ; then
+   for arch in $CASINO_LOCAL_AVAILABLE_ARCHS ; do
+    if [ "${arch//$search}" != "$arch" ] ; then
+     if [ "$arch" != "$CASINO_ARCH" ] ; then
+      export CASINO_ARCH=$arch
+      echo "CASINO_ARCH changed to $arch."
+      return
+     else
+      echo "CASINO_ARCH not changed (was already set to $CASINO_ARCH)."
+      return
+     fi
+    fi
+   done
+   echo "No configured CASINO_ARCH matches '$search'."
+   echo
+  fi
+  echo
+  echo "The following CASINO_ARCHs are configured on this machine:"
+  echo
+  ifound=0
+  i=0 ; for arch in $CASINO_LOCAL_AVAILABLE_ARCHS ; do i=$((i+1))
+   if [ "$arch" = "$CASINO_ARCH" ] ; then
+    echo "[$i] $arch [current]" ; ifound=1
+   else
+    echo "[$i] $arch"
+   fi
+  done
+  if ((ifound==0)) ; then
+   echo
+   if [ -z "$CASINO_ARCH" ] ; then
+    echo "CASINO_ARCH currently unset."
+   else
+    echo "CASINO_ARCH currently set to $CASINO_ARCH by hand."
+   fi
+  fi
+  echo
+  echo "To make permanent changes to this list, use the install script."
+  echo
+  echo "If you wish to *temporarily* switch to a different CASINO_ARCH now,"
+  echo "enter a number, or leave empty to quit:"
+  read number
+  if [[ "$number" == +([0-9]) ]] ; then
+   if ((number<=n)) && ((number>0)) ; then
+    arch=$(set -- $CASINO_LOCAL_AVAILABLE_ARCHS ; echo ${*:$number:1})
+    if [ "$arch" != "$CASINO_ARCH" ] ; then
+     export CASINO_ARCH=$arch
+     echo "CASINO_ARCH changed to $arch."
+    else
+     echo "CASINO_ARCH not changed (was already set to $CASINO_ARCH)."
+    fi
+   else
+    echo "CASINO_ARCH not changed (incorrect option)."
+   fi
+  elif [ ! -z "$number" ] ; then
+   echo "CASINO_ARCH not changed (incorrect option)."
+  else
+   echo "CASINO_ARCH not changed."
+  fi ;;
+ esac
+}

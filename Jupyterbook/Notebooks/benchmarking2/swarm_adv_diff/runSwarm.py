@@ -141,7 +141,7 @@ x, z = meshbox.X
 
 
 ## lets create a swarm variable for velocity
-swarm = uw.swarm.Swarm(mesh = meshbox, recycle_rate=0)
+swarm = uw.swarm.Swarm(mesh = meshbox, recycle_rate=2)
 
 t_soln_star = uw.swarm.SwarmVariable("Ts", swarm, 1, proxy_degree=TDegree, proxy_continuous=True)
 
@@ -200,15 +200,13 @@ adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 
 def saveState():
     ## save the mesh, save the mesh variables
-    print("starting save state")
     swarm.save_checkpoint(
         swarmName="swarm",
         swarmVars=[t_soln_star],
         index=0
     )
-    print("done checkpoint")
     meshbox.write_timestep_xdmf(filename = "meshvars", meshVars=[v_soln, p_soln, t_soln], index=0)
-    print("done writing the mesh")
+
 def loadState(v_soln,p_soln,t_soln,t_soln_star, swarm):
     v_soln.read_from_vertex_checkpoint("meshvars" + ".U.0.h5", data_name="U")
     p_soln.read_from_vertex_checkpoint("meshvars" + ".P.0.h5", data_name="P")
@@ -280,28 +278,27 @@ if infile == None:
     vrmsVal.append(0)
     timeVal.append(0)
 else:
-    if (uw.mpi.rank == 0):
-        with open(infile + "markers.pkl", 'rb') as f:
-            loaded_data = pickle.load(f)
-            timeVal = loaded_data[0]
-            vrmsVal = loaded_data[1]
-            NuVal = loaded_data[2]
+    with open(infile + "markers.pkl", 'rb') as f:
+        loaded_data = pickle.load(f)
+        timeVal = loaded_data[0]
+        vrmsVal = loaded_data[1]
+        NuVal = loaded_data[2]
 time = timeVal[-1]
 
     
 
 print("started the time loop")
-delta_t_natural = 1.0e-4
+delta_t_natural = 1.0e-2
 
 
 while t_step < nsteps:
     uw.timing.start()
-    if (uw.mpi.rank == 0):
-        print("starting stokes", str(t_step))
+    print("starting stokes", str(t_step))
     
     # solve the systems
     
     stokes.solve(zero_init_guess=True)
+    print("done stokes")
     delta_t = stokes.estimate_dt()
     delta_t = min(delta_t, delta_t_natural)
 
@@ -315,13 +312,13 @@ while t_step < nsteps:
     """
 
     adv_diff.solve(timestep=delta_t, zero_init_guess=False)
-    if (uw.mpi.rank == 0):
-        print("done advection diffusion")
+    print("done adv_diff")
+
     with swarm.access(t_soln_star):
         ##a = uw.function.evaluate(t_soln.fn, swarm.data)
         t_soln_star.data[:,0] = uw.function.evaluate(t_soln.fn, swarm.data)
-    if (uw.mpi.rank == 0):
-        print("done setting values")
+
+    print("done setting values")
     
     
     """
@@ -335,8 +332,7 @@ while t_step < nsteps:
     
     
     swarm.advection(v_soln.sym, delta_t = delta_t)
-    if (uw.mpi.rank == 0):
-        print("done swarm advection")
+    print("done swarm advection")
 
     vrmsVal.append(v_rms())
     time += delta_t
@@ -352,8 +348,8 @@ while t_step < nsteps:
             plt.title(str(len(vrmsVal))+" " + str(res))
             plt.savefig(outdir + "vrms.png")
             plt.clf()
-            print("saving state")
-            saveState()
+        print("saving state")
+        saveState()
 
     # Save state and measurements after each complete timestep
     if uw.mpi.rank == 0:
@@ -364,13 +360,13 @@ while t_step < nsteps:
 
 
 
+saveState()
 
 if (uw.mpi.rank == 0):
     plt.plot(timeVal, vrmsVal)
     plt.title(str(len(vrmsVal))+" " + str(res))
     plt.savefig(outdir + "vrms.png")
     plt.clf()
-    saveState()
 
 if (uw.mpi.rank == 0):
     end = timer.time()

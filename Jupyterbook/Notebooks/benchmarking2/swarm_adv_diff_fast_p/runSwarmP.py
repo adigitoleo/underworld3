@@ -60,7 +60,7 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 48
+res = 12
 maxRes = 96                        ### x and y res of box
 nsteps = 100                ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
@@ -204,7 +204,8 @@ def saveState():
     swarm.save_checkpoint(
         swarmName="swarm",
         swarmVars=[t_soln_star],
-        index=0
+        index=0,
+        force_sequential = True
     )
     print("done checkpoint")
     meshbox.write_timestep_xdmf(filename = "meshvars", meshVars=[v_soln, p_soln, t_soln], index=0)
@@ -280,18 +281,17 @@ if infile == None:
     vrmsVal.append(0)
     timeVal.append(0)
 else:
-    if (uw.mpi.rank == 0):
-        with open(infile + "markers.pkl", 'rb') as f:
-            loaded_data = pickle.load(f)
-            timeVal = loaded_data[0]
-            vrmsVal = loaded_data[1]
-            NuVal = loaded_data[2]
+    with open(infile + "markers.pkl", 'rb') as f:
+        loaded_data = pickle.load(f)
+        timeVal = loaded_data[0]
+        vrmsVal = loaded_data[1]
+        NuVal = loaded_data[2]
 time = timeVal[-1]
 
     
 
 print("started the time loop")
-delta_t_natural = 1.0e-4
+delta_t_natural = 1.0e-2
 
 
 while t_step < nsteps:
@@ -353,8 +353,7 @@ while t_step < nsteps:
             plt.savefig(outdir + "vrms.png")
             plt.clf()
             print("saving state")
-            saveState()
-
+        saveState()
     # Save state and measurements after each complete timestep
     if uw.mpi.rank == 0:
         with open(outfile+"markers.pkl", 'wb') as f:
@@ -364,13 +363,12 @@ while t_step < nsteps:
 
 
 
-
+saveState()
 if (uw.mpi.rank == 0):
     plt.plot(timeVal, vrmsVal)
     plt.title(str(len(vrmsVal))+" " + str(res))
     plt.savefig(outdir + "vrms.png")
     plt.clf()
-    saveState()
 
 if (uw.mpi.rank == 0):
     end = timer.time()
