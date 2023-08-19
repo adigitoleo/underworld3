@@ -323,7 +323,7 @@ while t_step < nsteps + start_step:
     if (t_step % save_every == 0 and t_step > 0) or (t_step+1==nsteps) :
         if uw.mpi.rank == 0:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, timeVal[t_step], vrmsVal[t_step]), flush = True)
-            print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
+            print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps+start_step , flush = True)
             print(timeVal)
             plt.scatter(timeVal, vrmsVal)
             plt.savefig(outdir + "vrms.png")
