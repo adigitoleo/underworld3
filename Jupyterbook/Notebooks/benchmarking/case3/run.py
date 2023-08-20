@@ -143,7 +143,7 @@ adv_diff = uw.systems.AdvDiffusionSLCN(
 
 adv_diff.constitutive_model = uw.systems.constitutive_models.DiffusionModel(meshbox.dim)
 adv_diff.constitutive_model.Parameters.diffusivity = k
-adv_diff.f = -1
+adv_diff.f = 1
 
 
 adv_diff.theta = 0.5
