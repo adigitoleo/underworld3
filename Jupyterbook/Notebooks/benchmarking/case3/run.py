@@ -77,7 +77,6 @@ tol = 1e-5
 VDegree = 2
 PDegree = 1
 TDegree = 1
-
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
@@ -240,8 +239,9 @@ else:
 # %%
 # check the mesh if in a notebook / serial
 # allows you to visualise the mesh and the mesh variable
-'''FIXME: change this so it's better'''
 
+
+'''FIXME: change this so it's better''
 def v_rms(mesh = meshbox, v_solution = v_soln): 
     # v_soln must be a variable of mesh
     v_rms = math.sqrt(uw.maths.Integral(mesh, v_solution.fn.dot(v_solution.fn)).evaluate())
@@ -307,10 +307,7 @@ else:
         time = pickle.load(f)
 
 t_step = start_step
-
-
-
-    
+ 
 #### Convection model / update in time
 
 print("started the time loop")
