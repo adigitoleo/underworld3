@@ -56,7 +56,7 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 12
+res = 96
 maxRes = 96                        ### x and y res of box
 nsteps = 100                ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
