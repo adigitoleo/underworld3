@@ -12,19 +12,19 @@
               ItemType="Uniform"
               Format="HDF"
               NumberType="Float" Precision="8"
-              Dimensions="21382 3">
+              Dimensions="346 3">
       &MeshData;:/viz/topology/cells
     </DataItem>
     <DataItem Name="vertices"
               Format="HDF"
-              Dimensions="10884 2">
+              Dimensions="198 2">
       &MeshData;:/geometry/vertices
     </DataItem>
     <!-- ============================================================ -->
       <Grid Name="domain" GridType="Uniform">
         <Topology
            TopologyType="Triangle"
-           NumberOfElements="21382">
+           NumberOfElements="346">
           <DataItem Reference="XML">
             /Xdmf/Domain/DataItem[@Name="cells"]
           </DataItem>
@@ -40,18 +40,18 @@
            Type="Vector"
            Center="Node">
           <DataItem ItemType="HyperSlab"
-        	    Dimensions="1 10884 2"
+        	    Dimensions="1 198 2"
         	    Type="HyperSlab">
             <DataItem
                Dimensions="3 3"
                Format="XML">
               0 0 0
               1 1 1
-              1 10884 2
+              1 198 2
             </DataItem>
             <DataItem
                DataType="Float" Precision="8"
-               Dimensions="1 10884 2"
+               Dimensions="1 198 2"
                Format="HDF">
               &U_Data;:/vertex_fields/U_P2
             </DataItem>
@@ -63,18 +63,18 @@
            Type="Scalar"
            Center="Node">
           <DataItem ItemType="HyperSlab"
-        	    Dimensions="1 10884 1"
+        	    Dimensions="1 198 1"
         	    Type="HyperSlab">
             <DataItem
                Dimensions="3 3"
                Format="XML">
               0 0 0
               1 1 1
-              1 10884 1
+              1 198 1
             </DataItem>
             <DataItem
                DataType="Float" Precision="8"
-               Dimensions="1 10884 1"
+               Dimensions="1 198 1"
                Format="HDF">
               &P_Data;:/vertex_fields/P_P1
             </DataItem>
@@ -86,20 +86,20 @@
            Type="Scalar"
            Center="Node">
           <DataItem ItemType="HyperSlab"
-        	    Dimensions="1 10884 1"
+        	    Dimensions="1 198 1"
         	    Type="HyperSlab">
             <DataItem
                Dimensions="3 3"
                Format="XML">
               0 0 0
               1 1 1
-              1 10884 1
+              1 198 1
             </DataItem>
             <DataItem
                DataType="Float" Precision="8"
-               Dimensions="1 10884 1"
+               Dimensions="1 198 1"
                Format="HDF">
-              &T_Data;:/vertex_fields/T_P1
+              &T_Data;:/vertex_fields/T_P3
             </DataItem>
           </DataItem>
         </Attribute>

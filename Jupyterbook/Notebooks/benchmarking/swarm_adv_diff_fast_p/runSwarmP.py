@@ -27,10 +27,6 @@ from underworld3.utilities import generateXdmf
 
 import argparse
 
-
-
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Blasius boundary layer simulation")
     parser.add_argument('-restart', action='store_true', help='Start from previous timestep?')
@@ -60,9 +56,9 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-res = 96
+res = 12
 maxRes = 96                        ### x and y res of box
-nsteps = 50                ### maximum number of time steps to run the first model 
+nsteps = 100                ### maximum number of time steps to run the first model 
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -70,7 +66,7 @@ b = math.log(1000)
 c = 0
 
 ## choice of degrees for variables
-TDegree = 1
+TDegree = 3
 PDegree = 1
 VDegree = 2
 
@@ -238,8 +234,12 @@ if restart:
         
     with meshbox.access(t_soln, t_0):
         t_0.data[:,0] = t_soln.data[:,0]
+
+    with swarm.access(t_soln_star):
+        t_soln_star.data[:,0 ] = uw.function.evaluate(t_soln.fn, swarm.data)
 else:
     loadState(v_soln,p_soln,t_soln,t_soln_star, swarm)
+
 
 def v_rms(mesh = meshbox, v_solution = v_soln): 
     # v_soln must be a variable of mesh
@@ -291,9 +291,9 @@ time = timeVal[-1]
     
 
 print("started the time loop")
-delta_t_natural = 1.0e-2
+delta_t_natural = 1.0e-3
 
-
+## stokes
 while t_step < nsteps:
     uw.timing.start()
     if (uw.mpi.rank == 0):
@@ -301,9 +301,8 @@ while t_step < nsteps:
     
     # solve the systems
     
-    stokes.solve(zero_init_guess=True)
-    delta_t = stokes.estimate_dt()
-    delta_t = min(delta_t, delta_t_natural)
+    stokes.solve(zero_init_guess=True) ## solves stokes
+    delta_t = 0.5*stokes.estimate_dt() ##
 
     """
     delta_t_adv_diff = 0.5 * adv_diff.estimate_dt()
@@ -317,9 +316,11 @@ while t_step < nsteps:
     adv_diff.solve(timestep=delta_t, zero_init_guess=False)
     if (uw.mpi.rank == 0):
         print("done advection diffusion")
+
     with swarm.access(t_soln_star):
         ##a = uw.function.evaluate(t_soln.fn, swarm.data)
         t_soln_star.data[:,0] = uw.function.evaluate(t_soln.fn, swarm.data)
+
     if (uw.mpi.rank == 0):
         print("done setting values")
     
@@ -348,7 +349,7 @@ while t_step < nsteps:
         if uw.mpi.rank == 0:
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps , flush = True)
             print(timeVal)
-            plt.plot(timeVal, vrmsVal)
+            plt.scatter(timeVal, vrmsVal)
             plt.title(str(len(vrmsVal))+" " + str(res))
             plt.savefig(outdir + "vrms.png")
             plt.clf()
@@ -365,7 +366,7 @@ while t_step < nsteps:
 
 saveState()
 if (uw.mpi.rank == 0):
-    plt.plot(timeVal, vrmsVal)
+    plt.scatter(timeVal, vrmsVal)
     plt.title(str(len(vrmsVal))+" " + str(res))
     plt.savefig(outdir + "vrms.png")
     plt.clf()
