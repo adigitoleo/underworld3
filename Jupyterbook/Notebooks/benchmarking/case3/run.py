@@ -241,7 +241,7 @@ else:
 # allows you to visualise the mesh and the mesh variable
 
 
-'''FIXME: change this so it's better''
+'''FIXME: change this so it's better'''
 def v_rms(mesh = meshbox, v_solution = v_soln): 
     # v_soln must be a variable of mesh
     v_rms = math.sqrt(uw.maths.Integral(mesh, v_solution.fn.dot(v_solution.fn)).evaluate())
