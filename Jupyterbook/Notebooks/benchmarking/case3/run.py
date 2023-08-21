@@ -73,6 +73,11 @@ viscosity = 1
 
 tol = 1e-5
 
+
+VDegree = 2
+PDegree = 1
+TDegree = 1
+
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
@@ -97,10 +102,10 @@ meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 qdegree = 3
                                         )
 ## the mesh variables
-v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=2) # degree = 2
-p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=1) # degree = 1
-t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=2) # degree = 3
-t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=2) # degree = 3
+v_soln = uw.discretisation.MeshVariable("U", meshbox, meshbox.dim, degree=VDegree) # degree = 2
+p_soln = uw.discretisation.MeshVariable("P", meshbox, 1, degree=PDegree) # degree = 1
+t_soln = uw.discretisation.MeshVariable("T", meshbox, 1, degree=TDegree) # degree = 3
+t_0 = uw.discretisation.MeshVariable("T0", meshbox, 1, degree=TDegree) # degree = 3
 
 stokes = Stokes(
     meshbox,
@@ -196,9 +201,9 @@ else:
     
     # T should have high degree for it to converge
     # this should have a different name to have no errors
-    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=2) # degree = 2
-    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=1) # degree = 1
-    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=1) # degree = 3
+    v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
+    p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
+    t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
 
     # force to run in serial?
     
