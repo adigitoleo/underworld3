@@ -99,7 +99,7 @@ else:
     infile = outfile
     with open('res.pkl', 'rb') as f:
         prev_res = pickle.load(f)
-        print("loaded previous res:", str(res))
+        print("loaded previous res:", str(prev_res))
 
 
 def getDifference(oldVars, newVars):
