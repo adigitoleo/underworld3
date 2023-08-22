@@ -258,14 +258,14 @@ else:
 
 
     with meshbox.access(v_soln, t_soln, p_soln):    
-        t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], t_soln.coords)
+        ##t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], t_soln.coords)
         p_soln.data[:, 0] = uw.function.evaluate(p_soln_prev.sym[0], p_soln.coords)
 
         #for velocity, encounters errors when trying to interpolate in the non-zero boundaries of the mesh variables 
         v_coords = deepcopy(v_soln.coords)
 
         v_soln.data[:] = uw.function.evaluate(v_soln_prev.fn, v_coords)
-
+    print("got here")
     meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 
 
