@@ -342,7 +342,7 @@ while t_step < nsteps + start_step:
             plt.savefig(outdir + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
+        ##meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
 
     if uw.mpi.rank == 0:
         with open(outfile+"markers.pkl", 'wb') as f:
