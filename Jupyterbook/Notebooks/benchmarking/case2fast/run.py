@@ -327,7 +327,7 @@ while t_step < nsteps + start_step:
     ## solve step
     stokes.solve(zero_init_guess=True) # originally True
 
-    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
+    delta_t = stokes.estimate_dt() # originally 0.5
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
 
     ## update values
