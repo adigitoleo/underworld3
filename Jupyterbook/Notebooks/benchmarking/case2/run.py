@@ -256,8 +256,6 @@ else:
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
 
-    with meshbox.access(t_soln):
-        t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], meshbox.data)
 
     with meshbox.access(v_soln, t_soln, p_soln):    
         t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], t_soln.coords)
