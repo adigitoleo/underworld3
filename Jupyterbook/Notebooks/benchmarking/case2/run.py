@@ -6,9 +6,6 @@ import os
 os.environ["UW_TIMING_ENABLE"] = "1"
 
 
-
-
-
 # %%
 import petsc4py
 from petsc4py import PETSc
