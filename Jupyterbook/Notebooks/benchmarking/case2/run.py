@@ -1,6 +1,14 @@
 ## program that runs stokes convection in a box heated from the bottom and cooled from
 ## the top 
 
+import os
+
+os.environ["UW_TIMING_ENABLE"] = "1"
+
+
+
+
+
 # %%
 import petsc4py
 from petsc4py import PETSc
@@ -27,6 +35,9 @@ comm = MPI.COMM_WORLD
 time = 0
 if (uw.mpi.rank == 0):
     start = timer.time()
+
+rank = comm.Get_rank()
+print('My rank is ',rank)
 
 # %% [markdown]
 # ### Set parameters to use 
@@ -63,7 +74,6 @@ tempMax   = 1.
 viscosity = 1
 
 tol = 1e-5
-maxRes = 96                        ### x and y res of box
 epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
@@ -80,7 +90,6 @@ VDegree = 2
 # can set outdir to None if you don't want to save anything
 outdir = "./results" 
 outfile = outdir + "/output"
-save_every = 5
 
 
 
@@ -155,26 +164,8 @@ if (uw.mpi.size==1):
     print("running the linear solver")
     stokes.petsc_options['pc_type'] = 'lu' # lu if linear
 
-# stokes.petsc_options["snes_max_it"] = 1000
-#stokes.petsc_options["snes_type"] = "ksponly"
 stokes.tolerance = tol
-#stokes.petsc_options["snes_max_it"] = 1000
 
-# stokes.petsc_options["snes_atol"] = 1e-6
-# stokes.petsc_options["snes_rtol"] = 1e-6
-
-
-#stokes.petsc_options["ksp_rtol"]  = 1e-5 # reduce tolerance to increase speed
-
-# Set solve options here (or remove default values
-# stokes.petsc_options.getAll()
-
-#stokes.petsc_options["snes_rtol"] = 1.0e-6
-# stokes.petsc_options["fieldsplit_pressure_ksp_monitor"] = None
-# stokes.petsc_options["fieldsplit_velocity_ksp_monitor"] = None
-# stokes.petsc_options["fieldsplit_pressure_ksp_rtol"] = 1.0e-6
-# stokes.petsc_options["fieldsplit_velocity_ksp_rtol"] = 1.0e-2
-# stokes.petsc_options.delValue("pc_use_amat")
 
 stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshbox.dim)
 
@@ -331,6 +322,7 @@ t_step = start_step
 #### Convection model / update in time
 
 print("started the time loop")
+uw.timing.start()
 while t_step < nsteps + start_step:
 
     ## solve step
@@ -375,6 +367,8 @@ while t_step < nsteps + start_step:
     if (uw.mpi.rank == 0):
         with open(outfile + "time.pkl", "wb") as f:
             pickle.dump(time, f)
+    uw.timing.stop()
+    uw.timing.print_table()
 
 
 # save final mesh variables in the run 
