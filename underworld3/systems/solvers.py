@@ -510,7 +510,6 @@ class SNES_Projection(SNES_Scalar):
         # variable given the values in self.function
         # F0 is left in place for the user to inject
         # non-linear constraints if required
-
         self._f0 = (
             self.F0 + (self.u.sym - self.uw_function) * self.uw_weighting_function
         )

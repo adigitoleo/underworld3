@@ -13,7 +13,6 @@ import underworld3.timing as timing
 import h5py
 import os
 import warnings
-import time
 
 comm = MPI.COMM_WORLD
 
@@ -1433,10 +1432,6 @@ class Swarm(_api_tools.Stateful):
         corrector=False,
         restore_points_to_domain_func=None,
     ):  
-        evalauteTimer = 0
-        totalTime = 0
-        totalStart = 0
-        comm = MPI.COMM_WORLD
 
         # X0 holds the particle location at the start of advection
         # This is needed because the particles may be migrated off-proc
@@ -1487,12 +1482,10 @@ class Swarm(_api_tools.Stateful):
 
                 v_at_Vpts = np.zeros_like(self.data)
 
-                start = time.time()
                 for d in range(self.dim):
                     v_at_Vpts[:, d] = uw.function.evaluate(
                         V_fn_matrix[d], self.data
                     ).reshape(-1)
-                evalauteTimer += time.time() - start
                 mid_pt_coords = self.data[...] + 0.5 * delta_t * v_at_Vpts
 
                 # validate_coords to ensure they live within the domain (or there will be trouble)
@@ -1507,12 +1500,10 @@ class Swarm(_api_tools.Stateful):
             with self.access(self.particle_coordinates):
 
                 v_at_Vpts = np.zeros_like(self.data)
-                start = time.time()
                 for d in range(self.dim):
                     v_at_Vpts[:, d] = uw.function.evaluate(
                         V_fn_matrix[d], self.data
                     ).reshape(-1)
-                evalauteTimer += time.time() - start
                 # if (uw.mpi.rank == 0):
                 #     print("Re-launch from X0", flush=True)
 
@@ -1620,7 +1611,4 @@ class Swarm(_api_tools.Stateful):
                 )
 
             self.cycle += 1
-        if (comm.Get_rank == 0):
-            print("total time:", max(comm.gather(time.time() - totalStart, root=0)))
-            print("time spent running evaluate", max(  comm.gather(   evalauteTimer), root=0))
         return
