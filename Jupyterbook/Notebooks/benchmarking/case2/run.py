@@ -228,8 +228,7 @@ if restart == True:
         
             t_soln.data[index] = tempMin + deltaTemp*(boxHeight - coord[1]) + pertStrength * pertCoeff
             t_soln.data[index] = max(tempMin, min(tempMax, t_soln.data[index]))
-            
-        
+
     with meshbox.access(t_soln, t_0):
         t_0.data[:,0] = t_soln.data[:,0]
 
@@ -247,6 +246,7 @@ else:
     
     # T should have high degree for it to converge
     # this should have a different name to have no errors
+
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
@@ -307,12 +307,14 @@ else:
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
-
+    
     with open(infile+"step.pkl", 'rb') as f:
         start_step = pickle.load(f)
     
     with open(infile+"time.pkl", "rb") as f:
         time = pickle.load(f)
+    
+
 
 t_step = start_step
  
@@ -325,7 +327,7 @@ while t_step < nsteps + start_step:
     ## solve step
     stokes.solve(zero_init_guess=True) # originally True
 
-    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
+    delta_t = 1.0 * stokes.estimate_dt() # originally 0.5
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
 
     ## update values
@@ -374,3 +376,6 @@ if (uw.mpi.rank == 0):
     plt.plot(timeVal, vrmsVal)
     plt.savefig(outdir + "vrms.png")
     plt.clf()
+if (uw.mpi.rank == 0):
+    with open("res.pkl", "wb") as f:
+        pickle.dump(res, f)
