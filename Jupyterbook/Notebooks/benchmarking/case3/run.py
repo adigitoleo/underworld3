@@ -51,8 +51,6 @@ if __name__ == "__main__":
     # Assign values from args to variables
     Ra = args.Ra
     res = args.res
-    print("here")
-    print(res)
     save_every = args.save_every
     restart = args.restart
     nsteps = args.nsteps
@@ -67,7 +65,7 @@ k = 1.0 #### diffusivity
 boxLength = 1.5 
 boxHeight = 1.0
 tempMin   = 0.
-tempMax   = 1.
+tempMax   = 0.1
 
 viscosity = 1
 
@@ -132,6 +130,8 @@ stokes.add_dirichlet_bc((0,0), "Top", (0,1))
 stokes.add_dirichlet_bc((0,0), "Bottom", (0,1))
 
 
+
+
 # add the body force term
 buoyancy_force = Ra * t_soln.sym[0]
 stokes.bodyforce = sympy.Matrix([0, buoyancy_force])
@@ -182,13 +182,14 @@ if infile is None:
             # print(index, coord)
             pertCoeff = math.cos( math.pi * coord[0]/boxLength ) * math.sin( math.pi * coord[1]/boxLength )
         
-            t_soln.data[index] = tempMin + deltaTemp*(boxHeight - coord[1]) + pertStrength * pertCoeff
+            t_soln.data[index] = tempMin + deltaTemp*(boxHeight - coord[1] + pertStrength * pertCoeff)
             t_soln.data[index] = max(tempMin, min(tempMax, t_soln.data[index]))
             
         
     with meshbox.access(t_soln, t_0):
         t_0.data[:,0] = t_soln.data[:,0]
-
+    
+    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[t_0, t_soln], index=0)
 else:
     meshbox_prev = uw.meshing.UnstructuredSimplexBox(
                                                             minCoords=(0.0, 0.0), 
@@ -290,7 +291,6 @@ if infile == None:
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
-
     start_step = 0
     time = 0
 else:
