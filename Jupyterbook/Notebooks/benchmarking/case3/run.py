@@ -220,9 +220,9 @@ else:
     print("step 1 done")
     # force to run in serial?
     
-    v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
-    p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
-    t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
+    v_soln_prev.read_from_vertex_checkpoint(infile + ".U.-1.h5", data_name="U")
+    p_soln_prev.read_from_vertex_checkpoint(infile + ".P.-1.h5", data_name="P")
+    t_soln_prev.read_from_vertex_checkpoint(infile + ".T.-1.h5", data_name="T")
     print("step 2 done")
     print(prev_res)
     with meshbox_prev.access(t_soln_prev):
@@ -251,7 +251,7 @@ else:
         print("e")   
     print("step 3 done")
 
-    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
     print("step 4 done")
 
     del meshbox_prev
@@ -356,7 +356,7 @@ while t_step < nsteps + start_step:
             plt.scatter(timeVal, vrmsVal)
             plt.savefig(outfile + "vrms.png")
             plt.clf()
-        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
 
     if uw.mpi.rank == 0:
@@ -379,7 +379,7 @@ while t_step < nsteps + start_step:
 
 
 # save final mesh variables in the run 
-meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
 if (uw.mpi.rank == 0):
     plt.scatter(timeVal, vrmsVal)
     plt.savefig(outfile + "vrms.png")
