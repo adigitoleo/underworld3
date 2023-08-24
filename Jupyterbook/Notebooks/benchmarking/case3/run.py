@@ -46,6 +46,7 @@ if __name__ == "__main__":
     parser.add_argument("--Ra", type=float, default=216000, help="Representing Re (float) but saved to 'Ra'")
     parser.add_argument("--restart", type=lambda x: (str(x).lower() == 'true'), default=False, help="Restart (bool)")
     parser.add_argument("--nsteps", type=int, default=100, help="Number of steps (int)")
+    parser.add_argument("--temperatureIC", type=float, default=None, help="temperature of starting condition")
 
     args = parser.parse_args()
     # Assign values from args to variables
@@ -54,6 +55,14 @@ if __name__ == "__main__":
     save_every = args.save_every
     restart = args.restart
     nsteps = args.nsteps
+    tempMax = args.temperatureIC
+    if (tempMax == None):
+        if (restart == True):
+            print("temperatureIC required!, killing program")
+            quit()
+        else:
+            tempMax = 1.0
+
     # Print the received values (or process them further if needed)
     print(f"Received values:\nRes: {res}\nSave_every: {save_every}\nRa: {Ra}\nRestart: {restart}\nNsteps: {nsteps}")
 
@@ -65,7 +74,6 @@ k = 1.0 #### diffusivity
 boxLength = 1.5 
 boxHeight = 1.0
 tempMin   = 0.
-tempMax   = 0.1
 
 viscosity = 1
 
@@ -74,20 +82,24 @@ tol = 1e-5
 
 VDegree = 2
 PDegree = 1
-TDegree = 1
+TDegree = 3
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
-outdir = "./results" 
-outfile = outdir + "/output" + str(res)
+outdir = "./results" + str(res) + "tmp"+str(tempMax)
+outfile = outdir + "/output" 
+
+
 
 
 if (restart == True): 
     infile = None
+    prev_res = res
 else:
     infile = outfile
+    with open(outfile+"res.pkl", "rb") as f:
+        prev_res = pickle.load(f)
 
-prev_res = res
 if uw.mpi.rank == 0:
     os.makedirs(outdir, exist_ok = True)
 
@@ -168,7 +180,7 @@ adv_diff.petsc_options["pc_gamg_agg_nsmooths"] = 5
 
 # %%
 import math, sympy
-
+print("done setting up problem")
 if infile is None:
     pertStrength = 0.1
     deltaTemp = tempMax - tempMin
@@ -191,6 +203,7 @@ if infile is None:
     
     meshbox.write_timestep_xdmf(filename = outfile, meshVars=[t_0, t_soln], index=0)
 else:
+    print("starting to load in previous state")
     meshbox_prev = uw.meshing.UnstructuredSimplexBox(
                                                             minCoords=(0.0, 0.0), 
                                                             maxCoords=(boxLength, boxHeight), 
@@ -204,12 +217,18 @@ else:
     v_soln_prev = uw.discretisation.MeshVariable("U2", meshbox_prev, meshbox_prev.dim, degree=VDegree) # degree = 2
     p_soln_prev = uw.discretisation.MeshVariable("P2", meshbox_prev, 1, degree=PDegree) # degree = 1
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
-
+    print("step 1 done")
     # force to run in serial?
     
     v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
     p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
     t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
+    print("step 2 done")
+    print(prev_res)
+    with meshbox_prev.access(t_soln_prev):
+        print(t_soln_prev.data.shape)
+    with meshbox.access(t_soln):
+        print(t_soln.data.shape)
 
     #comm.Barrier()
     # this will not work in parallel?
@@ -217,16 +236,23 @@ else:
     #p_soln_prev.load_from_h5_plex_vector(infile + '.P.0.h5')
     #t_soln_prev.load_from_h5_plex_vector(infile + '.T.0.h5')
 
-    with meshbox.access(v_soln, t_soln, p_soln):    
+    with meshbox.access(v_soln, t_soln, p_soln):
+        print("a")    
         t_soln.data[:, 0] = uw.function.evaluate(t_soln_prev.sym[0], t_soln.coords)
+        print("b")   
         p_soln.data[:, 0] = uw.function.evaluate(p_soln_prev.sym[0], p_soln.coords)
+        print("c")   
 
         #for velocity, encounters errors when trying to interpolate in the non-zero boundaries of the mesh variables 
         v_coords = deepcopy(v_soln.coords)
+        print("d")   
 
         v_soln.data[:] = uw.function.evaluate(v_soln_prev.fn, v_coords)
+        print("e")   
+    print("step 3 done")
 
     meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+    print("step 4 done")
 
     del meshbox_prev
     del v_soln_prev
@@ -248,8 +274,6 @@ def v_rms(mesh = meshbox, v_solution = v_soln):
     v_rms = math.sqrt(uw.maths.Integral(mesh, v_solution.fn.dot(v_solution.fn)).evaluate())
     return v_rms
 
-
-#print(f'initial v_rms = {v_rms()}')
 
 # %% [markdown]
 # #### Surface integrals
@@ -329,8 +353,8 @@ while t_step < nsteps + start_step:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, timeVal[t_step], vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps+start_step , flush = True)
             print(timeVal)
-            plt.plot(timeVal, vrmsVal)
-            plt.savefig(outdir + "vrms.png")
+            plt.scatter(timeVal, vrmsVal)
+            plt.savefig(outfile + "vrms.png")
             plt.clf()
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
         meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
@@ -348,16 +372,18 @@ while t_step < nsteps + start_step:
     if (uw.mpi.rank == 0):
         with open(outfile+"step.pkl", "wb") as f:
             pickle.dump(t_step, f)
-
-    if (uw.mpi.rank == 0):
         with open(outfile + "time.pkl", "wb") as f:
             pickle.dump(time, f)
+        with open(outfile + "res.pkl", "wb") as f:
+            pickle.dump(res, f)
 
 
 # save final mesh variables in the run 
 meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
 if (uw.mpi.rank == 0):
-    plt.plot(timeVal, vrmsVal)
-    plt.savefig(outdir + "vrms.png")
+    plt.scatter(timeVal, vrmsVal)
+    plt.savefig(outfile + "vrms.png")
     plt.clf()
+    with open(outfile + "res.pkl", "wb") as f:
+        pickle.dump(res, f)
 
