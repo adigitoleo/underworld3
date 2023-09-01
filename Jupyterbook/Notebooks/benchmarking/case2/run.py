@@ -7,8 +7,8 @@ os.environ["UW_TIMING_ENABLE"] = "1"
 
 
 # %%
-import petsc4py
-from petsc4py import PETSc
+##import petsc4py
+##from petsc4py import PETSc ## this line causes an error when using MPIEXEC
 from mpi4py import MPI
 import math
 
@@ -29,25 +29,28 @@ from underworld3.utilities import generateXdmf
 #os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE" # solve locking issue when reading file
 #os.environ["HDF5"]
 comm = MPI.COMM_WORLD
-time = 0
-if (uw.mpi.rank == 0):
-    start = timer.time()
 
 rank = comm.Get_rank()
-print('My rank is ',rank)
+print('My rank is ', rank)
+
 
 # %% [markdown]
 # ### Set parameters to use 
+
+uw.timing.start()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Set parameters for the program.")
 
     # Add arguments for resolution (res), save_every, Re (Ra), restart, and nsteps with default values
-    parser.add_argument("--res", type=int, default=96, help="Resolution (int)")
+    parser.add_argument("--res", type=int, default=12, help="Resolution (int)")
     parser.add_argument("--save_every", type=int, default=10, help="Save frequency (int)")
-    parser.add_argument("--Ra", type=float, default=1e4, help="Representing Re (float) but saved to 'Ra'")
+    parser.add_argument("--Ra", type=float, default=1e+04, help="Representing Re (float) but saved to 'Ra'")
     parser.add_argument("--restart", type=lambda x: (str(x).lower() == 'true'), default=False, help="Restart (bool)")
     parser.add_argument("--nsteps", type=int, default=100, help="Number of steps (int)")
+    parser.add_argument("--temperatureIC", type=float, default=None, help="temperature of starting condition")
+    parser.add_argument("--indir", type=str, default=None, help= 'previous directory to start simulation from')
+    parser.add_argument("--TDegree", type=int, default=3, help= 'degree of temperature variable')
 
     args = parser.parse_args()
     # Assign values from args to variables
@@ -56,9 +59,27 @@ if __name__ == "__main__":
     save_every = args.save_every
     restart = args.restart
     nsteps = args.nsteps
+    tempMax = args.temperatureIC
+    indir = args.indir
+    TDegree = args.TDegree
+    if (tempMax == None):
+        if (restart == True):
+            print("temperatureIC required!, killing program")
+            quit()
+        else:
+            tempMax = 1.0
     # Print the received values (or process them further if needed)
-    print(f"Received values:\nRes: {res}\nSave_every: {save_every}\nRa: {Ra}\nRestart: {restart}\nNsteps: {nsteps}")
-
+    print(f"""
+    Received values:
+    - Resolution (Res): {res}
+    - Save frequency (Save_every): {save_every}
+    - Ra value (Ra): {Ra}
+    - Restart flag (Restart): {restart}
+    - Number of steps (Nsteps): {nsteps}
+    - Initial temperature (TemperatureIC): {tempMax}
+    - Input directory (Indir): {indir if indir else "Not provided"}
+    - Temperature variable degree (TDegree): {TDegree}
+    """)
 
 
 k = 1.0 #### diffusivity     
@@ -66,68 +87,52 @@ k = 1.0 #### diffusivity
 boxLength = 1.0
 boxHeight = 1.0
 tempMin   = 0.
-tempMax   = 1.
 
 viscosity = 1
 
 tol = 1e-5
-epsilon_lr = 1e-3              ### criteria for early stopping; relative change of the Vrms in between iterations  
 
 ## parameters for case 2 (a):
 b = math.log(1000)
 c = 0
 
 ## choice of degrees for variables
-TDegree = 3
+# TDegree is given when starting program, default is 3
 PDegree = 1
 VDegree = 2
 
 ##########
 # parameters needed for saving checkpoints
 # can set outdir to None if you don't want to save anything
-outdir = "./results" 
-outfile = outdir + "/output"
+outdir = f"./results_Res{res}_Ra{Ra}_Nsteps{nsteps}_TempIC{tempMax}_TDegree{TDegree}"
+outfile = outdir + "/output" 
 
 
 
 ##infile = outdir + "/conv4_run12_" + str(prev_res)    # set infile to a value if there's a checkpoint from a previous run that you want to start from
-
-if (restart == True):
+if (restart == True): 
     infile = None
     prev_res = res
 else:
-    infile = outfile
-    with open('res.pkl', 'rb') as f:
+    if (indir == None):
+        print("WARNING: Assuming restart state located in " + outdir)
+        infile = outfile
+    else:
+        infile = indir + "/output"
+
+    with open(infile+"res.pkl", "rb") as f:
         prev_res = pickle.load(f)
-        print("loaded previous res:", str(prev_res))
-
-
-def getDifference(oldVars, newVars):
-    error = 0
-    counter = 0
-    for vIndex in range(len(oldVars)):
-        oldVar = oldVars[vIndex]
-        newVar = newVars[vIndex]
-
-        dimension = len(oldVar[0])
-
-
-        for elIndex in range(len(oldVar)):
-                
-            for dIndex in range(dimension):
-                error += abs(oldVar[elIndex, dIndex] - newVar[elIndex, dIndex])
-                counter += 1
-
-    return error/counter
 
 if uw.mpi.rank == 0:
     os.makedirs(outdir, exist_ok = True)
+
+
 
 # %%
 meshbox = uw.meshing.UnstructuredSimplexBox(
                                                 minCoords=(0.0, 0.0), 
                                                 maxCoords=(boxLength, boxHeight), 
-                                                cellSize=1.0 /res,
+                                                cellSize=1.0 / res,
                                                 qdegree = 3
                                         )
 
@@ -180,7 +185,6 @@ stokes.add_dirichlet_bc((0.0,), "Top", (1,))
 stokes.add_dirichlet_bc((0.0,), "Bottom", (1,))
 
 # We constrain the dv/dx = 0 on the boundrie (uw3 does this automatically)
-
 buoyancy_force = Ra * t_soln.sym[0]
 stokes.bodyforce = sympy.Matrix([0, buoyancy_force])
 
@@ -226,11 +230,14 @@ if restart == True:
             # print(index, coord)
             pertCoeff = math.cos( math.pi * coord[0]/boxLength ) * math.sin( math.pi * coord[1]/boxLength )
         
-            t_soln.data[index] = tempMin + deltaTemp*(boxHeight - coord[1]) + pertStrength * pertCoeff
+            t_soln.data[index] = tempMin + deltaTemp*(boxHeight - coord[1] + pertStrength * pertCoeff)
             t_soln.data[index] = max(tempMin, min(tempMax, t_soln.data[index]))
 
     with meshbox.access(t_soln, t_0):
         t_0.data[:,0] = t_soln.data[:,0]
+
+
+    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[t_0, t_soln], index=0)
 
     #meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln, dTdZ, sigma_zz], index=0)
 
@@ -252,9 +259,9 @@ else:
     t_soln_prev = uw.discretisation.MeshVariable("T2", meshbox_prev, 1, degree=TDegree) # degree = 3
 
     # force to run in serial?
-    v_soln_prev.read_from_vertex_checkpoint(infile + ".U.0.h5", data_name="U")
-    p_soln_prev.read_from_vertex_checkpoint(infile + ".P.0.h5", data_name="P")
-    t_soln_prev.read_from_vertex_checkpoint(infile + ".T.0.h5", data_name="T")
+    v_soln_prev.read_from_vertex_checkpoint(infile + ".U.-1.h5", data_name="U")
+    p_soln_prev.read_from_vertex_checkpoint(infile + ".P.-1.h5", data_name="P")
+    t_soln_prev.read_from_vertex_checkpoint(infile + ".T.-1.h5", data_name="T")
 
 
     with meshbox.access(v_soln, t_soln, p_soln):    
@@ -265,7 +272,7 @@ else:
         v_coords = deepcopy(v_soln.coords)
 
         v_soln.data[:] = uw.function.evaluate(v_soln_prev.fn, v_coords)
-    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+    meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
 
 
     del meshbox_prev
@@ -295,7 +302,7 @@ def surface_integral(mesh, uw_function, mask_fn):
     return integral
 
 
-if infile == None:
+if (restart == True):
     timeVal =  []    # time values
     vrmsVal =  []  # v_rms values 
     NuVal =  []      # Nusselt number values
@@ -307,27 +314,25 @@ else:
         timeVal = loaded_data[0]
         vrmsVal = loaded_data[1]
         NuVal = loaded_data[2]
-    
-    with open(infile+"step.pkl", 'rb') as f:
+
+    with open(infile + "step.pkl", 'rb') as f:
         start_step = pickle.load(f)
     
-    with open(infile+"time.pkl", "rb") as f:
+    with open(infile + "time.pkl", "rb") as f:
         time = pickle.load(f)
-    
-
 
 t_step = start_step
  
 #### Convection model / update in time
 
 print("started the time loop")
-uw.timing.start()
+
 while t_step < nsteps + start_step:
-
     ## solve step
-    stokes.solve(zero_init_guess=True) # originally True
+    stokes.solve(zero_init_guess=False) # originally True
+    
+    delta_t = 0.5 * stokes.estimate_dt() # originally 0.5
 
-    delta_t = 1.0 * stokes.estimate_dt() # originally 0.5
     adv_diff.solve(timestep=delta_t, zero_init_guess=False) # originally False
 
     ## update values
@@ -339,43 +344,31 @@ while t_step < nsteps + start_step:
         if uw.mpi.rank == 0:
             print("Timestep {}, dt {}, v_rms {}".format(t_step, timeVal[t_step], vrmsVal[t_step]), flush = True)
             print("Saving checkpoint for time step: ", t_step, "total steps: ", nsteps+start_step , flush = True)
-            print(timeVal)
-            plt.plot(timeVal, vrmsVal)
-            plt.savefig(outdir + "vrms.png")
+            plt.scatter(timeVal, vrmsVal)
+            plt.savefig(outfile + "vrms.png")
             plt.clf()
-        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
-        ##meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
-
-    if uw.mpi.rank == 0:
-        with open(outfile+"markers.pkl", 'wb') as f:
-            pickle.dump([timeVal, vrmsVal, NuVal], f)
-    if (uw.mpi.rank == 0):
-        with open("res.pkl", "wb") as f:
-            pickle.dump(res, f)
-
+            with open(outfile+"step.pkl", "wb") as f:
+                pickle.dump(t_step+1, f)
+            with open(outfile + "time.pkl", "wb") as f:
+                pickle.dump(time+delta_t, f)
+            with open(outfile + "res.pkl", "wb") as f:
+                pickle.dump(res, f)
+            with open(outfile+"markers.pkl", 'wb') as f:
+                pickle.dump([timeVal, vrmsVal, NuVal], f)
+        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
+        meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=t_step)
     ## iterate
-
     time += delta_t
     t_step += 1
 
-    ## here is where we will start next ime
-    if (uw.mpi.rank == 0):
-        with open(outfile+"step.pkl", "wb") as f:
-            pickle.dump(t_step, f)
+    
 
-    if (uw.mpi.rank == 0):
-        with open(outfile + "time.pkl", "wb") as f:
-            pickle.dump(time, f)
-    uw.timing.stop()
-    uw.timing.print_table()
-
-
+uw.timing.print_table()
 # save final mesh variables in the run 
-meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=0)
+##meshbox.write_timestep_xdmf(filename = outfile, meshVars=[v_soln, p_soln, t_soln], index=-1)
 if (uw.mpi.rank == 0):
-    plt.plot(timeVal, vrmsVal)
-    plt.savefig(outdir + "vrms.png")
+    plt.scatter(timeVal, vrmsVal)
+    plt.savefig(outfile + "vrms.png")
     plt.clf()
-if (uw.mpi.rank == 0):
-    with open("res.pkl", "wb") as f:
+    with open(outfile + "res.pkl", "wb") as f:
         pickle.dump(res, f)
