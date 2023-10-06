@@ -10,7 +10,7 @@ cd case1aFast
 
 ## you can change the settings for your case by setting the following parameters for your run
 RA=10000 ## Rayeligh number of your simulation
-NUM_LOOPS=2 ## number of loops the simulation will do. At the end each loop, the program saves and restarts from the ground up
+NUM_LOOPS=100 ## number of loops the simulation will do. At the end each loop, the program saves and restarts from the ground up
 ## the number of total timesteps will be NUM_LOOPS * NUM_STEPS
 STOPPING_TIME=0.3 ## time you want it to stop at 
 T_DEGREE=3
@@ -20,8 +20,8 @@ SPEEDUP=5
 USE_SWARM=False
 
 ## loop over each of the resolutions
-#for i in 6 8 10 12 14 16
-for i in 6 8
+for i in 6 8 10 12 14 16
+
 do
     sh generalRunner.sh --res $i --Ra $RA --num_loops $NUM_LOOPS --stoppingTime $STOPPING_TIME --TDegree $T_DEGREE --qdegree $Q_DEGREE --width $WIDTH --speedUp $SPEEDUP --useSwarm $USE_SWARM &
 done
