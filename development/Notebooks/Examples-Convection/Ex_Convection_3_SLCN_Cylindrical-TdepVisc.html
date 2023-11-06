@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -79,6 +80,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -139,13 +149,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Underworld 3 - Home"/>
+    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Underworld 3 - Home"/>`);</script>
   
   
 </a></div>
@@ -190,7 +201,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian-NL.html">Nonlinear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian.html">Linear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Cartesian.html">Poisson Equation (simple)</a></li>
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PorousFlow/Readme.html">Porous flow examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -215,8 +225,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Readme.html">Convection modelling examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Ex_AdvectionDiffusionSLCN_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Ex_AdvectionDiffusionSwarm_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ex_AdvectionDiffusionSLCN_RotationTest.html">Field (SemiLagrange) Advection solver test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ex_AdvectionDiffusionSwarm_RotationTest.html">Swarm Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Ex_Convection_1_SLCN_Cartesian.html">Constant viscosity convection, Cartesian domain (benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Ex_Convection_2_SLCN_Cartesian-TdepVisc.html">Temperature-dependent viscosity convection, Cartesian Domain(benchmark)</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Temperature-dependent viscosity convection, Cylindrical domain (benchmark)</a></li>
@@ -243,18 +253,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Utilities/Readme.html">Miscellaneous Tips and Tricks</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex-ConstitutiveTensors.html">Tests</a></li>
-
-
-
-
-
-
-
-
-
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_BCs_from_meshVariables.html">Cylindrical 2D Diffusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Coordinates.html">Symbolic forms v. mesh variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Integrals_on_Meshes.html">Using the PETSc mesh integration routines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Projection_Function_Eval.html">Projection-based function evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Tensor_Variables_etc.html">Examples with General Mesh variable manipulation</a></li>
@@ -383,10 +382,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -394,7 +393,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -501,7 +500,9 @@ meshr = uw.discretisation.MeshVariable(r&quot;r&quot;, meshdisc, 1, degree=1)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>radius_fn = sympy.sqrt(meshdisc.rvec.dot(meshdisc.rvec))  # normalise by outer radius if not 1.0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>radius_fn = sympy.sqrt(
+    meshdisc.rvec.dot(meshdisc.rvec)
+)  # normalise by outer radius if not 1.0
 unit_rvec = meshdisc.X / (radius_fn)
 gravity_fn = radius_fn
 
@@ -545,8 +546,8 @@ delta_eta = 10**log10_delta_eta
 stokes.petsc_options[&quot;snes_rtol&quot;] = 1 / delta_eta
 
 viscosity = delta_eta * sympy.exp(-sympy.log(delta_eta) * t_soln.sym[0])
-stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(meshdisc.dim)
-stokes.constitutive_model.Parameters.viscosity=viscosity
+stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel(meshdisc.dim)
+stokes.constitutive_model.Parameters.viscosity = viscosity
 stokes.penalty = 0.0
 
 stokes.saddle_preconditioner = 1.0 / viscosity
@@ -579,8 +580,8 @@ adv_diff = uw.systems.AdvDiffusionSLCN(
     solver_name=&quot;adv_diff&quot;,
 )
 
-adv_diff.constitutive_model = uw.systems.constitutive_models.DiffusionModel(meshdisc.dim)
-adv_diff.constitutive_model.Parameters.diffusivity=k
+adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel(meshdisc.dim)
+adv_diff.constitutive_model.Parameters.diffusivity = k
 adv_diff.theta = 0.5
 </pre></div>
 </div>
@@ -592,7 +593,9 @@ adv_diff.theta = 0.5
 
 import sympy
 
-init_t = 0.9 + 0.05 * (sympy.cos(sympy.pi * th / 2)) * sympy.cos(0.5 * np.pi * (ra - r_i) / (r_o - r_i))
+init_t = 0.9 + 0.05 * (sympy.cos(sympy.pi * th / 2)) * sympy.cos(
+    0.5 * np.pi * (ra - r_i) / (r_o - r_i)
+)
 
 adv_diff.add_dirichlet_bc(1.0, &quot;Lower&quot;)
 adv_diff.add_dirichlet_bc(0.0, &quot;Upper&quot;)
@@ -603,10 +606,14 @@ adv_diff.add_dirichlet_bc(0.0, &quot;Upper&quot;)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with meshdisc.access(t_soln):
-    t_soln.data[...] = uw.function.evaluate(init_t, t_soln.coords, meshdisc.N).reshape(-1, 1)
+    t_soln.data[...] = uw.function.evaluate(init_t, t_soln.coords, meshdisc.N).reshape(
+        -1, 1
+    )
 
 with meshdisc.access(meshr):
-    meshr.data[:, 0] = uw.function.evaluate(sympy.sqrt(x**2 + y**2), meshdisc.data, meshdisc.N)  # cf radius_fn which is 0-&gt;1
+    meshr.data[:, 0] = uw.function.evaluate(
+        sympy.sqrt(x**2 + y**2), meshdisc.data, meshdisc.N
+    )  # cf radius_fn which is 0-&gt;1
 </pre></div>
 </div>
 </div>
@@ -646,7 +653,6 @@ adv_diff.solve(timestep=0.1 * stokes.estimate_dt())
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># check the mesh if in a notebook / serial
 
 if uw.mpi.size == 1:
-
     import numpy as np
     import pyvista as pv
     import vtk
@@ -704,7 +710,13 @@ if uw.mpi.size == 1:
     #     show_edges=True, scalars=&quot;T&quot;, use_transparency=False, opacity=0.5,
     # )
 
-    pl.add_points(point_cloud, cmap=&quot;coolwarm&quot;, render_points_as_spheres=False, point_size=3, opacity=0.33)
+    pl.add_points(
+        point_cloud,
+        cmap=&quot;coolwarm&quot;,
+        render_points_as_spheres=False,
+        point_size=3,
+        opacity=0.33,
+    )
 
     pl.add_mesh(pvstream, opacity=0.5)
     pl.add_arrows(velocity_0s, velocity, mag=1.0e-3)
@@ -731,9 +743,7 @@ meshdisc.vtk(&quot;tmp_box_mesh.vtk&quot;)
 
 
 def plot_T_mesh(filename):
-
     if uw.mpi.size == 1:
-
         import numpy as np
         import pyvista as pv
         import vtk
@@ -794,14 +804,24 @@ def plot_T_mesh(filename):
             opacity=0.5,
         )
 
-        pl.add_points(point_cloud, cmap=&quot;coolwarm&quot;, render_points_as_spheres=False, point_size=10, opacity=0.5)
+        pl.add_points(
+            point_cloud,
+            cmap=&quot;coolwarm&quot;,
+            render_points_as_spheres=False,
+            point_size=10,
+            opacity=0.5,
+        )
 
         pl.add_mesh(pvstream, opacity=0.4)
 
         pl.remove_scalar_bar(&quot;T&quot;)
         pl.remove_scalar_bar(&quot;V&quot;)
 
-        pl.screenshot(filename=&quot;{}.png&quot;.format(filename), window_size=(1280, 1280), return_img=False)
+        pl.screenshot(
+            filename=&quot;{}.png&quot;.format(filename),
+            window_size=(1280, 1280),
+            return_img=False,
+        )
         # pl.show()
         pl.close()
 
@@ -832,7 +852,6 @@ def plot_T_mesh(filename):
 expt_name = f&quot;output/Ra1e6_cyl_eta1e{log10_delta_eta}&quot;
 
 for step in range(0, 1000):
-
     stokes.solve(zero_init_guess=True)
     delta_t = 2.0 * stokes.estimate_dt()
     adv_diff.solve(timestep=delta_t, zero_init_guess=True)
@@ -868,7 +887,6 @@ meshdisc.generate_xdmf(savefile)</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 
 if uw.mpi.size == 1:
-
     import numpy as np
     import pyvista as pv
     import vtk
@@ -907,7 +925,13 @@ if uw.mpi.size == 1:
     pl.add_arrows(arrow_loc, arrow_length, mag=100, opacity=0.75)
     # pl.add_arrows(arrow_loc2, arrow_length2, mag=1.0e-1)
 
-    pl.add_points(point_cloud, cmap=&quot;coolwarm&quot;, render_points_as_spheres=True, point_size=7, opacity=0.25)
+    pl.add_points(
+        point_cloud,
+        cmap=&quot;coolwarm&quot;,
+        render_points_as_spheres=True,
+        point_size=7,
+        opacity=0.25,
+    )
 
     pl.add_mesh(pvmesh, &quot;Black&quot;, &quot;wireframe&quot;, opacity=0.75)
 
@@ -943,11 +967,10 @@ if uw.mpi.size == 1:
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="Ex_Convection_2_SLCN_Cartesian-TdepVisc.html"
@@ -967,10 +990,7 @@ if uw.mpi.size == 1:
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1012,8 +1032,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

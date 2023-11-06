@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.15.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -14,14 +14,11 @@
 
 
 
-# -*- coding: utf-8 -*-
-# %% [markdown]
+#
 # # Constitutive relationships in Underworld (pt 1)
 #
-#
 # Introduction to how the constitutive relationships in Underworld are formulated.
-#
-# %%
+
 import petsc4py
 from petsc4py import PETSc
 
@@ -58,7 +55,10 @@ u3 = uw.discretisation.MeshVariable(r"\mathbf{u3}", mesh3, mesh3.dim, vtype=uw.V
 p3 = uw.discretisation.MeshVariable(r"p^{(3)}", mesh3, 1, vtype=uw.VarType.SCALAR, degree=1)
 phi3 = uw.discretisation.MeshVariable(r"\phi^{(3)}", mesh3, 1, vtype=uw.VarType.SCALAR, degree=2)
 
-
+R  = sympy.Array(sympy.matrices.rot_axis3(sympy.pi)[0:2,0:2])
+R4  = sympy.Array(sympy.matrices.rot_axis3(sympy.pi/4)[0:2,0:2])
+R2 = sympy.Array(sympy.matrices.rot_axis3(sympy.pi/2)[0:2,0:2])
+R34 = sympy.Array(sympy.matrices.rot_axis3(3*sympy.pi/4)[0:2,0:2])
 
 # %%
 poisson2 = uw.systems.Poisson(mesh2, u_Field=phi2)
@@ -70,14 +70,13 @@ stokes3 = uw.systems.Stokes(mesh3, velocityField=u3, pressureField=p3)
 # %%
 stokes2
 
-# %%
-## Tests 
+# # Tests 
 
 # The following tests are implemented with pytest. 
 
 
 
-# %% [markdown]
+# + [markdown] magic_args="[markdown]"
 # ## Introduction to constitutive models
 #
 # Constitutive models relate fluxes of a quantity to the gradients of the unknowns. For example, in thermal diffusion, there is a relationship between heat flux and temperature gradients which is known as *Fourier's law* and which involves an empirically determined thermal conductivity.
@@ -98,7 +97,7 @@ stokes2
 #
 # $$ \tau_{ij} = \mu_{ijkl} \left( \frac{\partial u_k}{\partial x_l} + \frac{\partial u_l}{\partial x_k} \right) $$
 
-# %% [markdown]
+# + [markdown] magic_args="[markdown]"
 # ## Constitutive tensors
 #
 # In Underworld, the underlying implementation of any consitutive relationship is through the appropriate tensor representation, allowing for a very general formulation for most problems. The constitutive tensors are described symbolically using `sympy` expressions. For scalar equations, the rank 2 constitutive tensor ($k_{ij}$) can be expressed as a matrix without any loss of generality. 
@@ -143,7 +142,7 @@ stokes2
 #
 #
 
-# %% [markdown]
+# + [markdown] magic_args="[markdown]"
 # ## Mandel form, sympy tensorial form, Voigt form
 #
 # The rank 4 tensor form of the constitutive equations, $c_{ijkl}$, has the following representation in `sympy`:
@@ -195,6 +194,7 @@ stokes2
 #
 #
 #
+# -
 
 # %%
 epsdot = uw.maths.tensor.rank2_symmetric_sym("\\dot\\varepsilon", 2)
@@ -211,19 +211,17 @@ I4m = uw.maths.tensor.rank4_to_mandel(I4,2)
 display(I4v)
 display(I4m)
 
-# %%
-## What does this show then ?
+# # What does this show then ?
 
 display(Pm * Pm * epsdot_vec.T)
 display(Pm * I4v * Pm * epsdot_vec.T)
 
-# %%
 # This is the generic constitutive tensor with relevant symmetries for fluid mechanics problems
 
 c4sym = uw.maths.tensor.rank4_symmetric_sym('c', 2)
 display(c4sym)
 
-## This is the mandel form of the constitutive matrix for constant viscosity
+# # This is the mandel form of the constitutive matrix for constant viscosity
 
 eta = sympy.symbols("\eta")
 Ceta = sympy.Matrix.diag([eta]*3)
@@ -245,27 +243,29 @@ d=3
 display(uw.maths.tensor.rank4_to_voigt(uw.maths.tensor.rank4_identity(d), d))
 sympy.Array(sympy.symarray('C',(d,d,d,d)))
 
-# %%
-#@# This is how we use those things
+# # This is how we use those things
 
-ViscousFlow = uw.systems.constitutive_models.TransverseIsotropicFlowModel(3)
+ViscousFlow = uw.constitutive_models.TransverseIsotropicFlowModel(u3)
 ViscousFlow.Parameters.eta_0=sympy.symbols(r"\eta_0")
 ViscousFlow.Parameters.eta_1=sympy.symbols(r"\eta_1")
 ViscousFlow.Parameters.director=sympy.Matrix([1,0,0]).T
 
+
+ViscousFlow.flux
+
 stokes3.constitutive_model = ViscousFlow
 display(stokes3.strainrate)
-display(stokes3.constitutive_model.flux(stokes3.strainrate))
+display(stokes3.constitutive_model.flux)
 
 # %%
 ViscousFlow.Parameters.eta_0=sympy.symbols(r"\eta_0")
 ViscousFlow.Parameters.eta_1=sympy.symbols(r"\eta_0")
 ViscousFlow.Parameters.director=sympy.Matrix([1,0,0]) # Doesn't matter if the viscosity are the same
 
-stokes3.constitutive_model.flux(stokes3.strainrate)
+stokes3.constitutive_model.flux
 
 # %%
-Cmods = uw.systems.constitutive_models.TransverseIsotropicFlowModel(dim=3)
+Cmods = uw.constitutive_models.TransverseIsotropicFlowModel(u3)
 Cmods.Parameters.eta_0=sympy.symbols(r"\eta_0")
 Cmods.Parameters.eta_1=sympy.symbols(r"\eta_1")
 
@@ -277,11 +277,11 @@ display(Cmods.C)
 
 # %%
 # Description / help is especially useful in notebook form
-Cmods
+Cmods.view()
 
 # %%
 gradT = mesh2.vector.gradient(phi2.sym)
-Cmodp = uw.systems.constitutive_models.Constitutive_Model(mesh2.dim, 1)
+Cmodp = uw.constitutive_models.Constitutive_Model(mesh2.dim, 1)
 Cmodp
 
 
@@ -301,32 +301,33 @@ Cmods.c
 Cmods
 
 # %%
-Cmodv = uw.systems.constitutive_models.ViscousFlowModel(2)
+Cmodv = uw.constitutive_models.ViscousFlowModel(2)
 Cmodv.Parameters.viscosity = sympy.symbols(r"\eta")
 Cmodv
 
 # %%
 Cmodv.flux(epsdot)
 
-# %%
 # Cvisc = sympy.symbols(r'\eta') * uw.maths.tensor.rank4_identity(2)
 # Celas = sympy.symbols(r'\mu') * uw.maths.tensor.rank4_identity(2)
 
 # Cvisc + Celas
 
-# %%
-## Equivalence test: define tensor explicitly or in canonical form with rotation
+# # Equivalence test: define tensor explicitly or in canonical form with rotation
+
+# +
+# Rotation (as defined for Muhlhaus / Moresi transverse isotropy)
 
 n = sympy.Matrix(sympy.symarray("n",(3,)))
 s = sympy.Matrix((-n[1], n[0], 0))
-n_ijk = mesh3.vector.to_vector(n.T)
-s_ijk = mesh3.vector.to_vector(s.T)
-t = -mesh3.vector.to_matrix(n_ijk.cross(s_ijk)).T
+t = -mesh3.vector.cross(n,s).T # complete the coordinate triad
+
+# -
 
 R = sympy.BlockMatrix((s,n,t)).as_explicit()
-R2 = R[0:2,0:2]
+R
 
-## Equivalence test - 2D tensor rotation 
+# # Equivalence test - 2D tensor rotation 
 
 Delta = sympy.symbols(r"\Delta")
 lambda_matrix = sympy.Matrix.diag([0,0, Delta])
@@ -334,10 +335,14 @@ lambda_ani = uw.maths.tensor.mandel_to_rank4(lambda_matrix,2)
 lambda_xyz = sympy.simplify(uw.maths.tensor.tensor_rotation(R2, lambda_ani))
 lambda_xyz_m = sympy.simplify(uw.maths.tensor.rank4_to_mandel(lambda_xyz, 2))
 
-## Equivalence test - 2D tensor definition
+
+lambda_matrix
+
+# # Equivalence test - 2D tensor definition
 
 d=2
 lambda_mat2 = uw.maths.tensor.rank4_identity(2) * 0
+lambda_mat2
 
 for i in range(d):
     for j in range(d):
@@ -350,10 +355,11 @@ for i in range(d):
 lambda_mat_m = sympy.simplify(uw.maths.tensor.rank4_to_mandel(lambda_mat2,2))
 difference = sympy.simplify(lambda_mat_m - lambda_xyz_m)
 
+difference
+
+
 # Are they term-by-term equivalent 
 sympy.simplify(difference.subs(n[1],sympy.sqrt(1-n[0]**2)))
-
-# %%
 
 n = sympy.Matrix(sympy.symarray("n",(3,)))
 s = (sympy.Matrix((-n[1], n[0], 0)) + sympy.Matrix((0, -n[2], n[1])))/2 
@@ -364,8 +370,9 @@ s_ijk = mesh3.vector.to_vector(s.T)
 t = mesh3.vector.to_matrix(n_ijk.cross(s_ijk)).T
 
 R = sympy.BlockMatrix((n,s,t)).as_explicit()
+R
 
-## Equivalence test - 3D tensor rotation 
+# # Equivalence test - 3D tensor rotation 
 
 Delta = sympy.symbols(r"\Delta")
 lambda_matrix = sympy.Matrix.diag([0, 0, 0, 0, Delta , Delta])
@@ -373,10 +380,15 @@ lambda_ani = uw.maths.tensor.mandel_to_rank4(lambda_matrix,3)
 lambda_xyz = sympy.simplify(uw.maths.tensor.tensor_rotation(R, lambda_ani))
 lambda_xyz_m = sympy.simplify(uw.maths.tensor.rank4_to_mandel(lambda_xyz, 3))
 
-## Equivalence test - 3D tensor definition
+lambda_matrix
+
+
+# # Equivalence test - 3D tensor definition
 
 d=3
 lambda_mat2 = uw.maths.tensor.rank4_identity(d) * 0
+
+
 
 for i in range(d):
     for j in range(d):
@@ -393,13 +405,42 @@ difference = sympy.simplify(lambda_mat_m - lambda_xyz_m)
 sympy.simplify(difference.subs(n[2],sympy.sqrt(1-n[0]**2-n[1]**2)))
 
 
-## the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.
+# +
+# Muhlhaus et al 
+
+eta0 = sympy.symbols("\eta_0")
+eta1 = sympy.symbols("\eta_1")
+
+lambda_MM = uw.maths.tensor.rank4_identity(3) * 0
+lambda_MM_mandel = uw.maths.tensor.rank4_to_mandel(lambda_MM, 3)
+lambda_MM_mandel[0,0] = eta0
+lambda_MM_mandel[1,1] = eta0
+lambda_MM_mandel[2,2] = eta0
+lambda_MM_mandel[3,3] = eta0
+lambda_MM_mandel[4,4] = eta1
+lambda_MM_mandel[5,5] = eta1
+lambda_MM = uw.maths.tensor.mandel_to_rank4(lambda_MM_mandel, 3)
+lambda_xyz = sympy.simplify(uw.maths.tensor.tensor_rotation(R, lambda_MM))
+lambda_xyz_m = sympy.simplify(uw.maths.tensor.rank4_to_mandel(lambda_xyz, 3))
+
+# -
+
+lambda_xyz_m
+
+
+
+
+
+
+
+
+
+# Note: the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.
 
 # %%
 0/0
 
-# %%
-## What does the identity tensor look like in C_ijkl, converted ?
+# # What does the identity tensor look like in C_ijkl, converted ?
 
 d = 2
 
@@ -413,10 +454,12 @@ for i in range(d):
 
 I
 
-mesh.tensor.rank4_to_mandel(I)
+uw.maths.tensor.rank4_to_mandel(I, 2)
+
+uw.maths.tensor.rank4_to_voigt(I, 2)
 
 # %%
-mesh3.tensor.voigt_to_rank4(P.inv() * sympy.Matrix.eye(6) * P.inv())
+uw.maths.tensor.voigt_to_rank4(P.inv() * sympy.Matrix.eye(6) * P.inv(),2)
 
 # %%
 E3 = sympy.Matrix(sympy.symarray('\dot\epsilon',(3,3)))
@@ -425,8 +468,6 @@ E3[2,0] = E3[0,2] #    --- " ---
 E3[2,1] = E3[1,2] #    --- " ---
 
 mesh3.tensor.rank2_to_mandel(E3)
-
-# %%
 
 # %%
 tau_r = 2 * sympy.tensorcontraction(sympy.tensorcontraction(sympy.tensorproduct(I, E3),(3,5)),(2,3))
@@ -456,10 +497,6 @@ Cv
 P * Cmods.template_L # this is the strain rate in Mandel form
 
 # %%
-
-# %%
-
-# %%
 0/0
 
 # %%
@@ -482,8 +519,6 @@ C.is_symmetric()
 
 # %%
 isinstance(stokes, uw.systems.SNES_Vector)
-
-# %%
 
 # %%
 # Set some things
@@ -510,8 +545,6 @@ display(poisson._L)
 Cmod = uw.constitutive_models.Constitutive_Model(poisson)
 
 # %%
-
-# %%
 Cmod.template_c
 
 # %%
@@ -526,8 +559,6 @@ Cmods.template_c
 
 # %%
 mesh.tensor.rank4_to_voigt(Cmods.template_c)
-
-# %%
 
 # %%
 import sympy
@@ -546,7 +577,7 @@ K1 = R.T * K * R
 # %%
 (K1 * poisson._L.T).T
 
-# %% [markdown]
+# + [markdown] magic_args="[markdown]"
 # https://farside.ph.utexas.edu/teaching/336L/Fluidhtml/node250.html
 #
 #
@@ -571,8 +602,8 @@ K1 = R.T * K * R
 # $\displaystyle a_{ijk}' = {\cal R}_{il}\,{\cal R}_{jm}\,{\cal R}_{kn}\,a_{lmn}.$
 #
 #
+# -
 
-# %%
 # 2D example - this should be one of the tests.
 
 R  = sympy.Array(sympy.matrices.rot_axis3(sympy.pi)[0:2,0:2])
@@ -600,8 +631,6 @@ def tensor_rotation(R, T):
     return T
 
 
-# %%
-
 A = sympy.Array(sympy.symarray('a',(2,2)))
 C = sympy.Array(sympy.symarray('c',(2,2,2,2)))
 V = sympy.Array(sympy.symarray('v',(2,)))
@@ -625,8 +654,6 @@ E = sympy.MutableDenseNDimArray(sympy.symarray('\dot\epsilon',(2,2)))
 E[0,1] = E[1,0] # enforce symmetry
 
 
-
-# %%
 
 CC3 = sympy.MutableDenseNDimArray(0 * C3)
 eta30 = sympy.symbols("\eta_0")
@@ -706,7 +733,6 @@ R.transpose()
 # %%
 0/0
 
-# %%
 # Check. Construct simple linear which is solution for 
 # above config.  Exclude boundaries from mesh data. 
 
@@ -721,7 +747,6 @@ with mesh.access():
 (mesh_analytic_soln - mesh_numerical_soln).max()
 
 
-# %%
 # Validate
 
 from mpi4py import MPI
@@ -755,90 +780,3 @@ if MPI.COMM_WORLD.size==1:
          
     pl.show(cpos="xy")
 
-
-# %%
-# Now let's construct something a little more complex.
-# First get the coord system off the mesh/dm.
-N = mesh.N
-
-# %%
-# Create some function using one of the base scalars N.x/N.y/N.z
-import sympy
-k = sympy.exp(-N.y)
-
-# %%
-# View
-k
-
-# %%
-# Don't forget to set the diffusivity
-poisson.k = k
-
-# %%
-with mesh.access():
-    orig_soln = poisson.u.data.copy()
-    
-poisson.solve()
-
-# %%
-
-# %%
-# Simply confirm different results
-with mesh.access():
-    if not np.allclose(poisson.u.data, orig_soln):
-        raise RuntimeError("Unexpected values encountered.")
-
-
-# %%
-# Nonlinear example
-mesh = uw.meshes.Unstructured_Simplex_Box(dim=2, minCoords=(0.0,0.0), maxCoords=(1.0,1,0), cell_size=0.05) 
-mesh.dm.view()
-
-
-# %%
-poisson = Poisson(mesh, degree=1)
-
-
-# %%
-u = poisson.u.fn
-
-
-# %%
-from sympy.vector import gradient
-nabla_u = gradient(u)
-poisson.k = 0.5*(nabla_u.dot(nabla_u))
-poisson.k
-
-
-# %%
-N = mesh.N
-abs_r2 = (N.x**2 + N.y**2)
-poisson.f = -16*abs_r2
-poisson.f
-
-
-# %%
-# poisson.add_dirichlet_bc(abs_r2, "All_dm_boundaries" )
-
-# %%
-# First solve linear to get reasonable initial guess.
-k_keep = poisson.k
-poisson.k = 1.
-poisson.solve()
-# Now solve non-linear
-poisson.k = k_keep
-poisson.solve(zero_init_guess=False)
-
-# %%
-with mesh.access():
-    exact = mesh.data[:,0]**2 + mesh.data[:,1]**2
-    if not np.allclose(poisson.u.data[:,0],exact[:],rtol=7.e-2):
-        l2 = np.linalg.norm(exact[:]-poisson.u.data[:,0])
-        raise RuntimeError(f"Unexpected values encountered. Diff norm = {l2}")
-
-
-# %%
-poisson._f1
-
-# %%
-0/0

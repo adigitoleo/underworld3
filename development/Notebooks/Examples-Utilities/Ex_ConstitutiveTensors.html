@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Tests &#8212; Underworld 3</title>
+    <title>Constitutive relationships in Underworld (pt 1) &#8212; Underworld 3</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -66,11 +67,9 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Utilities/Ex-ConstitutiveTensors';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Utilities/Ex_ConstitutiveTensors';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cylindrical 2D Diffusion" href="Ex_BCs_from_meshVariables.html" />
-    <link rel="prev" title="Miscellaneous Tips and Tricks" href="Readme.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -81,6 +80,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -141,13 +149,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Underworld 3 - Home"/>
+    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Underworld 3 - Home"/>`);</script>
   
   
 </a></div>
@@ -182,7 +191,7 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../Index.html">Index of Sample notebooks</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PoissonEquation/Readme.html">Solving the Poisson Equation</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Gradient_Recovery.html">Poisson Equation with flux recovery</a></li>
@@ -192,7 +201,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian-NL.html">Nonlinear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian.html">Linear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Cartesian.html">Poisson Equation (simple)</a></li>
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PorousFlow/Readme.html">Porous flow examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -217,8 +225,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Convection/Readme.html">Convection modelling examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field (SemiLagrange) Advection solver test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Swarm Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_1_SLCN_Cartesian.html">Constant viscosity convection, Cartesian domain (benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_2_SLCN_Cartesian-TdepVisc.html">Temperature-dependent viscosity convection, Cartesian Domain(benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_3_SLCN_Cylindrical-TdepVisc.html">Temperature-dependent viscosity convection, Cylindrical domain (benchmark)</a></li>
@@ -244,19 +252,8 @@ const thebe_selector_output = ".output, .cell_output"
 
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="Readme.html">Miscellaneous Tips and Tricks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Tests</a></li>
-
-
-
-
-
-
-
-
-
+<li class="toctree-l1 has-children"><a class="reference internal" href="Readme.html">Miscellaneous Tips and Tricks</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="Ex_BCs_from_meshVariables.html">Cylindrical 2D Diffusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Ex_Coordinates.html">Symbolic forms v. mesh variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Ex_Integrals_on_Meshes.html">Using the PETSc mesh integration routines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Ex_Projection_Function_Eval.html">Projection-based function evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Ex_Tensor_Variables_etc.html">Examples with General Mesh variable manipulation</a></li>
@@ -316,7 +313,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://emsc4033.rses.underworldcloud.org/hub/user-redirect/git-pull?repo=https%3A//github.com/underworldcode/underworld3&urlpath=tree/underworld3/Jupyterbook/Notebooks/Examples-Utilities/Ex-ConstitutiveTensors.py&branch=main" target="_blank"
+      <li><a href="https://emsc4033.rses.underworldcloud.org/hub/user-redirect/git-pull?repo=https%3A//github.com/underworldcode/underworld3&urlpath=tree/underworld3/Jupyterbook/Notebooks/Examples-Utilities/Ex_ConstitutiveTensors.py&branch=main" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onJupyterHub"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -362,7 +359,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../../_sources/Notebooks/Examples-Utilities/Ex-ConstitutiveTensors.py" target="_blank"
+      <li><a href="../../_sources/Notebooks/Examples-Utilities/Ex_ConstitutiveTensors.py" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -416,10 +413,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -427,7 +424,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -444,7 +441,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Tests</h1>
+    <h1>Constitutive relationships in Underworld (pt 1)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -454,7 +451,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Tests</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Constitutive relationships in Underworld (pt 1)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-constitutive-models">Introduction to constitutive models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constitutive-tensors">Constitutive tensors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mandel-form-sympy-tensorial-form-voigt-form">Mandel form, sympy tensorial form, Voigt form</a><ul class="nav section-nav flex-column">
@@ -466,12 +464,12 @@ document.write(`
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-this-show-then">What does this show then ?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-is-the-mandel-form-of-the-constitutive-matrix-for-constant-viscosity">This is the mandel form of the constitutive matrix for constant viscosity</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-is-how-we-use-those-things">This is how we use those things</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-define-tensor-explicitly-or-in-canonical-form-with-rotation">Equivalence test: define tensor explicitly or in canonical form with rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-2d-tensor-rotation">Equivalence test - 2D tensor rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-2d-tensor-definition">Equivalence test - 2D tensor definition</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-3d-tensor-rotation">Equivalence test - 3D tensor rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-3d-tensor-definition">Equivalence test - 3D tensor definition</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-forms-are-equivalent-the-second-is-simpler-to-implement-and-sympy-probably-likes-it-better">the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-the-identity-tensor-look-like-in-c-ijkl-converted">What does the identity tensor look like in C_ijkl, converted ?</a></li>
 </ul>
 
@@ -485,17 +483,12 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="constitutive-relationships-in-underworld-pt-1">
+<h1>Constitutive relationships in Underworld (pt 1)<a class="headerlink" href="#constitutive-relationships-in-underworld-pt-1" title="Permalink to this heading">#</a></h1>
+<p>Introduction to how the constitutive relationships in Underworld are formulated.</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># %% [markdown]</span>
-<span class="c1"># # Constitutive relationships in Underworld (pt 1)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># Introduction to how the constitutive relationships in Underworld are formulated.</span>
-<span class="c1">#</span>
-<span class="c1"># %%</span>
-<span class="kn">import</span> <span class="nn">petsc4py</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">petsc4py</span>
 <span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
 </pre></div>
 </div>
@@ -569,6 +562,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">R</span>  <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">matrices</span><span class="o">.</span><span class="n">rot_axis3</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">R4</span>  <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">matrices</span><span class="o">.</span><span class="n">rot_axis3</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">R2</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">matrices</span><span class="o">.</span><span class="n">rot_axis3</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">R34</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">matrices</span><span class="o">.</span><span class="n">rot_axis3</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
 <span class="n">poisson2</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Poisson</span><span class="p">(</span><span class="n">mesh2</span><span class="p">,</span> <span class="n">u_Field</span><span class="o">=</span><span class="n">phi2</span><span class="p">)</span>
 <span class="n">poisson3</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Poisson</span><span class="p">(</span><span class="n">mesh3</span><span class="p">,</span> <span class="n">u_Field</span><span class="o">=</span><span class="n">phi3</span><span class="p">)</span>
@@ -592,6 +595,7 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
 <section class="tex2jax_ignore mathjax_ignore" id="tests">
 <h1>Tests<a class="headerlink" href="#tests" title="Permalink to this heading">#</a></h1>
 <p>The following tests are implemented with pytest.</p>
@@ -777,10 +781,12 @@ document.write(`
 </div>
 </div>
 </div>
-<p>&#64;# This is how we use those things</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="this-is-how-we-use-those-things">
+<h1>This is how we use those things<a class="headerlink" href="#this-is-how-we-use-those-things" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ViscousFlow</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">TransverseIsotropicFlowModel</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ViscousFlow</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">TransverseIsotropicFlowModel</span><span class="p">(</span><span class="n">u3</span><span class="p">)</span>
 <span class="n">ViscousFlow</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">eta_0</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta_0&quot;</span><span class="p">)</span>
 <span class="n">ViscousFlow</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">eta_1</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta_1&quot;</span><span class="p">)</span>
 <span class="n">ViscousFlow</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">director</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -790,9 +796,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ViscousFlow</span><span class="o">.</span><span class="n">flux</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes3</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">ViscousFlow</span>
 <span class="n">display</span><span class="p">(</span><span class="n">stokes3</span><span class="o">.</span><span class="n">strainrate</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">stokes3</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">flux</span><span class="p">(</span><span class="n">stokes3</span><span class="o">.</span><span class="n">strainrate</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">stokes3</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">flux</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -809,7 +822,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes3</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">flux</span><span class="p">(</span><span class="n">stokes3</span><span class="o">.</span><span class="n">strainrate</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes3</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">flux</span>
 </pre></div>
 </div>
 </div>
@@ -817,7 +830,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">Cmods</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">TransverseIsotropicFlowModel</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">Cmods</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">TransverseIsotropicFlowModel</span><span class="p">(</span><span class="n">u3</span><span class="p">)</span>
 <span class="n">Cmods</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">eta_0</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta_0&quot;</span><span class="p">)</span>
 <span class="n">Cmods</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">eta_1</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta_1&quot;</span><span class="p">)</span>
 </pre></div>
@@ -844,7 +857,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
 <span class="c1"># Description / help is especially useful in notebook form</span>
-<span class="n">Cmods</span>
+<span class="n">Cmods</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -853,7 +866,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
 <span class="n">gradT</span> <span class="o">=</span> <span class="n">mesh2</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">phi2</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
-<span class="n">Cmodp</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">Constitutive_Model</span><span class="p">(</span><span class="n">mesh2</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Cmodp</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">Constitutive_Model</span><span class="p">(</span><span class="n">mesh2</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">Cmodp</span>
 </pre></div>
 </div>
@@ -897,7 +910,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">Cmodv</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">Cmodv</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">Cmodv</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta&quot;</span><span class="p">)</span>
 <span class="n">Cmodv</span>
 </pre></div>
@@ -920,11 +933,11 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <h1>Equivalence test: define tensor explicitly or in canonical form with rotation<a class="headerlink" href="#equivalence-test-define-tensor-explicitly-or-in-canonical-form-with-rotation" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">symarray</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,(</span><span class="mi">3</span><span class="p">,)))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rotation (as defined for Muhlhaus / Moresi transverse isotropy)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">symarray</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,(</span><span class="mi">3</span><span class="p">,)))</span>
 <span class="n">s</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">((</span><span class="o">-</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">n_ijk</span> <span class="o">=</span> <span class="n">mesh3</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-<span class="n">s_ijk</span> <span class="o">=</span> <span class="n">mesh3</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-<span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="n">mesh3</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">(</span><span class="n">n_ijk</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">s_ijk</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="n">mesh3</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="c1"># complete the coordinate triad</span>
 </pre></div>
 </div>
 </div>
@@ -932,7 +945,7 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">BlockMatrix</span><span class="p">((</span><span class="n">s</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">as_explicit</span><span class="p">()</span>
-<span class="n">R2</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">R</span>
 </pre></div>
 </div>
 </div>
@@ -951,6 +964,13 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lambda_matrix</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="equivalence-test-2d-tensor-definition">
 <h1>Equivalence test - 2D tensor definition<a class="headerlink" href="#equivalence-test-2d-tensor-definition" title="Permalink to this heading">#</a></h1>
@@ -958,6 +978,7 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="mi">2</span>
 <span class="n">lambda_mat2</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">0</span>
+<span class="n">lambda_mat2</span>
 </pre></div>
 </div>
 </div>
@@ -979,6 +1000,13 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lambda_mat_m</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">lambda_mat2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">difference</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">lambda_mat_m</span> <span class="o">-</span> <span class="n">lambda_xyz_m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">difference</span>
 </pre></div>
 </div>
 </div>
@@ -1012,6 +1040,7 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">BlockMatrix</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">as_explicit</span><span class="p">()</span>
+<span class="n">R</span>
 </pre></div>
 </div>
 </div>
@@ -1026,6 +1055,13 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <span class="n">lambda_ani</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">mandel_to_rank4</span><span class="p">(</span><span class="n">lambda_matrix</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">lambda_xyz</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">tensor_rotation</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">lambda_ani</span><span class="p">))</span>
 <span class="n">lambda_xyz_m</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">lambda_xyz</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lambda_matrix</span>
 </pre></div>
 </div>
 </div>
@@ -1070,9 +1106,36 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 </div>
 </div>
 </div>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-two-forms-are-equivalent-the-second-is-simpler-to-implement-and-sympy-probably-likes-it-better">
-<h1>the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.<a class="headerlink" href="#the-two-forms-are-equivalent-the-second-is-simpler-to-implement-and-sympy-probably-likes-it-better" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Muhlhaus et al </span>
+
+<span class="n">eta0</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s2">&quot;\eta_0&quot;</span><span class="p">)</span>
+<span class="n">eta1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s2">&quot;\eta_1&quot;</span><span class="p">)</span>
+
+<span class="n">lambda_MM</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_identity</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">0</span>
+<span class="n">lambda_MM_mandel</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">lambda_MM</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta0</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta0</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta0</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta0</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta1</span>
+<span class="n">lambda_MM_mandel</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta1</span>
+<span class="n">lambda_MM</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">mandel_to_rank4</span><span class="p">(</span><span class="n">lambda_MM_mandel</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">lambda_xyz</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">tensor_rotation</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">lambda_MM</span><span class="p">))</span>
+<span class="n">lambda_xyz_m</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">lambda_xyz</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lambda_xyz_m</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note: the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
@@ -1118,7 +1181,14 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_voigt</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1126,7 +1196,7 @@ Celas = sympy.symbols(r’\mu’) * uw.maths.tensor.rank4_identity(2)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">mesh3</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">voigt_to_rank4</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">inv</span><span class="p">())</span>
+<span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">voigt_to_rank4</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="o">.</span><span class="n">inv</span><span class="p">(),</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1748,162 +1818,6 @@ above config.  Exclude boundaries from mesh data.</p>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># Now let&#39;s construct something a little more complex.</span>
-<span class="c1"># First get the coord system off the mesh/dm.</span>
-<span class="n">N</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># Create some function using one of the base scalars N.x/N.y/N.z</span>
-<span class="kn">import</span> <span class="nn">sympy</span>
-<span class="n">k</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">N</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># View</span>
-<span class="n">k</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># Don&#39;t forget to set the diffusivity</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-    <span class="n">orig_soln</span> <span class="o">=</span> <span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># Simply confirm different results</span>
-<span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">orig_soln</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected values encountered.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># Nonlinear example</span>
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">Unstructured_Simplex_Box</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">cell_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span> 
-<span class="n">mesh</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">poisson</span> <span class="o">=</span> <span class="n">Poisson</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">fn</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="kn">from</span> <span class="nn">sympy.vector</span> <span class="kn">import</span> <span class="n">gradient</span>
-<span class="n">nabla_u</span> <span class="o">=</span> <span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">nabla_u</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">nabla_u</span><span class="p">))</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">k</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">N</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span>
-<span class="n">abs_r2</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">N</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="o">-</span><span class="mi">16</span><span class="o">*</span><span class="n">abs_r2</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">f</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>poisson.add_dirichlet_bc(abs_r2, “All_dm_boundaries” )</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="c1"># First solve linear to get reasonable initial guess.</span>
-<span class="n">k_keep</span> <span class="o">=</span> <span class="n">poisson</span><span class="o">.</span><span class="n">k</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mf">1.</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-<span class="c1"># Now solve non-linear</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k_keep</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-    <span class="n">exact</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">exact</span><span class="p">[:],</span><span class="n">rtol</span><span class="o">=</span><span class="mf">7.e-2</span><span class="p">):</span>
-        <span class="n">l2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">exact</span><span class="p">[:]</span><span class="o">-</span><span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected values encountered. Diff norm = </span><span class="si">{</span><span class="n">l2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">_f1</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># %%</span>
-<span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1931,34 +1845,12 @@ above config.  Exclude boundaries from mesh data.</p>
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="Readme.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Miscellaneous Tips and Tricks</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="Ex_BCs_from_meshVariables.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Cylindrical 2D Diffusion</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1973,7 +1865,8 @@ above config.  Exclude boundaries from mesh data.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Tests</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Constitutive relationships in Underworld (pt 1)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-constitutive-models">Introduction to constitutive models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constitutive-tensors">Constitutive tensors</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mandel-form-sympy-tensorial-form-voigt-form">Mandel form, sympy tensorial form, Voigt form</a><ul class="nav section-nav flex-column">
@@ -1985,12 +1878,12 @@ above config.  Exclude boundaries from mesh data.</p>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-this-show-then">What does this show then ?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-is-the-mandel-form-of-the-constitutive-matrix-for-constant-viscosity">This is the mandel form of the constitutive matrix for constant viscosity</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-is-how-we-use-those-things">This is how we use those things</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-define-tensor-explicitly-or-in-canonical-form-with-rotation">Equivalence test: define tensor explicitly or in canonical form with rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-2d-tensor-rotation">Equivalence test - 2D tensor rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-2d-tensor-definition">Equivalence test - 2D tensor definition</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-3d-tensor-rotation">Equivalence test - 3D tensor rotation</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#equivalence-test-3d-tensor-definition">Equivalence test - 3D tensor definition</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-two-forms-are-equivalent-the-second-is-simpler-to-implement-and-sympy-probably-likes-it-better">the two forms are equivalent, the second is simpler to implement and sympy probably likes it better.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-the-identity-tensor-look-like-in-c-ijkl-converted">What does the identity tensor look like in C_ijkl, converted ?</a></li>
 </ul>
 
@@ -2033,8 +1926,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

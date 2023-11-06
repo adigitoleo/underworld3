@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -77,6 +78,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -137,13 +147,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Underworld 3 - Home"/>
+    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Underworld 3 - Home"/>`);</script>
   
   
 </a></div>
@@ -188,7 +199,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian-NL.html">Nonlinear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian.html">Linear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Cartesian.html">Poisson Equation (simple)</a></li>
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PorousFlow/Readme.html">Porous flow examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -213,8 +223,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Convection/Readme.html">Convection modelling examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field (SemiLagrange) Advection solver test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Swarm Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_1_SLCN_Cartesian.html">Constant viscosity convection, Cartesian domain (benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_2_SLCN_Cartesian-TdepVisc.html">Temperature-dependent viscosity convection, Cartesian Domain(benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_3_SLCN_Cylindrical-TdepVisc.html">Temperature-dependent viscosity convection, Cylindrical domain (benchmark)</a></li>
@@ -241,18 +251,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Utilities/Readme.html">Miscellaneous Tips and Tricks</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex-ConstitutiveTensors.html">Tests</a></li>
-
-
-
-
-
-
-
-
-
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_BCs_from_meshVariables.html">Cylindrical 2D Diffusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Coordinates.html">Symbolic forms v. mesh variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Integrals_on_Meshes.html">Using the PETSc mesh integration routines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Projection_Function_Eval.html">Projection-based function evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Tensor_Variables_etc.html">Examples with General Mesh variable manipulation</a></li>
@@ -381,10 +380,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -392,7 +391,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -444,10 +443,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from petsc4py import PETSc
 import underworld3 as uw
-from underworld3.systems import Stokes
 import numpy as np
 import sympy
-from mpi4py import MPI
+
 options = PETSc.Options()
 </pre></div>
 </div>
@@ -457,7 +455,6 @@ options = PETSc.Options()
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sys = PETSc.Sys()
 sys.pushErrorHandler(&quot;traceback&quot;)
-
 
 options[&quot;snes_converged_reason&quot;] = None
 options[&quot;snes_monitor_short&quot;] = None
@@ -472,7 +469,7 @@ u = uw.scaling.units
 
 ### make scaling easier
 ndim = uw.scaling.non_dimensionalise
-dim  = uw.scaling.dimensionalise 
+dim = uw.scaling.dimensionalise
 </pre></div>
 </div>
 </div>
@@ -480,26 +477,29 @@ dim  = uw.scaling.dimensionalise
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Set the resolution, a structured quad box of 51x51 is used in the paper
-res = 51
+# res = 51
+res = 21  # use lower res for testing
 
-# define some names for our index 
-materialLightIndex = 0
-materialHeavyIndex = 1
+nsteps = 1  # number of time steps
+swarmGPC = 2  # swarm fill parameter
+render = True  # plot images
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>refLength    = 500e3
-refDensity   = 3.3e3
-refGravity   = 9.81
-refVelocity  = (1*u.centimeter/u.year).to(u.meter/u.second).m ### 1 cm/yr in m/s
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>refLength = 500e3
+refDensity = 3.3e3
+refGravity = 9.81
+refVelocity = (1 * u.centimeter / u.year).to(u.meter / u.second).m  ### 1 cm/yr in m/s
 refViscosity = 1e21
-refPressure  = refDensity * refGravity * refLength
-refTime      = refViscosity / refPressure
+refPressure = refDensity * refGravity * refLength
+refTime = refViscosity / refPressure
 
-bodyforce    = refDensity  * u.kilogram / u.metre**3 * refGravity * u.meter / u.second**2
+bodyforce = (
+    refDensity * u.kilogram / u.metre**3 * refGravity * u.meter / u.second**2
+)
 </pre></div>
 </div>
 </div>
@@ -507,13 +507,13 @@ bodyforce    = refDensity  * u.kilogram / u.metre**3 * refGravity * u.meter / u.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>KL = refLength * u.meter
-Kt = refTime   * u.second
+Kt = refTime * u.second
 KM = bodyforce * KL**2 * Kt**2
 
-scaling_coefficients                    = uw.scaling.get_coefficients()
+scaling_coefficients = uw.scaling.get_coefficients()
 scaling_coefficients[&quot;[length]&quot;] = KL
 scaling_coefficients[&quot;[time]&quot;] = Kt
-scaling_coefficients[&quot;[mass]&quot;]= KM
+scaling_coefficients[&quot;[mass]&quot;] = KM
 scaling_coefficients
 </pre></div>
 </div>
@@ -522,61 +522,47 @@ scaling_coefficients
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### fundamental values
-ref_length    = uw.scaling.dimensionalise(1., u.meter).magnitude
-
-ref_length_km = uw.scaling.dimensionalise(1., u.kilometer).magnitude
-
-ref_density   =  uw.scaling.dimensionalise(1., u.kilogram/u.meter**3).magnitude
-
-ref_gravity   = uw.scaling.dimensionalise(1., u.meter/u.second**2).magnitude
-
-ref_temp      = uw.scaling.dimensionalise(1., u.kelvin).magnitude
-
-ref_velocity  = uw.scaling.dimensionalise(1., u.meter/u.second).magnitude
+ref_length = uw.scaling.dimensionalise(1.0, u.meter).magnitude
+ref_length_km = uw.scaling.dimensionalise(1.0, u.kilometer).magnitude
+ref_density = uw.scaling.dimensionalise(1.0, u.kilogram / u.meter**3).magnitude
+ref_gravity = uw.scaling.dimensionalise(1.0, u.meter / u.second**2).magnitude
+ref_temp = uw.scaling.dimensionalise(1.0, u.kelvin).magnitude
+ref_velocity = uw.scaling.dimensionalise(1.0, u.meter / u.second).magnitude
 
 ### derived values
-ref_time      = ref_length / ref_velocity
-
+ref_time = ref_length / ref_velocity
 ref_time_Myr = dim(1, u.megayear).m
-
-ref_pressure  = ref_density * ref_gravity * ref_length
-
-ref_stress    = ref_pressure
-
+ref_pressure = ref_density * ref_gravity * ref_length
+ref_stress = ref_pressure
 ref_viscosity = ref_pressure * ref_time
 
 ### Key ND values
-ND_gravity     = 9.81    / ref_gravity
+ND_gravity = 9.81 / ref_gravity
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Set constants for the viscosity and density of the sinker.
-viscBG        = 1e21/ref_viscosity
-viscBlock     = 1e21/ref_viscosity
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># define some names for our index
+materialLightIndex = 0
+materialHeavyIndex = 1
+
+## Set constants for the viscosity and density of the sinker.
+viscBG = 1e21 / ref_viscosity
+viscBlock = 1e21 / ref_viscosity
 
 ## set density of blocks
-densityBG     = 3.2e3/ref_density
-densityBlock  = 3.3e3/ref_density
-
-
-nsteps = 2
-
-
-swarmGPC = 2
-
-### plot figs
-render = True
+densityBG = 3.2e3 / ref_density
+densityBlock = 3.3e3 / ref_density
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>xmin, xmax = 0., ndim(500*u.kilometer)
-ymin, ymax = 0., ndim(500*u.kilometer)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>xmin, xmax = 0.0, ndim(500 * u.kilometer)
+ymin, ymax = 0.0, ndim(500 * u.kilometer)
 </pre></div>
 </div>
 </div>
@@ -591,13 +577,17 @@ ymin, ymax = 0., ndim(500*u.kilometer)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Set the box min and max coords
-boxCentre_x, boxCentre_y = ndim(250.0*u.kilometer), ndim(375.0*u.kilometer)
+boxCentre_x, boxCentre_y = ndim(250.0 * u.kilometer), ndim(375.0 * u.kilometer)
 
-box_xmin, box_xmax = boxCentre_x-ndim(50*u.kilometer), boxCentre_x+ndim(50*u.kilometer)
-box_ymin, box_ymax = boxCentre_y-ndim(50*u.kilometer), boxCentre_y+ndim(50*u.kilometer)
+box_xmin, box_xmax = boxCentre_x - ndim(50 * u.kilometer), boxCentre_x + ndim(
+    50 * u.kilometer
+)
+box_ymin, box_ymax = boxCentre_y - ndim(50 * u.kilometer), boxCentre_y + ndim(
+    50 * u.kilometer
+)
 
 # location of tracer at bottom of sinker
-x_pos = box_xmax - ((box_xmax - box_xmin)/2.)
+x_pos = box_xmax - ((box_xmax - box_xmin) / 2.0)
 y_pos = box_ymin
 </pre></div>
 </div>
@@ -605,16 +595,16 @@ y_pos = box_ymin
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0.0,0.0), 
-#                                               maxCoords=(1.0,1.0), 
-#                                               cellSize=1.0/res, 
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(0.0,0.0),
+#                                               maxCoords=(1.0,1.0),
+#                                               cellSize=1.0/res,
 #                                               regular=True)
 
 # mesh = uw.meshing.UnstructuredSimplexBox(minCoords=(xmin, ymin), maxCoords=(xmax, ymax), cellSize=1.0 / res, regular=False)
 
-mesh = uw.meshing.StructuredQuadBox(elementRes =(int(res),int(res)),
-                                    minCoords=(xmin,ymin), 
-                                    maxCoords=(xmax,ymax))
+mesh = uw.meshing.StructuredQuadBox(
+    elementRes=(int(res), int(res)), minCoords=(xmin, ymin), maxCoords=(xmax, ymax)
+)
 </pre></div>
 </div>
 </div>
@@ -623,11 +613,11 @@ mesh = uw.meshing.StructuredQuadBox(elementRes =(int(res),int(res)),
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### Create Stokes object
 
-v = uw.discretisation.MeshVariable(&#39;U&#39;,    mesh,  mesh.dim, degree=2 )
-p = uw.discretisation.MeshVariable(&#39;P&#39;,    mesh, 1, degree=1 )
+v = uw.discretisation.MeshVariable(&quot;U&quot;, mesh, mesh.dim, degree=2)
+p = uw.discretisation.MeshVariable(&quot;P&quot;, mesh, 1, degree=1)
 
-stokes = uw.systems.Stokes(mesh, velocityField=v, pressureField=p )
-stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh.dim)
+stokes = uw.systems.Stokes(mesh, velocityField=v, pressureField=p)
+stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel(v)
 </pre></div>
 </div>
 </div>
@@ -635,25 +625,61 @@ stokes.constitutive_model = uw.systems.constitutive_models.ViscousFlowModel(mesh
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#### No slip
-sol_vel = sympy.Matrix([0.,0.])
-
-# stokes.add_dirichlet_bc( sol_vel, [&quot;Left&quot;, &quot;Right&quot;],  [0,1] )  # left/right: components, function, markers
-# stokes.add_dirichlet_bc( sol_vel, [&quot;Top&quot;, &quot;Bottom&quot;],  [0,1] )  # top/bottom: components, function, markers 
+sol_vel = sympy.Matrix([0.0, 0.0])
 
 ### free slip
-stokes.add_dirichlet_bc( sol_vel, [&quot;Left&quot;, &quot;Right&quot;],  [0] )  # left/right: components, function, markers
-stokes.add_dirichlet_bc( sol_vel, [&quot;Top&quot;, &quot;Bottom&quot;],  [1] )  # top/bottom: components, function, markers 
-
-
-
+stokes.add_dirichlet_bc(sol_vel, &quot;Left&quot;, 0)  # left/right: components, function, markers
+stokes.add_dirichlet_bc(
+    sol_vel, &quot;Right&quot;, 0
+)  # left/right: components, function, markers
+stokes.add_dirichlet_bc(sol_vel, &quot;Top&quot;, 1)  # left/right: components, function, markers
+stokes.add_dirichlet_bc(
+    sol_vel, &quot;Bottom&quot;, 1
+)  # left/right: components, function, markers
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>swarm     = uw.swarm.Swarm(mesh=mesh)
-material  = uw.swarm.IndexSwarmVariable(&quot;M&quot;, swarm, indices=2)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Solver
+
+stokes.petsc_options[&quot;snes_type&quot;] = &quot;newtonls&quot;
+stokes.petsc_options[&quot;ksp_type&quot;] = &quot;fgmres&quot;
+
+stokes.petsc_options[&quot;snes_monitor&quot;] = None
+stokes.petsc_options[&quot;ksp_monitor&quot;] = None
+
+# stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_type&quot;, &quot;mg&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_mg_type&quot;, &quot;kaskade&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_mg_cycle_type&quot;, &quot;w&quot;)
+
+stokes.petsc_options[&quot;fieldsplit_velocity_mg_coarse_pc_type&quot;] = &quot;svd&quot;
+stokes.petsc_options[f&quot;fieldsplit_velocity_ksp_type&quot;] = &quot;fcg&quot;
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_type&quot;] = &quot;chebyshev&quot;
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_max_it&quot;] = 7
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_converged_maxits&quot;] = None
+
+# gasm is super-fast ... but mg seems to be bulletproof
+# gamg is toughest wrt viscosity
+
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;gamg&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;additive&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
+
+# # # mg, multiplicative - very robust ... similar to gamg, additive
+
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;mg&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;multiplicative&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>swarm = uw.swarm.Swarm(mesh=mesh)
+material = uw.swarm.IndexSwarmVariable(&quot;M&quot;, swarm, indices=2)
 swarm.populate(fill_param=swarmGPC)
 </pre></div>
 </div>
@@ -663,8 +689,12 @@ swarm.populate(fill_param=swarmGPC)
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with swarm.access(material):
     material.data[...] = materialLightIndex
-    material.data[(swarm.data[:,0] &gt;= box_xmin) &amp; (swarm.data[:,0] &lt;= box_xmax) &amp;
-                  (swarm.data[:,1] &gt;= box_ymin) &amp; (swarm.data[:,1] &lt;= box_ymax)] = materialHeavyIndex
+    material.data[
+        (swarm.data[:, 0] &gt;= box_xmin)
+        &amp; (swarm.data[:, 0] &lt;= box_xmax)
+        &amp; (swarm.data[:, 1] &gt;= box_ymin)
+        &amp; (swarm.data[:, 1] &lt;= box_ymax)
+    ] = materialHeavyIndex
 </pre></div>
 </div>
 </div>
@@ -672,8 +702,8 @@ swarm.populate(fill_param=swarmGPC)
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### add tracer for sinker velocity
-tracer = np.zeros(shape=(1,2))
-tracer[:,0], tracer[:,1] = x_pos, y_pos
+tracer = np.zeros(shape=(1, 2))
+tracer[:, 0], tracer[:, 1] = x_pos, y_pos
 </pre></div>
 </div>
 </div>
@@ -681,11 +711,8 @@ tracer[:,0], tracer[:,1] = x_pos, y_pos
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>passiveSwarm = uw.swarm.Swarm(mesh)
-
 passiveSwarm.dm.finalizeFieldRegister()
-
 passiveSwarm.dm.addNPoints(npoints=len(tracer))
-
 passiveSwarm.dm.setPointCoordinates(tracer)
 </pre></div>
 </div>
@@ -693,10 +720,9 @@ passiveSwarm.dm.setPointCoordinates(tracer)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mat_density = np.array([densityBG,densityBlock])
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mat_density = np.array([densityBG, densityBlock])
 
-density = mat_density[0] * material.sym[0] + \
-          mat_density[1] * material.sym[1]
+density = mat_density[0] * material.sym[0] + mat_density[1] * material.sym[1]
 </pre></div>
 </div>
 </div>
@@ -705,8 +731,7 @@ density = mat_density[0] * material.sym[0] + \
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mat_viscosity = np.array([viscBG, viscBlock])
 
-viscosityMat = mat_viscosity[0] * material.sym[0] + \
-               mat_viscosity[1] * material.sym[1] 
+viscosityMat = mat_viscosity[0] * material.sym[0] + mat_viscosity[1] * material.sym[1]
 </pre></div>
 </div>
 </div>
@@ -714,53 +739,51 @@ viscosityMat = mat_viscosity[0] * material.sym[0] + \
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def plot_mat():
-
     import numpy as np
     import pyvista as pv
-    import vtk
 
-    pv.global_theme.background = &#39;white&#39;
+    pv.global_theme.background = &quot;white&quot;
     pv.global_theme.window_size = [750, 750]
-    pv.global_theme.antialiasing = True
-    pv.global_theme.jupyter_backend = &#39;panel&#39;
+    pv.global_theme.anti_aliasing = &quot;msaa&quot;
+    pv.global_theme.jupyter_backend = &quot;panel&quot;
     pv.global_theme.smooth_shading = True
 
-
     mesh.vtk(&quot;tempMsh.vtk&quot;)
-    pvmesh = pv.read(&quot;tempMsh.vtk&quot;) 
+    pvmesh = pv.read(&quot;tempMsh.vtk&quot;)
 
     with swarm.access():
-        points = np.zeros((swarm.data.shape[0],3))
-        points[:,0] = swarm.data[:,0]
-        points[:,1] = swarm.data[:,1]
-        points[:,2] = 0.0
+        points = np.zeros((swarm.data.shape[0], 3))
+        points[:, 0] = swarm.data[:, 0]
+        points[:, 1] = swarm.data[:, 1]
+        points[:, 2] = 0.0
 
     point_cloud = pv.PolyData(points)
-
 
     with swarm.access():
         point_cloud.point_data[&quot;M&quot;] = material.data.copy()
 
-
-
     pl = pv.Plotter(notebook=True)
 
-    pl.add_mesh(pvmesh,&#39;Black&#39;, &#39;wireframe&#39;)
+    pl.add_mesh(pvmesh, &quot;Black&quot;, &quot;wireframe&quot;)
 
     # pl.add_points(point_cloud, color=&quot;Black&quot;,
     #                   render_points_as_spheres=False,
-    #                   point_size=2.5, opacity=0.75)       
+    #                   point_size=2.5, opacity=0.75)
 
-
-
-    pl.add_mesh(point_cloud, cmap=&quot;coolwarm&quot;, edge_color=&quot;Black&quot;, show_edges=False, scalars=&quot;M&quot;,
-                        use_transparency=False, opacity=0.95)
-
-
+    pl.add_mesh(
+        point_cloud,
+        cmap=&quot;coolwarm&quot;,
+        edge_color=&quot;Black&quot;,
+        show_edges=False,
+        scalars=&quot;M&quot;,
+        use_transparency=False,
+        opacity=0.95,
+    )
 
     pl.show(cpos=&quot;xy&quot;)
-    
-if render == True and uw.mpi.size == 1:
+
+
+if render and uw.mpi.size == 1:
     plot_mat()
 </pre></div>
 </div>
@@ -769,16 +792,10 @@ if render == True and uw.mpi.size == 1:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### linear solve
-stokes.constitutive_model.Parameters.viscosity = ndim(ref_viscosity * u.pascal*u.second)
-# stokes.saddle_preconditioner = 1.0 / stokes.constitutive_model.Parameters.viscosity
+stokes.constitutive_model.Parameters.shear_viscosity_0 = ndim(
+    ref_viscosity * u.pascal * u.second
+)
 stokes.bodyforce = sympy.Matrix([0, -1 * ND_gravity * density])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>stokes.constitutive_model.Parameters.viscosity
 </pre></div>
 </div>
 </div>
@@ -827,35 +844,35 @@ options[&quot;snes_test_jacobian_view&quot;] = None
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>step   = 0
-time   = 0.
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>step = 0
+time = 0.0
+tSinker = np.zeros(nsteps + 1) * np.nan
+ySinker = np.zeros(nsteps + 1) * np.nan
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>tSinker = np.zeros(nsteps)*np.nan
-ySinker = np.zeros(nsteps)*np.nan
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>while step &lt; nsteps:
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def record_tracer(step, time):
     ### Get the position of the sinking ball
     with passiveSwarm.access(passiveSwarm):
         if passiveSwarm.dm.getLocalSize() &gt; 0:
-            ymin = passiveSwarm.data[:,1].min()
+            ymin = passiveSwarm.data[:, 1].min()
     ySinker[step] = ymin
     tSinker[step] = time
-    
-    ### print some stuff    
+
+    ### print some stuff
     if passiveSwarm.dm.getLocalSize() &gt; 0:
-        print(f&quot;Step: {str(step).rjust(3)}, time: {dim(time, u.megayear).m:6.2f} [Myr], tracer:  {dim(ymin, u.kilometer):6.2f} [km]&quot;)
-    
-    ### solve stokes 
+        print(
+            f&quot;Step: {str(step).rjust(3)}, time: {dim(time, u.megayear).m:6.2f} [Myr], tracer:  {dim(ymin, u.kilometer):6.2f} [km]&quot;
+        )
+
+
+record_tracer(step, time)
+
+while step &lt; nsteps:
+    ### solve stokes
     stokes.solve()
     ### estimate dt
     dt = 0.5 * stokes.estimate_dt()
@@ -863,14 +880,14 @@ ySinker = np.zeros(nsteps)*np.nan
     ### advect the swarm
     swarm.advection(stokes.u.sym, dt, corrector=False)
     passiveSwarm.advection(stokes.u.sym, dt, corrector=False)
-    
+
     ### advect tracer
     # vel_on_tracer = uw.function.evaluate(stokes.u.fn,tracer)
     # tracer += dt*vel_on_tracer
-    
-        
-    step+=1
-    time+=dt
+    step += 1
+    time += dt
+
+    record_tracer(step, time)
 </pre></div>
 </div>
 </div>
@@ -878,29 +895,29 @@ ySinker = np.zeros(nsteps)*np.nan
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if passiveSwarm.dm.getLocalSize() &gt; 0:
-    
     import matplotlib.pyplot as plt
-    
+
     ### remove nan values, if any. Convert to km and Myr
     ySinker = dim(ySinker[~np.isnan(ySinker)], u.kilometer)
     tSinker = dim(tSinker[~np.isnan(tSinker)], u.megayear)
-    
-    
-    print(&#39;Initial position: t = {0:.3f}, y = {1:.3f}&#39;.format(tSinker[0], ySinker[0]))
-    print(&#39;Final position:   t = {0:.3f}, y = {1:.3f}&#39;.format(tSinker[-1], ySinker[-1]))
-    
-    
-    UWvelocity = ((ySinker[0] - ySinker[-1]) / (tSinker[-1] - tSinker[0])).to(u.meter/u.second).m
-    print(f&#39;Velocity:         v = {UWvelocity} m/s&#39;)
 
-    
+    print(&quot;Initial position: t = {0:.3f}, y = {1:.3f}&quot;.format(tSinker[0], ySinker[0]))
+    print(&quot;Final position:   t = {0:.3f}, y = {1:.3f}&quot;.format(tSinker[-1], ySinker[-1]))
+
+    UWvelocity = (
+        ((ySinker[0] - ySinker[-1]) / (tSinker[-1] - tSinker[0]))
+        .to(u.meter / u.second)
+        .m
+    )
+    print(f&quot;Velocity:         v = {UWvelocity} m/s&quot;)
+
     if uw.mpi.size == 0:
         fig = plt.figure()
         fig.set_size_inches(12, 6)
-        ax = fig.add_subplot(1,1,1)
-        ax.plot(tSinker.m, ySinker.m) 
-        ax.set_xlabel(&#39;Time [Myr]&#39;)
-        ax.set_ylabel(&#39;Sinker position [km]&#39;)
+        ax = fig.add_subplot(1, 1, 1)
+        ax.plot(tSinker.m, ySinker.m)
+        ax.set_xlabel(&quot;Time [Myr]&quot;)
+        ax.set_ylabel(&quot;Sinker position [km]&quot;)
 </pre></div>
 </div>
 </div>
@@ -916,37 +933,45 @@ ySinker = np.zeros(nsteps)*np.nan
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from scipy.interpolate import interp1d
 
 
-
 #### col 0 is log10( visc_block / visc_BG ), col 1 is block velocity, m/s
 
-paperData = np.array([(-6.01810758939326, 1.3776991077026654e-9),
-                        (-5.014458950015076, 1.3792676876049961e-9),
-                        (-4.018123543216514, 1.3794412652019993e-9),
-                        (-3.021737084183539, 1.3740399388011341e-9),
-                        (-2.0104944249364634, 1.346341549020515e-9),
-                        (-1.0053652707603105, 1.1862379129846573e-9),
-                        (-0.005609364256097038, 8.128929227244664e-10),
-                        (0.993865754958847, 4.702099044525527e-10),
-                        (2.005950776073732, 3.505255987071023e-10),
-                        (3.0024521026341358, 3.3258073831103253e-10),
-                        (4.006139031188129, 3.2996814021496194e-10),
-                        (5.00247443798669, 3.301417178119651e-10),
-                        (6.013474599120308, 3.289241220212219e-10)])
+paperData = np.array(
+    [
+        (-6.01810758939326, 1.3776991077026654e-9),
+        (-5.014458950015076, 1.3792676876049961e-9),
+        (-4.018123543216514, 1.3794412652019993e-9),
+        (-3.021737084183539, 1.3740399388011341e-9),
+        (-2.0104944249364634, 1.346341549020515e-9),
+        (-1.0053652707603105, 1.1862379129846573e-9),
+        (-0.005609364256097038, 8.128929227244664e-10),
+        (0.993865754958847, 4.702099044525527e-10),
+        (2.005950776073732, 3.505255987071023e-10),
+        (3.0024521026341358, 3.3258073831103253e-10),
+        (4.006139031188129, 3.2996814021496194e-10),
+        (5.00247443798669, 3.301417178119651e-10),
+        (6.013474599120308, 3.289241220212219e-10),
+    ]
+)
 
 ### some errors from sampling, so rounding are used
-visc_ratio    = np.round(paperData[:,0])
-paperVelocity = np.round(paperData[:,1], 11)
+visc_ratio = np.round(paperData[:, 0])
+paperVelocity = np.round(paperData[:, 1], 11)
 
+f = interp1d(visc_ratio, paperVelocity, kind=&quot;cubic&quot;)
+x = np.arange(-6, 6, 0.01)
 
-f = interp1d(visc_ratio, paperVelocity, kind=&#39;cubic&#39;)
-
-x = np.arange(-6,6, 0.01)
-
-if uw.mpi.size == 0:
+if uw.mpi.size == 1 and render:
     import matplotlib.pyplot as plt
-    plt.title(&#39;check benchmark&#39;)
-    plt.plot(x, f(x), label=&#39;benchmark velocity curve&#39;, c=&#39;k&#39;)
-    plt.scatter(np.log10(viscBlock/viscBG), UWvelocity, label=&#39;model velocity&#39;, c=&#39;red&#39;, marker=&#39;x&#39;)
+
+    plt.title(&quot;check benchmark&quot;)
+    plt.plot(x, f(x), label=&quot;benchmark velocity curve&quot;, c=&quot;k&quot;)
+    plt.scatter(
+        np.log10(viscBlock / viscBG),
+        UWvelocity,
+        label=&quot;model velocity&quot;,
+        c=&quot;red&quot;,
+        marker=&quot;x&quot;,
+    )
     plt.legend()
 </pre></div>
 </div>
@@ -954,7 +979,17 @@ if uw.mpi.size == 0:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if render == True and uw.mpi.size == 1:
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### for uw testing system
+def test_sinkBlock():
+    if uw.mpi.size == 1:
+        assert np.isclose(f(0.0), UWvelocity)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if render and uw.mpi.size == 1:
     plot_mat()
 </pre></div>
 </div>
@@ -988,16 +1023,12 @@ if uw.mpi.size == 0:
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -1053,8 +1084,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

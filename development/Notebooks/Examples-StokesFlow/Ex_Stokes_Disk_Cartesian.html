@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -64,6 +65,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-StokesFlow/Ex_Stokes_Disk_Cartesian';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -79,6 +82,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -139,13 +151,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Underworld 3 - Home"/>
+    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Underworld 3 - Home"/>`);</script>
   
   
 </a></div>
@@ -190,7 +203,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian-NL.html">Nonlinear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian.html">Linear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Cartesian.html">Poisson Equation (simple)</a></li>
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PorousFlow/Readme.html">Porous flow examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -215,8 +227,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Convection/Readme.html">Convection modelling examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field (SemiLagrange) Advection solver test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Swarm Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_1_SLCN_Cartesian.html">Constant viscosity convection, Cartesian domain (benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_2_SLCN_Cartesian-TdepVisc.html">Temperature-dependent viscosity convection, Cartesian Domain(benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_3_SLCN_Cylindrical-TdepVisc.html">Temperature-dependent viscosity convection, Cylindrical domain (benchmark)</a></li>
@@ -243,18 +255,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Utilities/Readme.html">Miscellaneous Tips and Tricks</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex-ConstitutiveTensors.html">Tests</a></li>
-
-
-
-
-
-
-
-
-
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_BCs_from_meshVariables.html">Cylindrical 2D Diffusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Coordinates.html">Symbolic forms v. mesh variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Integrals_on_Meshes.html">Using the PETSc mesh integration routines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Projection_Function_Eval.html">Projection-based function evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Tensor_Variables_etc.html">Examples with General Mesh variable manipulation</a></li>
@@ -414,10 +415,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -425,11 +426,13 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -445,6 +448,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neumann-terms-boundary-integrals">Neumann terms (boundary integrals)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interior-integrals">Interior integrals</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -471,6 +483,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sympy</span>
 
 <span class="n">free_slip_upper</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">free_slip_lower</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -499,7 +512,7 @@ document.write(`
 <span class="n">r_i</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 <span class="k">if</span> <span class="n">problem_size</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="k">elif</span> <span class="n">problem_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
     <span class="n">res</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="k">elif</span> <span class="n">problem_size</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
@@ -516,14 +529,11 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">meshball</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span><span class="n">radiusOuter</span><span class="o">=</span><span class="n">r_o</span><span class="p">,</span> <span class="n">radiusInner</span><span class="o">=</span><span class="n">r_i</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">meshball</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">meshball</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span><span class="n">radiusOuter</span><span class="o">=</span><span class="n">r_o</span><span class="p">,</span>
+                              <span class="n">radiusInner</span><span class="o">=</span><span class="n">r_i</span><span class="p">,</span>
+                              <span class="n">cellSize</span><span class="o">=</span><span class="n">res</span><span class="p">,</span>
+                              <span class="n">refinement</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                              <span class="n">qdegree</span><span class="o">=</span><span class="mi">5</span><span class="p">,)</span>
 </pre></div>
 </div>
 </div>
@@ -532,10 +542,10 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test that the second one is skipped</span>
 
-<span class="n">v_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\mathbf</span><span class="si">{u}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">p_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">v_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">varsymbol</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\mathbf</span><span class="si">{u}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">p_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">varsymbol</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\mathbf</span><span class="si">{p}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">p_cont</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;p_c&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">t_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\Delta T&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">t_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">varsymbol</span><span class="o">=</span><span class="s2">&quot;\Delta T&quot;</span><span class="p">)</span>
 <span class="n">maskr</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -550,7 +560,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sympy</span>
 
 <span class="n">radius_fn</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">xR</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">radius_fn</span> <span class="o">=</span> <span class="n">maskr</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># radius_fn = maskr.sym[0]</span>
 <span class="n">unit_rvec</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span>
 <span class="n">gravity_fn</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># radius_fn / r_o</span>
 
@@ -561,7 +571,7 @@ document.write(`
 
 <span class="n">Rayleigh</span> <span class="o">=</span> <span class="mf">1.0e5</span>
 
-<span class="n">hw</span> <span class="o">=</span> <span class="mf">2000.0</span> <span class="o">/</span> <span class="n">res</span>
+<span class="n">hw</span> <span class="o">=</span> <span class="mf">10000.0</span> <span class="o">/</span> <span class="n">res</span>
 <span class="n">surface_fn</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">radius_fn</span> <span class="o">-</span> <span class="n">r_o</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">hw</span><span class="p">)</span>
 <span class="n">base_fn</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">radius_fn</span> <span class="o">-</span> <span class="n">r_i</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">hw</span><span class="p">)</span>
 </pre></div>
@@ -576,17 +586,70 @@ document.write(`
     <span class="n">meshball</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span>
 <span class="p">)</span>
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span>
-    <span class="n">meshball</span><span class="o">.</span><span class="n">dim</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span>
+    <span class="n">v_soln</span>
 <span class="p">)</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">penalty</span> <span class="o">=</span> <span class="mf">1.0</span>
 
 <span class="c1"># There is a null space if there are no fixed bcs, so we&#39;ll do this:</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">free_slip_upper</span><span class="p">:</span>
-    <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Upper&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Lower&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">free_slip_lower</span><span class="p">:</span>
+    <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+
+<span class="n">v_r</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">unit_rvec</span><span class="p">)</span><span class="o">*</span><span class="n">unit_rvec</span>
+    
+<span class="c1"># stokes.add_natural_bc( -1.0e3 * sympy.Matrix([v_r[0],v_r[1]]), &quot;Upper&quot;)</span>
+
+<span class="c1"># stokes.add_natural_bc( -1.0, sympy.Matrix((0.0, 0.0)).T , &quot;Upper&quot;, component=0)</span>
+<span class="c1"># stokes.add_natural_bc( -2.0, sympy.Matrix((0.0, 0.0)).T , &quot;Upper&quot;, component=1)</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">saddle_preconditioner</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">+</span> <span class="n">stokes</span><span class="o">.</span><span class="n">penalty</span><span class="p">))</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;newtonls&quot;</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;ksp_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fgmres&quot;</span>
+
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_type&quot;, &quot;mg&quot;)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">&quot;fieldsplit_velocity_pc_mg_type&quot;</span><span class="p">,</span> <span class="s2">&quot;kaskade&quot;</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">&quot;fieldsplit_velocity_pc_mg_cycle_type&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;fieldsplit_velocity_mg_coarse_pc_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;svd&quot;</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fieldsplit_velocity_ksp_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fcg&quot;</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fieldsplit_velocity_mg_levels_ksp_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;chebyshev&quot;</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fieldsplit_velocity_mg_levels_ksp_max_it&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fieldsplit_velocity_mg_levels_ksp_converged_maxits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># gasm is super-fast ... but mg seems to be bulletproof</span>
+<span class="c1"># gamg is toughest wrt viscosity</span>
+
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;gamg&quot;)</span>
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;kaskade&quot;)</span>
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)</span>
+
+<span class="c1"># # # mg, multiplicative - very robust ... similar to gamg, additive</span>
+
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;mg&quot;)</span>
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;multiplicative&quot;)</span>
+<span class="c1"># stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># stokes._setup_pointwise_functions(verbose=False)</span>
+<span class="c1"># stokes._setup_discretisation(verbose=False)</span>
 </pre></div>
 </div>
 </div>
@@ -616,7 +679,6 @@ document.write(`
     <span class="n">t_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
         <span class="n">t_init</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">t_soln</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">coord_sys</span><span class="o">=</span><span class="n">meshball</span><span class="o">.</span><span class="n">N</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">t_soln</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">t_soln</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
 <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">maskr</span><span class="p">):</span>
     <span class="n">maskr</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
@@ -630,37 +692,31 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">surface_fn</span><span class="p">)</span>
 <span class="n">s_norm</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">s_norm</span><span class="p">)</span>
+<span class="c1"># print(s_norm)</span>
 
 <span class="n">I</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">base_fn</span>
 <span class="n">b_norm</span> <span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">b_norm</span><span class="p">)</span>
+<span class="c1"># print(b_norm)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">s_norm</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b_norm</span> <span class="o">=</span> <span class="mi">1</span>
+
 <span class="n">buoyancy_force</span> <span class="o">=</span> <span class="n">Rayleigh</span> <span class="o">*</span> <span class="n">gravity_fn</span> <span class="o">*</span> <span class="n">t_init</span>
 <span class="k">if</span> <span class="n">free_slip_upper</span><span class="p">:</span>
     <span class="n">buoyancy_force</span> <span class="o">-=</span> <span class="mf">1.0e6</span> <span class="o">*</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">unit_rvec</span><span class="p">)</span> <span class="o">*</span> <span class="n">surface_fn</span> <span class="o">/</span> <span class="n">s_norm</span>
+
+<span class="k">if</span> <span class="n">free_slip_lower</span><span class="p">:</span>
     <span class="n">buoyancy_force</span> <span class="o">-=</span> <span class="mf">1.0e6</span> <span class="o">*</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">unit_rvec</span><span class="p">)</span> <span class="o">*</span> <span class="n">base_fn</span> <span class="o">/</span> <span class="n">b_norm</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">unit_rvec</span> <span class="o">*</span> <span class="n">buoyancy_force</span>
-
-<span class="c1"># This may help the solvers - penalty in the preconditioner</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">saddle_preconditioner</span> <span class="o">=</span> <span class="mf">1.0</span>
-
 <span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;ksp_monitor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-4</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="o">.</span><span class="n">getAll</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -669,18 +725,21 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">timing</span>
 
+<span class="n">stokes</span><span class="o">.</span><span class="n">_setup_pointwise_functions</span><span class="p">()</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">_setup_discretisation</span><span class="p">()</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">_setup_solver</span><span class="p">()</span>
+
 <span class="n">timing</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">timing</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">timing</span><span class="o">.</span><span class="n">print_table</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">_u_f0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">timing</span><span class="o">.</span><span class="n">print_table</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -689,7 +748,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pressure at mesh nodes</span>
 
-<span class="n">pressure_solver</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="c1"># pressure_solver.solve()</span>
 </pre></div>
 </div>
 </div>
@@ -707,7 +766,7 @@ document.write(`
 
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">750</span><span class="p">,</span> <span class="mi">600</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">antialiasing</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -715,11 +774,11 @@ document.write(`
     <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmp_ball.vtk&quot;</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span>
             <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">),</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span>
         <span class="p">)</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">p_cont</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">p_cont</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span>
             <span class="n">t_init</span><span class="p">,</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">coord_sys</span><span class="o">=</span><span class="n">meshball</span><span class="o">.</span><span class="n">N</span>
         <span class="p">)</span>
 
@@ -738,7 +797,7 @@ document.write(`
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
         <span class="n">pvmesh</span><span class="p">,</span>
         <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
-        <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Grey&quot;</span><span class="p">,</span>
+        <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
         <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;T&quot;</span><span class="p">,</span>
         <span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">use_transparency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -758,6 +817,109 @@ document.write(`
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From the <code class="docutils literal notranslate"><span class="pre">PETSc</span></code> docs, the form of the boundary integral (residual, jacobian, preconditioner) and the form of the interior integrals</p>
+<section id="neumann-terms-boundary-integrals">
+<h2>Neumann terms (boundary integrals)<a class="headerlink" href="#neumann-terms-boundary-integrals" title="Permalink to this heading">#</a></h2>
+<p>Boundary integral in mathematical form.</p>
+<div class="math notranslate nohighlight">
+\[\int_\Gamma \phi {\vec f}_0(u, u_t, \nabla u, x, t) \cdot \hat n + \nabla\phi \cdot {\overleftrightarrow f}_1(u, u_t, \nabla u, x, t) \cdot \hat n\]</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PetscErrorCode PetscDSSetBdResidual(
+                    PetscDS ds, 
+                    PetscInt f, 
+                    void (*f0)( PetscInt dim, 
+                                PetscInt Nf, 
+                                PetscInt NfAux, 
+                                const PetscInt uOff[], 
+                                const PetscInt uOff_x[], 
+                                const PetscScalar u[], 
+                                const PetscScalar u_t[], 
+                                const PetscScalar u_x[], 
+                                const PetscInt aOff[], 
+                                const PetscInt aOff_x[], 
+                                const PetscScalar a[], 
+                                const PetscScalar a_t[], 
+                                const PetscScalar a_x[], 
+                                PetscReal t, 
+                                const PetscReal x[], 
+                                const PetscReal n[], ## &lt;-- Different in boundary integral f0
+                                PetscInt numConstants, 
+                                const PetscScalar constants[], 
+                                PetscScalar f0[]), 
+                    void (*f1)( PetscInt dim, 
+                                PetscInt Nf, 
+                                PetscInt NfAux, 
+                                const PetscInt uOff[], 
+                                const PetscInt uOff_x[], 
+                                const PetscScalar u[], 
+                                const PetscScalar u_t[], 
+                                const PetscScalar u_x[], 
+                                const PetscInt aOff[], 
+                                const PetscInt aOff_x[], 
+                                const PetscScalar a[], 
+                                const PetscScalar a_t[], 
+                                const PetscScalar a_x[], 
+                                PetscReal t, 
+                                const PetscReal x[], 
+                                const PetscReal n[],  ## &lt;-- Different in boundary integral f1
+                                PetscInt numConstants, 
+                                const PetscScalar constants[], 
+                                PetscScalar f1[])
+                    )
+</pre></div>
+</div>
+</section>
+<section id="interior-integrals">
+<h2>Interior integrals<a class="headerlink" href="#interior-integrals" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[\int_\Omega \phi f_0(u, u_t, \nabla u, x, t) + \nabla\phi \cdot {\vec f}_1(u, u_t, \nabla u, x, t)\]</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PetscErrorCode PetscDSSetResidual(  PetscDS ds, 
+                                    PetscInt f, 
+                                    void (*f0)( PetscInt dim, 
+                                                PetscInt Nf,
+                                                PetscInt NfAux,
+                                                const PetscInt uOff[],
+                                                const PetscInt uOff_x[],
+                                                const PetscScalar u[],
+                                                const PetscScalar u_t[],
+                                                const PetscScalar u_x[],
+                                                const PetscInt aOff[],
+                                                const PetscInt aOff_x[],
+                                                const PetscScalar a[],
+                                                const PetscScalar a_t[],
+                                                const PetscScalar a_x[], 
+                                                PetscReal t, 
+                                                const PetscReal x[], 
+                                                PetscInt numConstants, 
+                                                const PetscScalar constants[], 
+                                                PetscScalar f0[]),
+                                    void (*f1)( PetscInt dim, 
+                                                PetscInt Nf, 
+                                                PetscInt NfAux, 
+                                                const PetscInt uOff[], 
+                                                const PetscInt uOff_x[], 
+                                                const PetscScalar u[], 
+                                                const PetscScalar u_t[], 
+                                                const PetscScalar u_x[], 
+                                                const PetscInt aOff[], 
+                                                const PetscInt aOff_x[], 
+                                                const PetscScalar a[], 
+                                                const PetscScalar a_t[], 
+                                                const PetscScalar a_x[], 
+                                                PetscReal t, 
+                                                const PetscReal x[], 
+                                                PetscInt numConstants, 
+                                                const PetscScalar constants[], PetscScalar f1[])
+                                    )
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -785,11 +947,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="Ex_Stokes_Cartesian_SolC.html"
@@ -809,15 +970,27 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neumann-terms-boundary-integrals">Neumann terms (boundary integrals)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interior-integrals">Interior integrals</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
@@ -854,8 +1027,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>

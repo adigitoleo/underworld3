@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -39,8 +39,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -79,6 +80,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -139,13 +149,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/AuWorldEQ.jpg" class="logo__image only-light" alt="Underworld 3 - Home"/>
+    <script>document.write(`<img src="../../_static/AuWorldEQ.jpg" class="logo__image only-dark" alt="Underworld 3 - Home"/>`);</script>
   
   
 </a></div>
@@ -190,7 +201,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian-NL.html">Nonlinear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_DiffusionSLCN_Cartesian.html">Linear diffusion of a hot pipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-PoissonEquation/Ex_Poisson_Cartesian.html">Poisson Equation (simple)</a></li>
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-PorousFlow/Readme.html">Porous flow examples</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -215,8 +225,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Convection/Readme.html">Convection modelling examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Field Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSLCN_RotationTest.html">Field (SemiLagrange) Advection solver test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_AdvectionDiffusionSwarm_RotationTest.html">Swarm Advection solver test - shear flow driven by a pre-defined, rigid body rotation in a disc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_1_SLCN_Cartesian.html">Constant viscosity convection, Cartesian domain (benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_2_SLCN_Cartesian-TdepVisc.html">Temperature-dependent viscosity convection, Cartesian Domain(benchmark)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Convection/Ex_Convection_3_SLCN_Cylindrical-TdepVisc.html">Temperature-dependent viscosity convection, Cylindrical domain (benchmark)</a></li>
@@ -243,18 +253,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Examples-Utilities/Readme.html">Miscellaneous Tips and Tricks</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex-ConstitutiveTensors.html">Tests</a></li>
-
-
-
-
-
-
-
-
-
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_BCs_from_meshVariables.html">Cylindrical 2D Diffusion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Coordinates.html">Symbolic forms v. mesh variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Integrals_on_Meshes.html">Using the PETSc mesh integration routines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Projection_Function_Eval.html">Projection-based function evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-Utilities/Ex_Tensor_Variables_etc.html">Examples with General Mesh variable manipulation</a></li>
@@ -414,10 +413,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -425,7 +424,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -476,7 +475,18 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">trl</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">lmoresi</span><span class="o">/+</span><span class="n">Simulations</span><span class="o">/</span><span class="n">NS_benchmarks</span><span class="o">/</span><span class="n">Re250_res001_noproj</span><span class="o">/</span> <span class="o">|</span> <span class="n">tail</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">sh</span>
+
+<span class="n">ls</span> <span class="o">-</span><span class="n">tr</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">lmoresi</span><span class="o">/+</span><span class="n">Simulations</span><span class="o">/</span><span class="n">NS_benchmarks</span><span class="o">/</span><span class="n">NS_BMK_DvDt_std</span> <span class="o">|</span> <span class="n">tail</span>
+<span class="c1">#ls -tr /Users/lmoresi/+Underworld/underworld3/JupyterBook/Notebooks/Examples-NavierStokes/output_res_033/*mesh*h5 | tail -10</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">lmoresi</span><span class="o">/+</span><span class="n">Simulations</span><span class="o">/</span><span class="n">NS_benchmarks</span><span class="o">/</span><span class="n">NS_BMK_DvDt_std</span><span class="o">/</span><span class="n">NS_benchmark_DFG2d_2iii_0</span><span class="mf">.033</span><span class="o">*</span> <span class="o">|</span> <span class="n">tail</span>
 </pre></div>
 </div>
 </div>
@@ -485,43 +495,39 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Reading the checkpoints back in ... </span>
 
-<span class="n">step</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">basename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/Users/lmoresi/+Simulations/NS_benchmarks/Re250_res001_noproj/NS_test_Re_250_0.01_ts005_noproj&quot;</span>
-<span class="c1"># basename = f&quot;/Users/lmoresi/+Simulations/NS_benchmarks/Re250_res001/NS_test_Re_250_0.01_ts005&quot;</span>
-<span class="c1"># basename = f&quot;output/NS_test_Re_250_0.05&quot;</span>
-<span class="n">mesh_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.mesh.0.h5&quot;</span>
-<span class="n">mesh_filename</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mi">390</span>
+
+<span class="n">checkpoint_dir</span> <span class="o">=</span> <span class="s2">&quot;/Users/lmoresi/+Simulations/NS_benchmarks/NS_BMK_DvDt_std&quot;</span>
+<span class="c1"># checkpoint_dir = &quot;/Users/lmoresi/+Underworld/underworld3/JupyterBook/Notebooks/Examples-NavierStokes//Users/lmoresi/+Simulations/NS_benchmarks/NS_BMK_DvDt_std&quot;</span>
+
+<span class="n">checkpoint_base</span> <span class="o">=</span> <span class="s2">&quot;NS_benchmark_DFG2d_2iii_0.033&quot;</span>
+<span class="n">base_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">checkpoint_dir</span><span class="p">,</span> <span class="n">checkpoint_base</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="n">lmoresi</span><span class="o">/+</span><span class="n">Simulations</span><span class="o">/</span><span class="n">NS_benchmarks</span><span class="o">/</span><span class="n">Re250_res001_noproj</span><span class="o">/*</span><span class="n">mesh</span><span class="o">*</span> <span class="o">|</span> <span class="n">head</span> <span class="o">-</span><span class="mi">5</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">mesh_filename</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_filename</span><span class="si">}</span><span class="s2">.mesh.</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
 
 <span class="n">v_soln_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">p_soln_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">vorticity_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">passive_swarm_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">swarm</span><span class="o">.</span><span class="n">Swarm</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">active_swarm_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">swarm</span><span class="o">.</span><span class="n">Swarm</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">read_from_vertex_checkpoint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.U.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">)</span>
-<span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">read_from_vertex_checkpoint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.P.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">)</span>
-<span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">read_from_vertex_checkpoint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.omega.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;omega&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+<span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+<span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
 
-<span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.passive_swarm.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
+<span class="c1"># This one is just the individual points</span>
+<span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;passive_swarm&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -558,11 +564,19 @@ document.write(`
         <span class="n">usol</span> <span class="o">=</span> <span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>            
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Vmag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span>
+            <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">sym</span><span class="p">)),</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span>
+        <span class="p">)</span>
+        
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">X</span>
+    <span class="n">U0</span> <span class="o">=</span> <span class="mf">1.5</span>
+    <span class="n">Vb</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">U0</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.41</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span> <span class="o">/</span> <span class="mf">0.41</span><span class="o">**</span><span class="mi">2</span>
+        
     <span class="n">v_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sym</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sym</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_vectors</span>
 
     <span class="n">arrow_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
@@ -582,7 +596,7 @@ document.write(`
 
     <span class="c1"># point sources at cell centres</span>
 
-    <span class="n">skip</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">skip</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
@@ -596,11 +610,11 @@ document.write(`
     <span class="p">)</span>
 
     <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
-    <span class="c1"># pl.add_arrows(arrow_loc, arrow_length, mag=0.002, opacity=0.5)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">arrow_loc</span><span class="p">,</span> <span class="n">arrow_length</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
         <span class="n">pvmesh</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;bwr&quot;</span><span class="p">,</span>
         <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
         <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Omega&quot;</span><span class="p">,</span>
@@ -610,26 +624,25 @@ document.write(`
 
     <span class="n">pl</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">swarm_point_cloud</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
                   <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">point_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.66</span>
+                  <span class="n">point_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.2</span>
                 <span class="p">)</span>
 
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span><span class="s1">&#39;Black&#39;</span><span class="p">,</span> <span class="s1">&#39;wireframe&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.66</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span><span class="s1">&#39;Black&#39;</span><span class="p">,</span> <span class="s1">&#39;wireframe&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 
     <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;Omega&quot;</span><span class="p">)</span>
-    <span class="c1"># pl.remove_scalar_bar(&quot;mag&quot;)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;mag&quot;</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">)</span>
         
 
-        
-    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetPosition</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetFocalPoint</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetPosition</span><span class="p">(</span><span class="mf">1.15</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetFocalPoint</span><span class="p">(</span><span class="mf">1.15</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetClippingRange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
         
         
     <span class="n">pl</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span>
-            <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_filename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
             <span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2560</span><span class="p">,</span> <span class="mi">1280</span><span class="p">),</span>
             <span class="n">return_img</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
@@ -641,41 +654,149 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.205</span><span class="p">]]))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
 <span class="n">steps</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">U_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basename</span><span class="si">}</span><span class="s2">.U*h5&quot;</span><span class="p">)</span>
+<span class="n">U_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">checkpoint_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">checkpoint_base</span><span class="si">}</span><span class="s2">.mesh.U*h5&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">Uf</span> <span class="ow">in</span> <span class="n">U_files</span><span class="p">:</span>
     <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Uf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.U.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
 <span class="n">steps</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
+<span class="nb">print</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># for step in steps():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">steps</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1250</span><span class="p">,</span> <span class="mi">1250</span><span class="p">]</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s1">&#39;viewup&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+    
+    <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+    <span class="c1"># check the mesh if in a notebook / serial</span>
+    
+    <span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+    <span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+    <span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;omega&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+
+<span class="c1"># This one is just the individual points</span>
+    <span class="n">passive_swarm_ckpt</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">swarm</span><span class="o">.</span><span class="n">Swarm</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">read_timestep</span><span class="p">(</span><span class="n">checkpoint_base</span><span class="p">,</span> <span class="s2">&quot;passive_swarm&quot;</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="n">checkpoint_dir</span><span class="p">)</span>
+
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">vtk</span>
+
+    <span class="n">mesh</span><span class="o">.</span><span class="n">vtk</span><span class="p">(</span><span class="s2">&quot;tmp_mesh.vtk&quot;</span><span class="p">)</span>
+    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmp_mesh.vtk&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
+        <span class="n">usol</span> <span class="o">=</span> <span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>            
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_soln_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vorticity_ckpt</span><span class="o">.</span><span class="n">rbf_interpolate</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">X</span>
+    <span class="n">U0</span> <span class="o">=</span> <span class="mf">1.5</span>
+    <span class="n">Vb</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">U0</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.41</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span> <span class="o">/</span> <span class="mf">0.41</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="n">v_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sym</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln_ckpt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sym</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_vectors</span>
+
+    <span class="n">arrow_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">arrow_loc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="n">arrow_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln_ckpt</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">arrow_length</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">usol</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="c1"># swarm points</span>
+
+    <span class="k">with</span> <span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">passive_swarm_ckpt</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">swarm_point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+    <span class="c1"># point sources at cell centres</span>
+
+    <span class="n">skip</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[::</span><span class="n">skip</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+    <span class="n">pvstream</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">streamlines_from_source</span><span class="p">(</span>
+        <span class="n">point_cloud</span><span class="p">,</span>
+        <span class="n">vectors</span><span class="o">=</span><span class="s2">&quot;V&quot;</span><span class="p">,</span>
+        <span class="n">integration_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+        <span class="n">max_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># pl.add_arrows(arrow_loc, arrow_length, mag=0.02, opacity=0.5)</span>
+
+
+
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">swarm_point_cloud</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
+                  <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">point_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span>
+                <span class="p">)</span>
+
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span><span class="s1">&#39;Black&#39;</span><span class="p">,</span> <span class="s1">&#39;wireframe&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
+        <span class="n">pvmesh</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;bwr&quot;</span><span class="p">,</span>
+        <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
+        <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Omega&quot;</span><span class="p">,</span>
+        <span class="n">use_transparency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+    <span class="p">)</span>
+    
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+
+    <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;Omega&quot;</span><span class="p">)</span>
+    <span class="c1"># pl.remove_scalar_bar(&quot;mag&quot;)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">)</span>
+    
+    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetPosition</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetFocalPoint</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetClippingRange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
+        
+    <span class="n">pl</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span>
+            <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_filename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span>
+            <span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
+            <span class="n">return_img</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">pl</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">trl</span> <span class="n">output</span><span class="o">/*</span><span class="n">png</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -707,16 +828,12 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -758,8 +875,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
