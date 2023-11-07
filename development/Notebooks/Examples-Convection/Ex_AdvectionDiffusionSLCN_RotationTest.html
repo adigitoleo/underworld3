@@ -541,14 +541,14 @@ delta_t = 1.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff.Unknowns.DuDt.bdf(2)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>type(adv_diff.Unknowns)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel(t_soln)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel(adv_diff.Unknowns)
 adv_diff.constitutive_model.Parameters.diffusivity = k
 </pre></div>
 </div>
@@ -679,19 +679,19 @@ with meshball.access(t_0, t_soln):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>timing.reset()
-timing.start()
-
-delta_t = 0.025
-
-adv_diff.solve(timestep=delta_t, verbose=False, _force_setup=False)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff.DuDt._psi_star_projection_solver._constitutive_model
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff._f0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>timing.reset()
+timing.start()
+
+delta_t = 0.001
+
+adv_diff.solve(timestep=delta_t, verbose=False, _force_setup=False)
 </pre></div>
 </div>
 </div>
@@ -761,7 +761,7 @@ if uw.mpi.size == 1:
 
 expt_name = &quot;rotation_test_slcn&quot;
 
-delta_t = 0.025
+delta_t = 0.05
 
 plot_T_mesh(filename=&quot;{}_step_{}&quot;.format(expt_name, 0))
 

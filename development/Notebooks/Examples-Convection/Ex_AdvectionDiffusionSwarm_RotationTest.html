@@ -476,7 +476,7 @@ t_0 = uw.discretisation.MeshVariable(&quot;T0&quot;, meshball, 1, degree=3)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DTdt = uw.swarm.Lagrangian_Updater(
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DTdt = uw.swarm.Lagrangian_D_Dt(
         meshball,
         psi_fn = t_soln.sym,
         V_fn = v_soln.sym,
@@ -526,7 +526,7 @@ delta_t = 1.0
     order=1,
 )
 
-adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel(t_soln)
+adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel
 adv_diff.constitutive_model.Parameters.diffusivity = k
 </pre></div>
 </div>
@@ -579,9 +579,6 @@ adv_diff.add_dirichlet_bc(0.0, &quot;Upper&quot;)
 with meshball.access(t_0, t_soln):
     t_0.data[...] = uw.function.evaluate(init_t, t_0.coords).reshape(-1, 1)
     t_soln.data[...] = t_0.data[...]
-
-with swarm.access(T1):
-    T1.data[:, 0] = uw.function.evaluate(t_soln.sym[0], swarm.particle_coordinates.data)
 </pre></div>
 </div>
 </div>
@@ -613,10 +610,10 @@ def plot_T_mesh(filename):
         import underworld3.visualisation
         
         pvmesh = uw.visualisation.mesh_to_pv_mesh(meshball)
-        swarm_points = uw.visualisation.swarm_to_pv_cloud(swarm)
+        swarm_points = uw.visualisation.swarm_to_pv_cloud(adv_diff.DuDt.swarm)
         tsoln_points = uw.visualisation.meshVariable_to_pv_cloud(t_soln)
             
-        swarm_points.point_data[&quot;T&quot;] = uw.visualisation.scalar_fn_to_pv_points(swarm_points,T1.sym)
+        swarm_points.point_data[&quot;T&quot;] = uw.visualisation.scalar_fn_to_pv_points(swarm_points,adv_diff.DuDt.psi_fn)
         
         pvmesh.point_data[&quot;T&quot;] = uw.visualisation.scalar_fn_to_pv_points(pvmesh,t_soln.sym)
         pvmesh.point_data[&quot;V&quot;] = uw.visualisation.vector_fn_to_pv_points(pvmesh,v_soln.sym)
@@ -648,20 +645,10 @@ def plot_T_mesh(filename):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>v_fe = v_soln.mesh.dm.getField(v_soln.field_id)[0]
-v_fe
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with meshball.access(t_0, t_soln, T1):
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with meshball.access(t_0, t_soln):
     t_0.data[...] = uw.function.evaluate(init_t, t_0.coords).reshape(-1, 1)
     t_soln.data[...] = t_0.data[...]
 
-with swarm.access(T1):
-    T1.data[:, 0] = uw.function.evaluate(t_soln.sym[0], swarm.particle_coordinates.data)
 </pre></div>
 </div>
 </div>
@@ -670,13 +657,13 @@ with swarm.access(T1):
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>adv_diff.DuDt.update(dt=0.05)
 
-# Update the swarm locations
-swarm.advection(
-    v_soln.sym,
-    delta_t=0.05,
-    corrector=False,
-    restore_points_to_domain_func=meshball.return_coords_to_bounds,
-)  
+# # Update the swarm locations
+# swarm.advection(
+#     v_soln.sym,
+#     delta_t=0.05,
+#     corrector=False,
+#     restore_points_to_domain_func=meshball.return_coords_to_bounds,
+# )  
 </pre></div>
 </div>
 </div>
@@ -726,10 +713,9 @@ if uw.mpi.size == 1:
     import underworld3.visualisation
 
     pvmesh = uw.visualisation.mesh_to_pv_mesh(meshball)
-    swarm_points = uw.visualisation.swarm_to_pv_cloud(swarm)
+    swarm_points = uw.visualisation.swarm_to_pv_cloud(adv_diff.DuDt.swarm)
     tsoln_points = uw.visualisation.meshVariable_to_pv_cloud(t_soln)
         
-    swarm_points.point_data[&quot;T&quot;] = uw.visualisation.scalar_fn_to_pv_points(swarm_points,T1.sym)
     swarm_points.point_data[&quot;Ts&quot;] = uw.visualisation.scalar_fn_to_pv_points(swarm_points, adv_diff.DuDt.psi_star[0].sym[0] )
 
     pvmesh.point_data[&quot;T&quot;] = uw.visualisation.scalar_fn_to_pv_points(pvmesh,t_soln.sym)
@@ -740,16 +726,16 @@ if uw.mpi.size == 1:
 
     pl.add_arrows(pvmesh.points, pvmesh.point_data[&quot;V&quot;], mag=0.02, opacity=0.75)
 
-    # pl.add_points(
-    #     swarm_points,
-    #     cmap=&quot;coolwarm&quot;,
-    #     render_points_as_spheres=False,
-    #     scalars=&quot;Ts&quot;,
-    #     point_size=3,
-    #     opacity=0.66,
-    # )
+    pl.add_points(
+        swarm_points,
+        cmap=&quot;coolwarm&quot;,
+        render_points_as_spheres=False,
+        scalars=&quot;Ts&quot;,
+        point_size=3,
+        opacity=0.66,
+    )
 
-    pl.add_mesh(pvmesh, cmap=&quot;coolwarm&quot;, opacity=0.75, scalars=&quot;T&quot;)
+    # pl.add_mesh(pvmesh, cmap=&quot;coolwarm&quot;, opacity=0.75, scalars=&quot;T&quot;)
 
     # pl.remove_scalar_bar(&quot;T&quot;)
     # pl.remove_scalar_bar(&quot;mag&quot;)

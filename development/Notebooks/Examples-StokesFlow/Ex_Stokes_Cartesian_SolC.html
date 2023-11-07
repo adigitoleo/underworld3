@@ -541,7 +541,7 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">u</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">p</span>
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">=</span><span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscoElasticPlasticFlowModel</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">=</span><span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscoElasticPlasticFlowModel</span><span class="p">(</span><span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="c1"># %%</span>
 <span class="n">T</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">varsymbol</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">{T}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -761,13 +761,6 @@ document.write(`
 <h2>SolCx from the same setup<a class="headerlink" href="#solcx-from-the-same-setup" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span>
     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">surface_fn</span> <span class="o">+</span> <span class="n">base_fn</span><span class="p">))]</span>
 <span class="p">)</span>
@@ -842,7 +835,7 @@ document.write(`
         <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">arrows</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">arrows</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">)</span>
 </pre></div>

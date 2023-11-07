@@ -499,6 +499,13 @@ variable that consists of discrete level values (integers).</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">uw</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the problem size</span>
 <span class="c1">#      1 - ultra low res for automatic checking</span>
 <span class="c1">#      2 - low res problem to play with this notebook</span>
@@ -631,8 +638,8 @@ variable that consists of discrete level values (integers).</p>
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Stokes</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 
-<span class="n">v</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">_u</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">_p</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">u</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">p</span>
 
 <span class="c1"># Set some options</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">penalty</span> <span class="o">=</span> <span class="mf">1.0</span>
@@ -642,46 +649,6 @@ variable that consists of discrete level values (integers).</p>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Left&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Right&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># class _Unknowns(stokes._Unknowns):</span>
-
-<span class="c1">#     def __init__(inner_self):</span>
-
-<span class="c1">#         super().__init__(inner_self)</span>
-
-<span class="c1">#         inner_self._p = None</span>
-
-<span class="c1">#         return</span>
-
-<span class="c1">#     @property</span>
-<span class="c1">#     def p(inner_self):</span>
-<span class="c1">#         return inner_self._p</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">p</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">unk</span><span class="o">.</span><span class="n">p</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -738,6 +705,7 @@ variable that consists of discrete level values (integers).</p>
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># viscosity = sympy.Max( sympy.Min(viscosityMat, eta_max), eta_min)</span>
 
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="n">viscosity</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">density</span><span class="p">])</span>
 </pre></div>
@@ -925,13 +893,6 @@ variable that consists of discrete level values (integers).</p>
 <span class="n">velocity_points</span> <span class="o">=</span> <span class="n">underworld3</span><span class="o">.</span><span class="n">visualisation</span><span class="o">.</span><span class="n">meshVariable_to_pv_cloud</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">visualisation</span><span class="o">.</span><span class="n">coords_to_pv_coords</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">visualisation</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">velocity_points</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
 </pre></div>
 </div>
 </div>
