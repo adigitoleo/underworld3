@@ -528,7 +528,7 @@ stokes = Stokes(
 stokes.petsc_options.delValue(&quot;ksp_monitor&quot;)
 
 # Constant visc
-stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel(meshbox.dim)
+stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel
 stokes.constitutive_model.Parameters.viscosity = 1
 
 # Velocity boundary conditions
@@ -578,7 +578,7 @@ r_o = 1.0
 adv_diff = uw.systems.AdvDiffusion(
     meshbox,
     u_Field=t_soln,
-    V_Field=v_soln,
+    V_fn=v_soln,
     solver_name=&quot;adv_diff&quot;,
     degree=3,
     verbose=False,

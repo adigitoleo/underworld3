@@ -514,7 +514,7 @@ stokes = Stokes(
 # Constant viscosity
 
 viscosity = 1
-stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel(stokes.u)
+stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel
 stokes.constitutive_model.Parameters.shear_viscosity_0 = 1.0
 stokes.tolerance = 1.0e-3
 
@@ -553,11 +553,11 @@ h = 0.0
 adv_diff = uw.systems.AdvDiffusionSLCN(
     meshbox,
     u_Field=t_soln,
-    V_Field=v_soln,
+    V_fn=v_soln,
     solver_name=&quot;adv_diff&quot;,
 )
 
-adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel(t_soln)
+adv_diff.constitutive_model = uw.constitutive_models.DiffusionModel
 adv_diff.constitutive_model.Parameters.diffusivity = k
 adv_diff.theta = 0.5
 </pre></div>
