@@ -718,6 +718,120 @@ class IndexSwarmVariable(SwarmVariable):
 
         return
 
+class PopulationControl(uw_object):
+    def __init__(self, swarm):
+
+        self._swarm = swarm
+
+        ### copy the original swarm coords and cellids
+        with swarm.access():
+            self._swarm_coords   = np.copy(np.ascontiguousarray( self._swarm.data))
+            self._swarm_cellid   = np.copy(np.ascontiguousarray( self._swarm.particle_cellid.data[:,0]))
+
+        kd = uw.kdtree.KDTree(self._swarm_coords)
+    
+        kd.build_index()
+    
+        ### can be done in init, doesn't change
+        ### get the cell ID
+        self._m_cID = swarm.mesh.get_closest_cells( np.ascontiguousarray(  self._swarm.mesh._centroids) ) 
+
+        ### get the initial ppc
+        with self._swarm.access():
+            s_cID, s_cID_counts = np.unique(self._swarm.particle_cellid.data, return_counts=True)
+            self._swarm_ppc = s_cID_counts[0]
+
+
+    def repopulate(self, updateField=None):
+        """
+        This method repopulates the swarm.
+        pass through field that needs to be updated (e.g. the material field)
+        """
+
+        self._updateField = updateField
+
+        ### build a kdtree for the swarm [Not sure if this can be replaced with something simpler/already implemented]
+        def swarm_kdtree(swarm):
+            kd = uw.kdtree.KDTree(np.ascontiguousarray(swarm.mesh._centroids))
+            kd.build_index()
+        
+            with swarm.access():
+                n, d, b = kd.find_closest_point(swarm.data)
+
+            return n, d, b
+        
+
+        ### needs to be done every loop
+        n0, d0, b0 = swarm_kdtree(self._swarm)
+        s_cID, s_cID_c = np.unique(n0, return_counts=True)
+        
+        particles_to_add = []
+        particles_to_delete = []
+        
+        ### checks each cellID in the mesh for the number of particles in each cell
+        for id in self._m_cID:
+            ### check if swarm cell ID is in mesh cell ID (if false, means the cell has no particles)
+            cellID_check = np.isin(id, s_cID)
+            
+            if cellID_check == False:
+                ### repopulate entire cell
+                count = 0
+                num_of_particles_to_add = (self._swarm_ppc - count)
+                #### repopulate entire cell using the original layout
+                particles_to_add.append( self._swarm_coords[(self._swarm_cellid == id)] )
+            
+            if cellID_check == True:
+                count = s_cID_c[s_cID == id][0]
+                if count < self._swarm_ppc:
+                    
+                    #### add n number of particles
+                    num_of_particles_to_add = (self._swarm_ppc - count)
+
+                    ####TODO How do we want to distribute these particles in cells that are under-populated but not empty?
+
+                    particles_to_add.append(self._swarm.mesh._centroids[id]+((np.random.rand(num_of_particles_to_add,2)*2)-1)*self._swarm.mesh.get_min_radius()) 
+                    
+                if count == self._swarm_ppc:
+                    pass
+
+                if count > self._swarm_ppc:
+                    ### remove n number of particles
+                    ####TODO How do we want to select the particles to delete?
+                    num_of_particles_to_remove = (count-self._swarm_ppc)
+                        
+                    rng = np.random.default_rng()
+        
+                    self._swarm.dm.sortGetAccess()
+                    
+                    swarmindex = self._swarm.dm.sortGetPointsPerCell(id)
+        
+                    particles_to_delete.append(rng.choice(swarmindex, num_of_particles_to_remove, replace=False))
+        
+                    self._swarm.dm.sortRestoreAccess()
+
+        ###TODO Fix up the adding and deleting of particles (not sure if this is correct)         
+        ###TODO how to update the required field(s) ?
+        if len(particles_to_add) > 0 :
+            particles_to_add = np.concatenate(particles_to_add)
+            ### do interp before adding particles, otherwise interp happens from the newly added particles
+            if self._updateField != None:
+                new_particle_mat = np.rint(self._updateField.rbf_interpolate(particles_to_add, nnn=5))
+            
+            ### add the particles
+            self._swarm.add_particles_with_coordinates(particles_to_add)
+
+            if self._updateField != None:
+                with self._swarm.access(self._updateField):
+                    self._updateField.data[ -len(particles_to_add): ] = new_particle_mat
+        ### delete particles from over-populated cells
+        ###TODO how do we want to do this?
+        if len(particles_to_delete) > 0 :
+            particles_to_delete = np.concatenate(particles_to_delete)
+            for i in particles_to_delete:
+                self._swarm.dm.removePointAtIndex(i)
+
+
+
 
 # @typechecked
 class Swarm(Stateful, uw_object):
