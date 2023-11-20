@@ -767,15 +767,15 @@ class PopulationControl(uw_object):
         ### only add the required number of particles to match the initial ppc
         particles_to_add = original_swarm_coords[np.min(point_distance, axis=1).argsort()[::-1]][:num_of_particles_to_add]
 
-
-        ###TODO Fix up the adding and deleting of particles (not sure if this is correct)
+  
         if len(particles_to_add) > 0 :
             ### do interp before adding particles, otherwise interp happens from the newly added particles
             if self._updateField != None:
                 ### defualt to the nnn value
-                new_particle_mat = np.rint(self._updateField.rbf_interpolate(particles_to_add))
+                new_particle_mat = np.rint( self._updateField.rbf_interpolate(particles_to_add) )#, nnn=self._swarm_ppc))
             
             ### add the particles
+            ###TODO Fix up the adding of particles (not sure if this is the correct way) 
             self._swarm.add_particles_with_coordinates(particles_to_add)
 
             if self._updateField != None:
@@ -859,22 +859,22 @@ class PopulationControl(uw_object):
                     particles_to_delete.append(rng.choice(swarmindex, num_of_particles_to_remove, replace=False))
         
                     self._swarm.dm.sortRestoreAccess()
-
-        ###TODO Fix up the adding and deleting of particles (not sure if this is correct)         
+       
         if len(particles_to_add) > 0 :
             particles_to_add = np.concatenate(particles_to_add)
             ### do interp before adding particles, otherwise interp happens from the newly added particles (which are assigned a default value)
             if self._updateField != None:
-                new_particle_mat = np.rint(self._updateField.rbf_interpolate(particles_to_add, nnn=5))
+                new_particle_mat = np.rint( self._updateField.rbf_interpolate(particles_to_add) ) #, nnn=self._swarm_ppc))
             
             ### add the particles
+            ###TODO Fix up the adding of particles (not sure if this is the correct way) 
             self._swarm.add_particles_with_coordinates(particles_to_add)
 
             if self._updateField != None:
                 with self._swarm.access(self._updateField):
                     self._updateField.data[ -len(particles_to_add): ] = new_particle_mat
         ### delete particles from over-populated cells
-        ###TODO how do we want to do this?
+        ###TODO is this the correct way?
         if len(particles_to_delete) > 0 :
             particles_to_delete = np.concatenate(particles_to_delete)
             for i in particles_to_delete:
