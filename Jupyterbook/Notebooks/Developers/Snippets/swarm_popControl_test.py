@@ -140,7 +140,8 @@ with swarm.access():
 print(f'cell particles min: {s_cID_counts.min()}\ncell particles max: {s_cID_counts.max()}')
 
 # %%
-pop_control.repopulate(material)
+# pop_control.repopulate_loop(material)
+pop_control.repopulate_fast(material)
 with swarm.access():
     s_cID, s_cID_counts = np.unique(swarm.particle_cellid.data, return_counts=True)
 print(f'cell particles min: {s_cID_counts.min()}\ncell particles max: {s_cID_counts.max()}')
@@ -164,7 +165,8 @@ print(f'cell particles min: {s_cID_counts.min()}\ncell particles max: {s_cID_cou
 
 
 # %%
-pop_control.repopulate(material)
+# pop_control.repopulate_loop(material)
+pop_control.repopulate_fast(material)
 plot_mat()
 
 with swarm.access():
@@ -185,7 +187,8 @@ with swarm.access():
 print(f'cell particles min: {s_cID_counts.min()}\ncell particles max: {s_cID_counts.max()}')
 
 # %%
-pop_control.repopulate(material)
+# pop_control.repopulate_loop(material)
+pop_control.repopulate_fast(material)
 plot_mat()
 
 with swarm.access():
@@ -206,7 +209,8 @@ with swarm.access():
 print(f'cell particles min: {s_cID_counts.min()}\ncell particles max: {s_cID_counts.max()}')
 
 # %%
-pop_control.repopulate(material)
+# pop_control.repopulate_loop(material)
+pop_control.repopulate_fast(material)
 plot_mat()
 
 with swarm.access():
