@@ -458,6 +458,15 @@ document.write(`
 <p>This should develop a boundary layer with sqrt(t) growth rate</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
+<span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">petsc4py</span>
 <span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
 
@@ -564,7 +573,7 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Constant visc</span>
 
 
-<span class="n">navier_stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v_soln</span><span class="p">)</span>
+<span class="n">navier_stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="mf">1.0</span>
 
@@ -611,68 +620,41 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># check the mesh if in a notebook / serial</span>
-
-
 <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
-    <span class="kn">import</span> <span class="nn">vtk</span>
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span>
 
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1250</span><span class="p">,</span> <span class="mi">1250</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;viewup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">meshball</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">vorticity</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
 
-    <span class="n">meshball</span><span class="o">.</span><span class="n">vtk</span><span class="p">(</span><span class="s2">&quot;tmp_ball.vtk&quot;</span><span class="p">)</span>
-    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmp_ball.vtk&quot;</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">swarm</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-
+    <span class="n">velocity_points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">meshVariable_to_pv_cloud</span><span class="p">(</span><span class="n">v_soln</span><span class="p">)</span>
+    <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">velocity_points</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+    
+    <span class="n">points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">swarm_to_pv_cloud</span><span class="p">(</span><span class="n">swarm</span><span class="p">)</span>
     <span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
     <span class="c1"># point sources at cell centres</span>
-
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">centroid_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">vorticity</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
-    <span class="n">v_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_vectors</span>
-
     <span class="n">pvstream</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">streamlines_from_source</span><span class="p">(</span>
-        <span class="n">centroid_cloud</span><span class="p">,</span>
-        <span class="n">vectors</span><span class="o">=</span><span class="s2">&quot;V&quot;</span><span class="p">,</span>
-        <span class="n">integration_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
-        <span class="n">surface_streamlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">max_time</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-    <span class="p">)</span>
+                                                <span class="n">centroid_cloud</span><span class="p">,</span>
+                                                <span class="n">vectors</span><span class="o">=</span><span class="s2">&quot;V&quot;</span><span class="p">,</span>
+                                                <span class="n">integration_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span>
+                                                <span class="n">surface_streamlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                <span class="n">max_time</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                                            <span class="p">)</span>
 
-    <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-        <span class="n">usol</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-    <span class="n">arrow_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="n">arrow_loc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
-    <span class="n">arrow_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="n">arrow_length</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">usol</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
-    <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
+    <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Omega&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.33</span><span class="p">)</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">arrow_loc</span><span class="p">,</span> <span class="n">arrow_length</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mf">1.0e-2</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">1.0e-2</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
     <span class="c1"># pl.add_points(</span>
     <span class="c1">#     point_cloud,</span>
     <span class="c1">#     color=&quot;Black&quot;,</span>
@@ -695,53 +677,26 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_V_mesh</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
         <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
-        <span class="kn">import</span> <span class="nn">vtk</span>
+        <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span>
 
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1250</span><span class="p">,</span> <span class="mi">1250</span><span class="p">]</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;viewup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-        <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+        <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">meshball</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">p_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">vorticity</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
 
-        <span class="n">meshball</span><span class="o">.</span><span class="n">vtk</span><span class="p">(</span><span class="s2">&quot;tmp_ball.vtk&quot;</span><span class="p">)</span>
-        <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmp_ball.vtk&quot;</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="n">swarm</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-            <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-            <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-            <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-
+        <span class="n">velocity_points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">meshVariable_to_pv_cloud</span><span class="p">(</span><span class="n">v_soln</span><span class="p">)</span>
+        <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">velocity_points</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+        
+        <span class="n">points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">swarm_to_pv_cloud</span><span class="p">(</span><span class="n">swarm</span><span class="p">)</span>
         <span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
         <span class="c1"># point sources at cell centres</span>
-
         <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">centroid_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-            <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">p_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span>
-                <span class="n">vorticity</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span>
-            <span class="p">)</span>
-
-        <span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-            <span class="n">usol</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="n">arrow_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="n">arrow_loc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
-        <span class="n">arrow_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="n">arrow_length</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">usol</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
-        <span class="n">v_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="n">v_vectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">meshball</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_vectors</span>
 
         <span class="n">pvstream</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">streamlines_from_source</span><span class="p">(</span>
             <span class="n">centroid_cloud</span><span class="p">,</span>
@@ -753,7 +708,7 @@ document.write(`
 
         <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
 
-        <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">arrow_loc</span><span class="p">,</span> <span class="n">arrow_length</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
 
         <span class="c1"># pl.add_points(</span>
         <span class="c1">#     point_cloud,</span>
@@ -811,7 +766,7 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time evolution model / update in time</span>
 
 
-<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">250</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="c1">#250</span>
     <span class="n">delta_t</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">*</span> <span class="n">navier_stokes</span><span class="o">.</span><span class="n">estimate_dt</span><span class="p">()</span>
     <span class="n">navier_stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="n">delta_t</span><span class="p">)</span>
 

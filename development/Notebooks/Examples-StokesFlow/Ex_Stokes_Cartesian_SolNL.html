@@ -579,7 +579,7 @@ velocity field. This is a placeholder that just lets the non-linear problem run.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Stokes</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
@@ -587,12 +587,12 @@ velocity field. This is a placeholder that just lets the non-linear problem run.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span>
-    <span class="n">sol_vel</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Top&quot;</span><span class="p">,</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="p">)</span>  <span class="c1"># top/bottom: components, function, markers</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span>
-    <span class="n">sol_vel</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">,</span> <span class="s2">&quot;Right&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="p">)</span>  <span class="c1"># left/right: components, function, markers</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># BC</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="n">sol_vel</span><span class="p">,</span> <span class="s2">&quot;Top&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="n">sol_vel</span><span class="p">,</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="n">sol_vel</span><span class="p">,</span> <span class="s2">&quot;Left&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="n">sol_vel</span><span class="p">,</span> <span class="s2">&quot;Right&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>

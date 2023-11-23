@@ -468,6 +468,15 @@ document.write(`
 <p>(In a spherical coordinate system)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
+<span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">petsc4py</span>
 <span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
 
@@ -478,8 +487,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SYMPY_USE_CACHE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
-
-<span class="n">r_o</span> <span class="o">=</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r_o</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="n">r_i</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 <span class="n">num_els</span> <span class="o">=</span> <span class="mi">4</span>
@@ -521,30 +535,15 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
-    <span class="kn">import</span> <span class="nn">vtk</span>
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span>
 
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1050</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;viewup&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
-
-    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmpWedgeX.msh&quot;</span><span class="p">)</span>
+    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="s2">&quot;tmpWedgeX.msh&quot;</span><span class="p">)</span>
 
     <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
 
     <span class="n">clipped</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">normal</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">crinkle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># pl.add_mesh(</span>
-    <span class="c1">#     pvmesh,</span>
-    <span class="c1">#     show_edges=True,</span>
-    <span class="c1">#     opacity=0.1,</span>
-    <span class="c1">#     # clim=[0,1]</span>
-    <span class="c1"># )</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
         <span class="n">pvmesh</span><span class="p">,</span>
@@ -645,7 +644,7 @@ document.write(`
 <span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_rtol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0e-5</span>
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v_soln</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -680,7 +679,7 @@ document.write(`
     <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln_xyz</span><span class="p">,</span>
     <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes_xyz&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">stokes_xyz</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v_soln_xyz</span><span class="p">)</span>
+<span class="n">stokes_xyz</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes_xyz</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">stokes_xyz</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_rtol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0e-5</span>
 
@@ -709,8 +708,14 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># t_init = 10.0 * sympy.exp(-5.0 * (x**2 + (y - 0.5) ** 2))</span>
 <span class="n">t_init</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="n">Rayleigh</span> <span class="o">*</span> <span class="n">t_init</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;PoleAxisN&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtNo&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtNi&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;PoleAxisS&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtSo&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtSi&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PoleAxisN&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtNo&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtNi&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PoleAxisS&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtSo&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtSi&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># ----</span>
 
@@ -724,14 +729,14 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes_xyz</span><span class="o">.</span><span class="n">_setup_terms</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># stokes_xyz._setup_terms()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">_setup_terms</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># stokes._setup_terms()</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -758,20 +763,19 @@ document.write(`
 <span class="n">projector</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Vector_Projection</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
 <span class="n">projector</span><span class="o">.</span><span class="n">uw_function</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">_u_f0</span>
 <span class="n">projector</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">=</span> <span class="mf">1.0e-6</span>
-<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;PoleAxisN&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtNo&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtNi&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;PoleAxisS&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtSo&quot;</span><span class="p">,</span> <span class="s2">&quot;PolePtSi&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PoleAxisN&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtNo&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtNi&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PoleAxisS&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtSo&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">projector</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;PolePtSi&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="n">options</span> <span class="o">=</span> <span class="n">projector</span><span class="o">.</span><span class="n">petsc_options</span>
 <span class="n">options</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s2">&quot;snes_rtol&quot;</span><span class="p">,</span> <span class="mf">1.0e-4</span><span class="p">)</span>
 
 <span class="n">projector</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">/</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -791,14 +795,15 @@ document.write(`
 <span class="c1">## the xyz mesh for Uxy, and use it for plotting.</span>
 
 <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
     <span class="kn">import</span> <span class="nn">vtk</span>
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span> <span class="c1"># use this </span>
 
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">antialiasing</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
+    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;trame&quot;</span>
     <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;./tmpWedgeX.msh&quot;</span><span class="p">)</span>
@@ -838,8 +843,8 @@ document.write(`
     <span class="n">arrow_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">stokes</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">arrow_length</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">usol</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.0001</span>
 
-    <span class="n">arrow_length_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">stokes</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-    <span class="n">arrow_length_xy</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">usol_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+    <span class="c1"># arrow_length_xy = np.zeros((stokes.u.coords.shape[0], 3))</span>
+    <span class="c1"># arrow_length_xy[:, :] = usol_xyz[...]</span>
 
     <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
 

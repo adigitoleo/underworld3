@@ -397,7 +397,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -413,6 +415,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -424,6 +434,31 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="miscellaneous-tips-and-tricks">
 <h1>Miscellaneous Tips and Tricks<a class="headerlink" href="#miscellaneous-tips-and-tricks" title="Permalink to this heading">#</a></h1>
+<section id="recent-solver-and-visualization-updates">
+<h2>Recent solver and visualization updates<a class="headerlink" href="#recent-solver-and-visualization-updates" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>[x] Ex_Integrals_on_Meshes.py</p>
+<ul>
+<li><p>[ ] RuntimeError: The mesh requires at least a single variable for integration to function correctly. This is a PETSc limitation. Create a ticket.</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Tensor_Variables_etc.py</p>
+<ul>
+<li><p>[ ] Temperature mesh variable not defined and require changes in advDiff system</p></li>
+</ul>
+</li>
+<li><p>[x] Ex_Projection_Function_Eval.py</p></li>
+<li><p>[x] Ex_UsingCoordinates.py</p></li>
+<li><p>[x] Ex_scaling.py</p></li>
+<li><p>[x] Ex_Anisotropy.py</p></li>
+<li><p>[x] Ex_BCs_from_meshVariables.py</p></li>
+<li><p>[ ] Ex_ConstitutiveTensors.py</p>
+<ul>
+<li><p>[ ] AttributeError: type object ‘TransverseIsotropicFlowModel’ has no attribute ‘Parameters’</p></li>
+</ul>
+</li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -482,6 +517,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

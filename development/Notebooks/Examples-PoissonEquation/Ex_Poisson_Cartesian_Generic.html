@@ -473,6 +473,15 @@ the <code class="docutils literal notranslate"><span class="pre">Poisson</span><
 <h2>Generic scalar solver class<a class="headerlink" href="#generic-scalar-solver-class" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
+<span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">underworld3</span> <span class="k">as</span> <span class="nn">uw</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span>
@@ -508,11 +517,11 @@ the <code class="docutils literal notranslate"><span class="pre">Poisson</span><
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson0</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">SNES_Scalar</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">u_Field</span><span class="o">=</span><span class="n">t_soln0</span><span class="p">)</span>
 <span class="n">poisson0</span><span class="o">.</span><span class="n">F0</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">poisson0</span><span class="o">.</span><span class="n">F1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">poisson0</span><span class="o">.</span><span class="n">_L</span>
+<span class="n">poisson0</span><span class="o">.</span><span class="n">F1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">poisson0</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">L</span>
 <span class="n">poisson0</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">poisson0</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;Top&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-<span class="n">poisson0</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">DiffusionModel</span><span class="p">(</span><span class="n">t_soln0</span><span class="p">)</span>
+<span class="n">poisson0</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">DiffusionModel</span>
 <span class="n">poisson0</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">diffusivity</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
@@ -534,7 +543,7 @@ more than add a template for the flux term.</p>
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create Poisson object</span>
 <span class="n">poisson</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Poisson</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">u_Field</span><span class="o">=</span><span class="n">t_soln</span><span class="p">)</span>
-<span class="n">poisson</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">DiffusionModel</span><span class="p">(</span><span class="n">t_soln</span><span class="p">)</span>
+<span class="n">poisson</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">DiffusionModel</span>
 <span class="n">poisson</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">diffusivity</span> <span class="o">=</span> <span class="mf">1.0</span>
 
 <span class="n">poisson</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -573,21 +582,21 @@ more than add a template for the flux term.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">_L</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">L</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">_L</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">_f1</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">_L</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poisson</span><span class="o">.</span><span class="n">_f1</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -617,25 +626,16 @@ more than add a template for the flux term.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
 
 <span class="k">if</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
-    <span class="kn">import</span> <span class="nn">vtk</span>
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span>
 
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">anti_aliasing</span> <span class="o">=</span> <span class="s2">&quot;msaa&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">jupyter_backend</span> <span class="o">=</span> <span class="s2">&quot;panel&quot;</span>
-    <span class="n">pv</span><span class="o">.</span><span class="n">global_theme</span><span class="o">.</span><span class="n">smooth_shading</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_analytic_soln</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_numerical_soln</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;DT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T2&quot;</span><span class="p">]</span>
 
-    <span class="n">mesh</span><span class="o">.</span><span class="n">vtk</span><span class="p">(</span><span class="s2">&quot;mesh_tmp.vtk&quot;</span><span class="p">)</span>
-    <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;mesh_tmp.vtk&quot;</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">():</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_analytic_soln</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_numerical_soln</span>
-        <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;DT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T2&quot;</span><span class="p">]</span>
-
-    <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">notebook</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
         <span class="n">pvmesh</span><span class="p">,</span>

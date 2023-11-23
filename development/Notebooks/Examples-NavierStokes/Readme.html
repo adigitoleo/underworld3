@@ -397,7 +397,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -413,6 +415,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -424,6 +434,34 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="navier-stokes-equation">
 <h1>Navier Stokes Equation<a class="headerlink" href="#navier-stokes-equation" title="Permalink to this heading">#</a></h1>
+<section id="recent-solver-and-visualization-updates">
+<h2>Recent solver and visualization updates<a class="headerlink" href="#recent-solver-and-visualization-updates" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>[x] Ex_Navier_Stokes_Benchmarks_NS_DFG_2d_SLCN.py</p></li>
+<li><p>[ ] Ex_Navier_Stokes_Benchmarks_NS_DFG_2d.py</p>
+<ul>
+<li><p>[ ] require updates near uw.swarm.Lagrangian_Updater</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Navier_Stokes_Disk_Coriolis.py</p>
+<ul>
+<li><p>[ ] require updates near uw.systems.NavierStokesSwarm</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Navier_Stokes_Disk_FreeSlipBCs-Coriolis.py</p>
+<ul>
+<li><p>[ ] require updates near uw.systems.NavierStokesSwarm</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Navier_Stokes_Disk_NoSlipBCs-Coriolis_ss.py</p>
+<ul>
+<li><p>[ ] require updates near uw.systems.NavierStokesSwarm</p></li>
+</ul>
+</li>
+<li><p>[x] Ex_Navier_Stokes_Visualise_NS_DFG_2d.py</p></li>
+<li><p>[x] Ex_NavierStokesRotationTest.py</p></li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -482,6 +520,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

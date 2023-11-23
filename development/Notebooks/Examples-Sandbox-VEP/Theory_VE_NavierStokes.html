@@ -504,13 +504,6 @@ Numerically, this is the value on a particle at the previous timestep. This appr
                                                           \right] - \nabla p
 \]</div>
 <p>Where <span class="math notranslate nohighlight">\(\boldsymbol\tau^*\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol\tau^{**}\)</span> are the upstream history values at <span class="math notranslate nohighlight">\(t - \Delta t\)</span> and <span class="math notranslate nohighlight">\(t - 2\Delta t\)</span> respectively.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
-</pre></div>
-</div>
-</div>
-</div>
 <p>In the Navier-stokes problem, it is common to write <span class="math notranslate nohighlight">\(\boldsymbol\tau=\eta \left(\nabla \mathbf u + (\nabla \mathbf u)^T \right)\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol\tau^*=\eta \left(\nabla \mathbf u^* + (\nabla \mathbf u^*)^T \right)\)</span> which ignores  rotation and shearing of the stress during the interval <span class="math notranslate nohighlight">\(\Delta T\)</span>. This simplifies the implementation because only the velocity history is required, not the history of the stress tensor.</p>
 </section>
 <section id="viscoelasticity">
@@ -582,6 +575,15 @@ Numerically, this is the value on a particle at the previous timestep. This appr
 <p>dot_f term will need BDf coefficients (<a class="reference external" href="https://en.wikipedia.org/wiki/Backward_differentiation_formula">https://en.wikipedia.org/wiki/Backward_differentiation_formula</a>)</p>
 <p>Flux history for Adams Moulton
 Substitute for present stress in ADM</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
+<span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -765,16 +767,14 @@ Substitute for present stress in ADM</p>
 <span class="n">C_0</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span>
 
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscoElasticPlasticFlowModel</span><span class="p">(</span>
-    <span class="n">stokes</span><span class="o">.</span><span class="n">_u</span>
-<span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscoElasticPlasticFlowModel</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\eta&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_modulus</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\mu&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">stress_star</span> <span class="o">=</span> <span class="n">stress_star</span><span class="o">.</span><span class="n">sym</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">dt_elastic</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span>
     <span class="sa">r</span><span class="s2">&quot;\Delta\ t&quot;</span>
 <span class="p">)</span>  <span class="c1"># sympy.sympify(1) / 10</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">strainrate_inv_II</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">_Einv2</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">strainrate_inv_II</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">Einv2</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">strainrate_inv_II_min</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span>
 </pre></div>
@@ -784,13 +784,6 @@ Substitute for present stress in ADM</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="o">/</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </div>
@@ -1248,6 +1241,9 @@ Substitute for present stress in ADM</p>
 <span class="c1"># unexpected. This is a limitation we are stuck with for the moment.</span>
 
 <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span> <span class="c1"># use tools from here</span>
+    
     <span class="n">mesh1</span><span class="o">.</span><span class="n">vtk</span><span class="p">(</span><span class="s2">&quot;tmp_shear_inclusion.vtk&quot;</span><span class="p">)</span>
     <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;tmp_shear_inclusion.vtk&quot;</span><span class="p">)</span>
 

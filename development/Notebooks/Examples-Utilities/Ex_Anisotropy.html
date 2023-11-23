@@ -755,7 +755,7 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 <span class="n">C_ijkl_HW_R</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">tensor_rotation</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">C_ijkl_HW</span><span class="p">))</span>
 <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">C_ijkl_HW_R</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="n">C_IJm</span>
 
-<span class="n">display</span><span class="p">(</span><span class="n">C_IJm_HW_R</span><span class="p">)</span>
+<span class="c1"># display(C_IJm_HW_R)</span>
 
 <span class="c1">## Maybe this can be simplified if we use the unit vector relationships among n0,n1,n2</span>
 

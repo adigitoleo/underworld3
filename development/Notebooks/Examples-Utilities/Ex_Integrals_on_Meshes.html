@@ -468,6 +468,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">UnstructuredSimplexBox</span><span class="p">(</span><span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">32.0</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -482,6 +483,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">StructuredQuadBox</span><span class="p">(</span><span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">elementRes</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -496,6 +498,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">StructuredQuadBox</span><span class="p">(</span><span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">elementRes</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -512,6 +515,7 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">UnstructuredSimplexBox</span><span class="p">(</span>
     <span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -526,6 +530,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -540,6 +545,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -554,6 +560,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">SphericalShell</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -568,6 +575,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">SphericalShell</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -581,14 +589,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">CubicSphere</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">numElements</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mesh = uw.meshing.CubicSphere(radiusInner=0.5, radiusOuter=1.0, numElements=30)</span>
+<span class="c1"># s_soln = uw.discretisation.MeshVariable(&quot;T&quot;, mesh, 1, degree=2) # add this line to avoid petsc error for time being</span>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">z</span>
+<span class="c1"># x = mesh.N.x</span>
+<span class="c1"># y = mesh.N.y</span>
+<span class="c1"># z = mesh.N.z</span>
 
-<span class="n">I9</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">I9</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>  <span class="c1"># 4/3 * 7/8 * pi (3.634)</span>
+<span class="c1"># I9 = uw.maths.Integral(mesh, 1)</span>
+<span class="c1"># print(I9.evaluate())  # 4/3 * 7/8 * pi (3.634)</span>
 </pre></div>
 </div>
 </div>
@@ -597,6 +606,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">SphericalShell</span><span class="p">(</span><span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="c1"># mesh = uw.meshing.Annulus(radiusInner = 0.0, radiusOuter=1.0, cellSize=0.05)</span>
+<span class="n">s_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># add this line to avoid petsc error for time being</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">x</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">N</span><span class="o">.</span><span class="n">y</span>
@@ -626,11 +636,13 @@ document.write(`
     <span class="n">mesh</span><span class="p">,</span>
     <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span>
     <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span>
-    <span class="n">u_degree</span><span class="o">=</span><span class="n">v_soln</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span>
-    <span class="n">p_degree</span><span class="o">=</span><span class="n">p_soln</span><span class="o">.</span><span class="n">degree</span><span class="p">,</span>
+    <span class="c1"># u_degree=v_soln.degree,</span>
+    <span class="c1"># p_degree=p_soln.degree,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Upper&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 

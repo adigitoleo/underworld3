@@ -397,7 +397,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -413,6 +415,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -425,6 +435,40 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="visco-elastic-plastic-models">
 <h1>Visco-elastic-plastic models<a class="headerlink" href="#visco-elastic-plastic-models" title="Permalink to this heading">#</a></h1>
 <p>a.k.a. Digital Sandbox</p>
+<section id="recent-solver-and-visualization-updates">
+<h2>Recent solver and visualization updates<a class="headerlink" href="#recent-solver-and-visualization-updates" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>[x] Ex_Compression_Example.py</p></li>
+<li><p>[x] Ex_Shear_Band_Notch_Benchmark.py</p></li>
+<li><p>[x] Ex_Shear_Band_Plasticity_PS.py</p></li>
+<li><p>[ ] Ex_Shear_Band_Plasticity_SS.py</p>
+<ul>
+<li><p>[ ] Not working properly</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Sheared_Layer_Elastic.py</p>
+<ul>
+<li><p>[ ] need to update swarm.Lagrangian_Updater</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Sheared_Layer_Test.py</p>
+<ul>
+<li><p>[ ] NameError: name ‘strain’ is not defined</p></li>
+</ul>
+</li>
+<li><p>[ ] Ex_Sheared_Layer_Visualisation.py</p>
+<ul>
+<li><p>[ ] Input files not found</p></li>
+</ul>
+</li>
+<li><p>[x] Ex_VP-CM_slabSubduction.py</p></li>
+<li><p>[ ] Theory_VE_NavierStokes.py</p>
+<ul>
+<li><p>[ ] NameError: name ‘tauY’ is not defined</p></li>
+</ul>
+</li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -483,6 +527,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#recent-solver-and-visualization-updates">Recent solver and visualization updates</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -432,6 +432,15 @@ document.write(`
                   
   <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># to fix trame issue
+import nest_asyncio
+nest_asyncio.apply()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import petsc4py
 from petsc4py import PETSc
 
@@ -467,18 +476,11 @@ r_o = 1.0
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1:
-    import numpy as np
+    
     import pyvista as pv
-    import vtk
+    import underworld3.visualisation as vis
 
-    pv.global_theme.background = &quot;white&quot;
-    pv.global_theme.window_size = [1050, 500]
-    pv.global_theme.antialiasing = True
-    pv.global_theme.jupyter_backend = &quot;panel&quot;
-    pv.global_theme.smooth_shading = True
-    pv.global_theme.camera[&quot;viewup&quot;] = [0.0, 1.0, 0.0]
-    pv.global_theme.camera[&quot;position&quot;] = [0.0, 0.0, 1.0]
-
+    # pvmesh = vis.mesh_to_pv_mesh(bubblemesh)
     pvmesh = pv.read(&quot;tmpManifold.msh&quot;)
     pvmesh.point_data[&quot;lon&quot;] = bubblemesh.data[:,0]
     pvmesh.point_data[&quot;lat&quot;] = bubblemesh.data[:,1]
@@ -588,7 +590,18 @@ projector.solve()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1:
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># if uw.mpi.size == 1:
+    
+#     import pyvista as pv
+#     import underworld3.visualisation as vis
+ 
+#     # pvmesh = pv.read(&quot;tmpManifold.msh&quot;)
+#     pvmesh = vis.mesh_to_pv_mesh(&quot;tmpManifold.msh&quot;)
+#     pvmesh.point_data[&quot;nT&quot;] = vis.scalar_fn_to_pv_points(pvmesh, Tnode.sym)
+#     pvmesh.point_data[&quot;dT&quot;] = vis.scalar_fn_to_pv_points(pvmesh, Tdiff.sym)
+#     pvmesh.point_data[&quot;dTc&quot;] = vis.scalar_fn_to_pv_points(pvmesh, Tdiffc.sym)
+
+if uw.mpi.size == 1:
     import numpy as np
     import pyvista as pv
     import vtk
@@ -596,12 +609,12 @@ projector.solve()
     pv.global_theme.background = &quot;white&quot;
     pv.global_theme.window_size = [1050, 500]
     pv.global_theme.antialiasing = True
-    pv.global_theme.jupyter_backend = &quot;panel&quot;
+    pv.global_theme.jupyter_backend = &quot;trame&quot;
     pv.global_theme.smooth_shading = True
     pv.global_theme.camera[&quot;viewup&quot;] = [0.0, 1.0, 0.0]
     pv.global_theme.camera[&quot;position&quot;] = [0.0, 0.0, 1.0]
  
-    pvmesh = pv.read(&quot;testManifold.msh&quot;)
+    pvmesh = pv.read(&quot;tmpManifold.msh&quot;)
    
     with bubblemesh.access():
         pvmesh.point_data[&quot;nT&quot;] = Tnode.data[:,0]
@@ -613,7 +626,7 @@ projector.solve()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pl = pv.Plotter()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pl = pv.Plotter(window_size=(750, 750))
 
 pl.add_mesh(
     pvmesh,

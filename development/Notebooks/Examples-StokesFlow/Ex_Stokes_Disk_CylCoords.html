@@ -470,10 +470,21 @@ document.write(`
 <p>(In cylindrical coordinates)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
+<span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">petsc4py</span>
 <span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
 
 <span class="kn">import</span> <span class="nn">underworld3</span> <span class="k">as</span> <span class="nn">uw</span>
+<span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">timing</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span>
 
@@ -482,9 +493,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;UW_TIMING_ENABLE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
-
-
-<span class="c1"># Define the problem size</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the problem size</span>
 <span class="c1">#      1 - ultra low res for automatic checking</span>
 <span class="c1">#      2 - low res problem to play with this notebook</span>
 <span class="c1">#      3 - medium resolution (be prepared to wait)</span>
@@ -526,7 +541,7 @@ document.write(`
     <span class="n">radiusInner</span><span class="o">=</span><span class="n">r_i</span><span class="p">,</span>
     <span class="n">cellSize</span><span class="o">=</span><span class="n">res</span><span class="p">,</span>
     <span class="n">refinement</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="c1"># filename=&quot;tmp_meshball.msh&quot;</span>
+    <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;tmp_meshball.msh&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -543,7 +558,7 @@ document.write(`
 <span class="n">rtheta_vec</span> <span class="o">=</span> <span class="n">xy_vec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">rtheta_vec</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">rtheta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="o">...</span><span class="p">]</span>
 <span class="n">dmplex</span><span class="o">.</span><span class="n">setCoordinates</span><span class="p">(</span><span class="n">rtheta_vec</span><span class="p">)</span>
-<span class="k">del</span> <span class="n">meshball_xyz_tmp</span>
+<span class="c1"># del meshball_xyz_tmp</span>
 </pre></div>
 </div>
 </div>
@@ -655,13 +670,9 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create Stokes object (r, theta)</span>
 
-<span class="n">stokes</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Stokes</span><span class="p">(</span>
-    <span class="n">meshball</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span>
-<span class="p">)</span>
-
+<span class="n">stokes</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Stokes</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-5</span>
-
-<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v_soln</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="c1"># Velocity boundary conditions</span>
@@ -711,7 +722,7 @@ document.write(`
     <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln_xy</span><span class="p">,</span>
     <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes_xy&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">stokes_xy</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span><span class="p">(</span><span class="n">v_soln_xy</span><span class="p">)</span>
+<span class="n">stokes_xy</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">stokes_xy</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shar_viscosity_0</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">stokes_xy</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_rtol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0e-8</span>
 
@@ -780,9 +791,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">timing</span>
-
-<span class="n">timing</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">timing</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">timing</span><span class="o">.</span><span class="n">print_table</span><span class="p">()</span>
 
@@ -807,13 +816,6 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">timing</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">timing</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 <span class="n">stokes_xy</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">timing</span><span class="o">.</span><span class="n">print_table</span><span class="p">()</span>
@@ -830,20 +832,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Periodic in theta - the nodes which have been &quot;moved&quot; to a</span>
 <span class="c1">## different coordinate sheet are plotted incorrectly and there is</span>
 <span class="c1">## not much to be done about that ... we could define a v_soln/p_soln on</span>
 <span class="c1">## the xyz mesh for Uxy, and use it for plotting.</span>
 
 <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span> <span class="c1"># use this module for plotting</span>
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
     <span class="kn">import</span> <span class="nn">vtk</span>
 
@@ -906,13 +901,6 @@ document.write(`
     <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">arrow_loc</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">arrow_length</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.00005</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Red&quot;</span><span class="p">)</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
 </pre></div>
 </div>
 </div>
