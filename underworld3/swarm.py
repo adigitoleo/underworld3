@@ -734,7 +734,7 @@ class PopulationControl(uw_object):
             self._particleNumber   = self._swarm.data.shape[0]
             ### get the cell IDs from the initial layout
             self._mesh_cID, self._cIDcount  = np.unique(self._swarm_cellid, return_counts=True)
-            ### particles per cell (need to check this is consistent)
+            ### get the initial particles per cell
             self._swarm_ppc                  = self._cIDcount[0] #int(self._particleNumber / self._mesh_cID.shape[0])
 
     ### This way is quick and easy but isn't as good at distributing particles
@@ -748,25 +748,33 @@ class PopulationControl(uw_object):
 
         self._updateField = updateField
 
-        with self._swarm.access():
-            current_numb_of_particles = self._swarm.data.shape[0]
-
-        num_of_particles_to_add = (self._particleNumber - current_numb_of_particles)
-
-        ### get the original particle positions in the cell
-        original_swarm_coords    = self._swarm_coords
         ### get the current swarm positions in the cell
         with self._swarm.access():
             current_swarm_coords = self._swarm.data
             current_swarm_cells = self._swarm.particle_cellid.data
 
-        ### compare distance between the original particles and the current layout
-        point_distance = distance.cdist(original_swarm_coords, current_swarm_coords, 'euclidean')
-        ### sort the distances from largest to smallest
-        ### only add the required number of particles to match the initial ppc
-        particles_to_add = original_swarm_coords[np.min(point_distance, axis=1).argsort()[::-1]][:num_of_particles_to_add]
+        ### Get the local cells
+        local_cells = self._swarm.mesh.get_closest_local_cells(np.ascontiguousarray(self._swarm.mesh._centroids) )
 
-        new_cells = self._swarm.mesh.get_closest_local_cells(particles_to_add)
+        ### get the original coords for these cells
+        local_original_coords = self._swarm_coords[np.isin(self._swarm_cellid, local_cells)]
+        
+        ### original total number of particles
+        original_particle_number = local_original_coords.shape[0]
+
+        current_particle_cellID, current_ppc  = np.unique(current_swarm_cells, return_counts=True)
+
+        num_of_particles_to_delete=np.max([0, (np.sum(current_ppc) - original_particle_number)])
+
+        num_of_particles_to_add = np.max([0, (original_particle_number - np.sum(current_ppc))])
+
+        ### compare distance between the original particles and the current layout
+        point_distance = distance.cdist(local_original_coords, current_swarm_coords, 'euclidean')
+        ### sort the distances from largest to smallest
+        particles_to_add = local_original_coords[np.min(point_distance, axis=1).argsort()[::-1]][:int(num_of_particles_to_add)] if num_of_particles_to_add > 0 else np.empty(shape=(0,2))
+
+
+        new_cells = self._swarm.mesh.get_closest_local_cells(particles_to_add) if num_of_particles_to_add > 0 else np.empty(shape=(0,2))
         
         if isinstance(new_cells, int):
             new_cells = np.array([new_cells])
@@ -780,9 +788,13 @@ class PopulationControl(uw_object):
         valid_coords = particles_to_add[valid]
         valid_cells = new_cells[valid]
 
-        all_local_coords = np.vstack([current_swarm_coords, valid_coords])
+        if valid_coords.size > 0:
+            all_local_coords = np.vstack([current_swarm_coords, valid_coords])
+            all_local_cells = np.hstack([current_swarm_cells[:,0], valid_cells])
+        else:
+            all_local_coords = current_swarm_coords
+            all_local_cells = current_swarm_cells[:,0]
 
-        all_local_cells = np.hstack([current_swarm_cells[:,0], valid_cells])
 
         ### do interp before adding particles, otherwise interp happens from the newly added particles
         if (self._updateField != None):
@@ -807,6 +819,28 @@ class PopulationControl(uw_object):
                 self._updateField.data[:,0] = new_particle_mat[:,0]
 
         uw.mpi.barrier()
+
+        # Delete particles on ranks with too many particles
+        with self._swarm.access(self._swarm.particle_coordinates):
+            ### get current coords
+            all_current_coords = self._swarm.data
+
+            if num_of_particles_to_delete > 0:
+                rng = np.random.default_rng()
+
+                #### Selection of coords doesn't delete all particles (?)
+                overpopulated_rank_coords = (rng.choice(all_current_coords, num_of_particles_to_delete))
+                    
+                # Calculate point_distance
+                point_distance = distance.cdist(all_current_coords, overpopulated_rank_coords, 'euclidean')
+
+                # Get the index of particles to remove
+                index_condition = np.min(point_distance, axis=1).argsort()[:num_of_particles_to_delete]
+
+                # Set coords to 1.0e100 so they are deleted by the DM, following the same logic as the remeshing example
+                self._swarm.data[index_condition] = 1.0e100
+
+
 
         return
 
