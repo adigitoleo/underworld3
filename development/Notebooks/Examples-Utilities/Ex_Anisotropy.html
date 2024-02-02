@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Anisotropic Constitutive relationships in Underworld (pt 1) &#8212; Underworld 3</title>
   
@@ -19,55 +18,59 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/customize.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/customize.css?v=47e70012" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
     <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
-    <script src="../../_static/font_button.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Utilities/Ex_Anisotropy';</script>
+    <script src="../../_static/font_button.js?v=3ec2d3a6"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -79,10 +82,9 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -123,11 +125,16 @@ const thebe_selector_output = ".output, .cell_output"
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -161,7 +168,18 @@ const thebe_selector_output = ".output, .cell_output"
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -215,11 +233,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Cartesian_SolNL.html">Non-linear Stokes benchmark</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Sinker.html">Multiple materials - Linear stokes sinker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Cartesian_SolC.html">Stokes Benchmark SolCx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Disk_Cartesian.html">Cylindrical Stokes (Cartesian formulation)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Disk_CylCoords.html">Cylindrical Stokes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Spherical_FreeSlipBCs.html">Mathematical formulation</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Spherical_FreeSlipBCs.html">Stokes flow in a Spherical Domain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Swarm_RT_Cartesian.html">Rayleigh Taylor - swarm materials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_Stokes_Swarm_RT_Spherical.html">Rayleigh-Taylor (Level-set based) in the sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples-StokesFlow/Ex_WIP_Stokes_Periodic.html">Periodic Mesh Example (WIP)</a></li>
@@ -469,6 +484,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#muhlhaus-moresi-transversely-isotropic-tensor">Muhlhaus / Moresi transversely isotropic tensor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#han-wahr-full-transverse-isotropic-tensor">Han &amp; Wahr (full transverse isotropic tensor)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rotation-symbolic">Rotation (symbolic)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthotropic-medium">Orthotropic medium</a></li>
 </ul>
             </nav>
@@ -479,22 +495,22 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="anisotropic-constitutive-relationships-in-underworld-pt-1">
-<h1>Anisotropic Constitutive relationships in Underworld (pt 1)<a class="headerlink" href="#anisotropic-constitutive-relationships-in-underworld-pt-1" title="Permalink to this heading">#</a></h1>
+<h1>Anisotropic Constitutive relationships in Underworld (pt 1)<a class="headerlink" href="#anisotropic-constitutive-relationships-in-underworld-pt-1" title="Link to this heading">#</a></h1>
 <p>Introduction to how the anisotropic constitutive relationships in Underworld are formulated.</p>
 <p>This may be helpful:</p>
 <p><img alt="" src="https://d32ogoqmya1dw8.cloudfront.net/images/NAGTWorkshops/mineralogy/mineral_physics/table_9.v13.png" /></p>
 <p>(Image from: <a class="reference external" href="https://serc.carleton.edu/NAGTWorkshops/mineralogy/mineral_physics/tensors.html">https://serc.carleton.edu/NAGTWorkshops/mineralogy/mineral_physics/tensors.html</a>)
 This will also be helpful: <a class="reference external" href="https://en.wikipedia.org/wiki/Elasticity_tensor">https://en.wikipedia.org/wiki/Elasticity_tensor</a></p>
 <section id="incompressibility">
-<h2>Incompressibility<a class="headerlink" href="#incompressibility" title="Permalink to this heading">#</a></h2>
+<h2>Incompressibility<a class="headerlink" href="#incompressibility" title="Link to this heading">#</a></h2>
 <p>If we apply constraints to the deformation, we expect to reduce the number of independent material constants. Incompressibility should reduce the number of <em>independent</em> material constants. In an isotropic medium (or a medium with cubic symmetry), incompressibility eliminates the one volumetric material modulus (e.g. the bulk modulus). In general anisotropic media, it is not the case that changes in pressure result in uniform expansion or contraction, and an incompressibility constraint reduces the number of <em>independent</em> material constants. In the transversely isotropic case, there are five independent materia constants in general, reducing to four when the material is incompressible.</p>
 <p>It is not a given that the stiffness matrix is trivial to construct / meaningful for incompressible anisotropy and there is some discussion here: <a class="reference external" href="https://rastgaragah.wordpress.com/2013/03/12/incompressibility-of-linearly-elastic-material/">https://rastgaragah.wordpress.com/2013/03/12/incompressibility-of-linearly-elastic-material/</a> (identifies the issue but no resolution) and this explains in more detail: <a class="reference external" href="https://doi.org/10.1016/S0022-5096(01)00121-1">https://doi.org/10.1016/S0022-5096(01)00121-1</a>.</p>
 </section>
 <section id="introduction-to-constitutive-models">
-<h2>Introduction to constitutive models<a class="headerlink" href="#introduction-to-constitutive-models" title="Permalink to this heading">#</a></h2>
+<h2>Introduction to constitutive models<a class="headerlink" href="#introduction-to-constitutive-models" title="Link to this heading">#</a></h2>
 <p>Constitutive models relate fluxes of a quantity to the gradients of the unknowns. For example, in thermal diffusion, there is a relationship between heat flux and temperature gradients which is known as <em>Fourier’s law</em> and which involves an empirically determined thermal conductivity.</p>
 <div class="math notranslate nohighlight">
 \[ q_i = k \frac{ \partial T}{\partial x_i} \]</div>
@@ -510,7 +526,7 @@ This will also be helpful: <a class="reference external" href="https://en.wikipe
 \[ \tau_{ij} = \mu_{ijkl} \left( \frac{\partial u_k}{\partial x_l} + \frac{\partial u_l}{\partial x_k} \right) \]</div>
 </section>
 <section id="constitutive-tensors">
-<h2>Constitutive tensors<a class="headerlink" href="#constitutive-tensors" title="Permalink to this heading">#</a></h2>
+<h2>Constitutive tensors<a class="headerlink" href="#constitutive-tensors" title="Link to this heading">#</a></h2>
 <p>In Underworld, the underlying implementation of any consitutive relationship is through the appropriate tensor representation, allowing for a very general formulation for most problems. The constitutive tensors are described symbolically using <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions. For scalar equations, the rank 2 constitutive tensor (<span class="math notranslate nohighlight">\(k_{ij}\)</span>) can be expressed as a matrix without any loss of generality.</p>
 <p>For vector equations, the constitutive tensor is of rank 4, but it is common in the engineering / finite element literature to transform the rank 4 tensor to a matrix representation. This has some benefits in terms of legibility and, perhaps, results in common code patterns across the formulation for scalar equations.</p>
 <p>We can write the stress and strain rate tensors (<span class="math notranslate nohighlight">\(\tau_{ij}\)</span> and <span class="math notranslate nohighlight">\(\dot\epsilon_{ij}\)</span> respectively) as</p>
@@ -541,7 +557,7 @@ This will also be helpful: <a class="reference external" href="https://en.wikipe
 \[I_{IJ} = \delta_{IJ}\]</div>
 </section>
 <section id="mandel-form-sympy-tensorial-form-voigt-form">
-<h2>Mandel form, sympy tensorial form, Voigt form<a class="headerlink" href="#mandel-form-sympy-tensorial-form-voigt-form" title="Permalink to this heading">#</a></h2>
+<h2>Mandel form, sympy tensorial form, Voigt form<a class="headerlink" href="#mandel-form-sympy-tensorial-form-voigt-form" title="Link to this heading">#</a></h2>
 <p>The rank 4 tensor form of the constitutive equations, <span class="math notranslate nohighlight">\(c_{ijkl}\)</span>, has the following representation in <code class="docutils literal notranslate"><span class="pre">sympy</span></code>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left[\begin{matrix}\left[\begin{matrix}c_{0 0 0 0} &amp; c_{0 0 0 1}\\c_{0 0 1 0} &amp; c_{0 0 1 1}\end{matrix}\right] &amp; \left[\begin{matrix}c_{0 1 0 0} &amp; c_{0 1 0 1}\\c_{0 1 1 0} &amp; c_{0 1 1 1}\end{matrix}\right]\\\left[\begin{matrix}c_{1 0 0 0} &amp; c_{1 0 0 1}\\c_{1 0 1 0} &amp; c_{1 0 1 1}\end{matrix}\right] &amp; \left[\begin{matrix}c_{1 1 0 0} &amp; c_{1 1 0 1}\\c_{1 1 1 0} &amp; c_{1 1 1 1}\end{matrix}\right]\end{matrix}\right]\end{split}\]</div>
@@ -558,7 +574,7 @@ This will also be helpful: <a class="reference external" href="https://en.wikipe
 </div>
 <p>which we adopt in <code class="docutils literal notranslate"><span class="pre">underworld</span></code> for the display and manipulation of constitutive tensors.</p>
 <section id="voigt-form">
-<h3>Voigt form<a class="headerlink" href="#voigt-form" title="Permalink to this heading">#</a></h3>
+<h3>Voigt form<a class="headerlink" href="#voigt-form" title="Link to this heading">#</a></h3>
 <p>Computation of the stress tensor using <span class="math notranslate nohighlight">\(\tau^*_I = C^*_{IJ}\varepsilon^*_J\)</span> is equivalent to the following</p>
 <div class="math notranslate nohighlight">
 \[ \mathbf{P} \mathbf{\tau} =  \mathbf{P} \mathbf{C} \mathbf{P} \cdot \mathbf{P} \mathbf{\varepsilon} \]</div>
@@ -573,13 +589,13 @@ This will also be helpful: <a class="reference external" href="https://en.wikipe
 <p>A full discussion of this can be found in Brannon (2018) and Helnwein (2001).</p>
 </section>
 <section id="references">
-<h3>References.<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h3>
+<h3>References.<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
 <p>Brannon, R. (2018). Rotation Reflection and Frame Changes Orthogonal tensors in computational engineering mechanics. IOP Publishing. <a class="reference external" href="https://doi.org/10.1088/978-0-7503-1454-1">https://doi.org/10.1088/978-0-7503-1454-1</a></p>
 <p>Helnwein, P. (2001). Some remarks on the compressed matrix representation of symmetric second-order and fourth-order tensors. Computer Methods in Applied Mechanics and Engineering, 190(22–23), 2753–2770. <a class="reference external" href="https://doi.org/10.1016/S0045-7825(00)00263-2">https://doi.org/10.1016/S0045-7825(00)00263-2</a></p>
 </section>
 </section>
 <section id="rotations">
-<h2>Rotations<a class="headerlink" href="#rotations" title="Permalink to this heading">#</a></h2>
+<h2>Rotations<a class="headerlink" href="#rotations" title="Link to this heading">#</a></h2>
 <p>The expressions for our anisotropic tensors are provided in a Canonical reference frame which exploits the symmetry of the material to present a compact form of the constitutive tensors. In a general orientation, a rotation tensor <span class="math notranslate nohighlight">\(\cal R\)</span> is required to transform to / from this canonical frame. For isotropic materials, <span class="math notranslate nohighlight">\(\cal R\)</span> is the identity matrix. For cubic materials, a single angle describes the offset of the two frames, and for transversely isotropic materials, we need to define a rotation matrix that aligns the normal to the symmetry plane with the vertical axis in the canonical frame. These examples have fewer degrees of freedom than a full rotation matrix and this fact can be used to simplify the general (rotated) form of the constitutive tensors.</p>
 <p>Define <span class="math notranslate nohighlight">\({\cal R}_{ij}\)</span> as the rotation matrix that maps <span class="math notranslate nohighlight">\(x\)</span> onto the <span class="math notranslate nohighlight">\(x' \)</span> coordiate system, i.e.</p>
 <p><span class="math notranslate nohighlight">\(\displaystyle a_i' = {\cal R}_{ij}\,a_j,\)</span>, for vectors,</p>
@@ -591,7 +607,7 @@ This will also be helpful: <a class="reference external" href="https://en.wikipe
 <p><span class="math notranslate nohighlight">\(\displaystyle a_{ijk}' = {\cal R}_{il}\,{\cal R}_{jm}\,{\cal R}_{kn}\,a_{lmn}.\)</span></p>
 <p>In <code class="docutils literal notranslate"><span class="pre">underworld</span></code> tensor rotation is provided for rank 2 and rank 4 tensors by <code class="docutils literal notranslate"><span class="pre">uw.maths.tensor.tensor_rotation(R,</span> <span class="pre">tensor_expression)</span></code></p>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
 <p>First we define the rotation for the transversely isotropic case which depends on the normal vector to the symmetry plane.</p>
 <p>A rotation matrix for a transversely isotropic medium is defined by specifying the normal of the symmetry plane (<span class="math notranslate nohighlight">\(\hat{\mathbf{n}} = \{ n_0, n_1, n_2\} \)</span>).
 The other orientations are arbitrary, so we simply derive them from <span class="math notranslate nohighlight">\(\hat{\mathbf{n}}\)</span> - one vector specified to be perpendicular in the horizontal plane and the third vector is then found from their cross product (<span class="math notranslate nohighlight">\(\hat{\mathbf{s}}\)</span> and <span class="math notranslate nohighlight">\(\hat{\mathbf{t}}\)</span> respectively)</p>
@@ -631,7 +647,7 @@ The other orientations are arbitrary, so we simply derive them from <span class=
 </section>
 </section>
 <section id="validation">
-<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">#</a></h2>
+<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
 <p>A simple check on this is to rotate the isotropic constitutive tensor and validate that
 it is invariant under rotation.</p>
 <div class="math notranslate nohighlight">
@@ -671,7 +687,7 @@ it is invariant under rotation.</p>
 </div>
 </section>
 <section id="muhlhaus-moresi-transversely-isotropic-tensor">
-<h2>Muhlhaus / Moresi transversely isotropic tensor<a class="headerlink" href="#muhlhaus-moresi-transversely-isotropic-tensor" title="Permalink to this heading">#</a></h2>
+<h2>Muhlhaus / Moresi transversely isotropic tensor<a class="headerlink" href="#muhlhaus-moresi-transversely-isotropic-tensor" title="Link to this heading">#</a></h2>
 <p>The Muhlhaus / Moresi transversely isotropic consitituve model is designed to model
 materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 <p>The constitutive model is</p>
@@ -721,7 +737,7 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 </div>
 </section>
 <section id="han-wahr-full-transverse-isotropic-tensor">
-<h2>Han &amp; Wahr (full transverse isotropic tensor)<a class="headerlink" href="#han-wahr-full-transverse-isotropic-tensor" title="Permalink to this heading">#</a></h2>
+<h2>Han &amp; Wahr (full transverse isotropic tensor)<a class="headerlink" href="#han-wahr-full-transverse-isotropic-tensor" title="Link to this heading">#</a></h2>
 <p>In the Han &amp; Wahr paper, the expression for incompressible transverse-isotropy is as follows</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\left[\begin{matrix}2 \eta_{0} + \mu_{0} &amp; \mu_{0} &amp; 0 &amp; 0 &amp; 0 &amp; 0\\\mu_{0} &amp; 2 \eta_{0} + \mu_{0} &amp; 0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; - 2 \Delta\eta + 2 \eta_{0} + \mu_{1} &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; - 2 \Delta\eta + 2 \eta_{0} &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; - 2 \Delta\eta + 2 \eta_{0} &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 2 \eta_{0}\end{matrix}\right]\end{split}\]</div>
@@ -750,17 +766,30 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 <span class="n">C_IJm_HW</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">eta0</span>  <span class="c1"># xy</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">C_IJm_HW</span><span class="p">)</span>
-
-
-<span class="n">C_ijkl_HW</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">mandel_to_rank4</span><span class="p">(</span><span class="n">C_IJm_HW</span> <span class="o">-</span> <span class="n">C_IJm</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="rotation-symbolic">
+<h2>Rotation (symbolic)<a class="headerlink" href="#rotation-symbolic" title="Link to this heading">#</a></h2>
+<p>Compute the rotation (of the non-isotropic part)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">C_ijkl_HW</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">mandel_to_rank4</span><span class="p">(</span><span class="n">C_IJm_HW</span> <span class="o">-</span> <span class="n">C_IJm</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">C_ijkl_HW</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> 
 
 <span class="n">C_ijkl_HW_R</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">tensor_rotation</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">C_ijkl_HW</span><span class="p">))</span>
-<span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">C_ijkl_HW_R</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="n">C_IJm</span>
+<span class="n">C_IJm_HW_R</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">tensor</span><span class="o">.</span><span class="n">rank4_to_mandel</span><span class="p">(</span><span class="n">C_ijkl_HW_R</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="n">C_IJm</span>
 
-<span class="c1"># display(C_IJm_HW_R)</span>
-
-<span class="c1">## Maybe this can be simplified if we use the unit vector relationships among n0,n1,n2</span>
+<span class="n">display</span><span class="p">(</span><span class="n">C_IJm_HW_R</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Maybe this can be simplified if we use the unit vector relationships among n0,n1,n2</span>
 
 <span class="n">C_IJm_HW_R_s1</span> <span class="o">=</span> <span class="n">C_IJm_HW_R</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">C_IJm_HW_R_s2</span> <span class="o">=</span> <span class="n">C_IJm_HW_R_s1</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">factor</span><span class="p">)</span>
@@ -773,7 +802,7 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 </div>
 </section>
 <section id="orthotropic-medium">
-<h2>Orthotropic medium<a class="headerlink" href="#orthotropic-medium" title="Permalink to this heading">#</a></h2>
+<h2>Orthotropic medium<a class="headerlink" href="#orthotropic-medium" title="Link to this heading">#</a></h2>
 <p><strong>Note</strong> all the caveats above regarding incompressibility. The Browaeys &amp; Chevrot elastic tensors have a bulk modulus term, so it is not completely obvious how to square the assumptions in the first two implementations with this set.</p>
 <p>The full formulation should look like this:</p>
 <div class="math notranslate nohighlight">
@@ -932,6 +961,7 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
@@ -953,6 +983,7 @@ materials that have a single (usually) weak plane (e.g. an embedded fault).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#muhlhaus-moresi-transversely-isotropic-tensor">Muhlhaus / Moresi transversely isotropic tensor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#han-wahr-full-transverse-isotropic-tensor">Han &amp; Wahr (full transverse isotropic tensor)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rotation-symbolic">Rotation (symbolic)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthotropic-medium">Orthotropic medium</a></li>
 </ul>
   </nav></div>
@@ -995,8 +1026,8 @@ By Louis Moresi
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
