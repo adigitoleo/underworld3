@@ -55,18 +55,10 @@
     <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-StokesFlow/Ex_Stokes_Ellipse_Cartesian';</script>
@@ -515,7 +507,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="n">free_slip_upper</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">free_slip_lower</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">free_slip_lower</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Define the problem size</span>
 <span class="c1">#      1 - ultra low res for automatic checking</span>
@@ -537,7 +529,7 @@ document.write(`
         <span class="k">pass</span>
 
 <span class="n">r_o</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">r_i</span> <span class="o">=</span> <span class="mf">0.33</span>
+<span class="n">r_i</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 <span class="k">if</span> <span class="n">problem_size</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
     <span class="n">res</span> <span class="o">=</span> <span class="mf">0.5</span>
@@ -555,8 +547,8 @@ document.write(`
 
 <span class="n">cellSizeOuter</span> <span class="o">=</span> <span class="n">res</span>
 <span class="n">cellSizeInner</span> <span class="o">=</span> <span class="n">res</span><span class="o">/</span><span class="mi">2</span>
-<span class="n">ellipticityOuter</span> <span class="o">=</span> <span class="mf">3.0</span>
-<span class="n">ellipticityInner</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">ellipticityOuter</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">ellipticityInner</span> <span class="o">=</span> <span class="mf">1.0</span>
 
 <span class="n">radiusOuter</span> <span class="o">=</span> <span class="n">r_o</span>
 <span class="n">radiusInner</span> <span class="o">=</span> <span class="n">r_i</span>
@@ -658,6 +650,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Analytic expression for surface normals</span>
 
 <span class="n">Gamma_N_Outer</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="n">ellipticityOuter</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">y</span> <span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -672,7 +671,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># check the mesh if in a notebook / serial and look at the surface normals (check them)</span>
 
-<span class="k">if</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="k">if</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
     
     <span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
     <span class="kn">import</span> <span class="nn">underworld3.visualisation</span> <span class="k">as</span> <span class="nn">vis</span>
@@ -708,6 +707,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a density structure / buoyancy force</span>
 <span class="c1"># gravity will vary linearly from zero at the centre</span>
 <span class="c1"># of the sphere to (say) 1 at the surface</span>
@@ -729,6 +735,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">elliptical_mesh</span><span class="o">.</span><span class="n">Gamma</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create Stokes object</span>
 
 <span class="n">stokes</span> <span class="o">=</span> <span class="n">Stokes</span><span class="p">(</span><span class="n">elliptical_mesh</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span><span class="p">)</span>
@@ -739,7 +752,6 @@ document.write(`
 <span class="c1"># Surface normals provided by DMPLEX</span>
 
 <span class="n">Gamma</span> <span class="o">=</span> <span class="n">elliptical_mesh</span><span class="o">.</span><span class="n">Gamma</span>
-
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="mi">10000</span> <span class="o">*</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span>  <span class="n">Gamma</span><span class="p">,</span> <span class="s2">&quot;Outer&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="mi">10000</span> <span class="o">*</span> <span class="n">Gamma</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span>  <span class="n">Gamma</span><span class="p">,</span> <span class="s2">&quot;Inner&quot;</span><span class="p">)</span>
 
@@ -796,7 +808,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># t_init = 10.0 * sympy.exp(-5.0 * (x**2 + (y - 0.5) ** 2))</span>
-<span class="n">t_init</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
+<span class="n">t_init</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -822,6 +834,13 @@ document.write(`
 <span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;ksp_monitor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-4</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buoyancy_force</span>
 </pre></div>
 </div>
 </div>
@@ -886,7 +905,7 @@ document.write(`
                 <span class="n">use_transparency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
                <span class="p">)</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.000005</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
     
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">)</span>
 

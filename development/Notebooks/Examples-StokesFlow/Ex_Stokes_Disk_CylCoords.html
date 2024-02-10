@@ -55,18 +55,10 @@
     <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-StokesFlow/Ex_Stokes_Disk_CylCoords';</script>
@@ -488,13 +480,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
 <span class="kn">import</span> <span class="nn">nest_asyncio</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -506,16 +492,10 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">underworld3</span> <span class="k">as</span> <span class="nn">uw</span>
 <span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">timing</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span>
 
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
-
-<span class="kn">import</span> <span class="nn">nest_asyncio</span>
-
-<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
-
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;UW_TIMING_ENABLE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
@@ -575,7 +555,9 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_vec</span> <span class="o">=</span> <span class="n">meshball_xyz_tmp</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">getCoordinates</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## We don&#39;t have the native coordinates built in to this mesh</span>
+
+<span class="n">xy_vec</span> <span class="o">=</span> <span class="n">meshball_xyz_tmp</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">getCoordinates</span><span class="p">()</span>
 <span class="n">xy</span> <span class="o">=</span> <span class="n">xy_vec</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="n">dmplex</span> <span class="o">=</span> <span class="n">meshball_xyz_tmp</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
@@ -588,10 +570,17 @@ document.write(`
 <span class="n">dmplex</span><span class="o">.</span><span class="n">setCoordinates</span><span class="p">(</span><span class="n">rtheta_vec</span><span class="p">)</span>
 <span class="c1"># del meshball_xyz_tmp</span>
 
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="k">class</span> <span class="nc">boundaries</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">Lower</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">Upper</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">Centre</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="n">meshball</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span>
     <span class="n">dmplex</span><span class="p">,</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="n">boundaries</span><span class="p">,</span>
     <span class="n">coordinate_system_type</span><span class="o">=</span><span class="n">uw</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">CoordinateSystemType</span><span class="o">.</span><span class="n">CYLINDRICAL2D_NATIVE</span><span class="p">,</span>
+    
     <span class="n">qdegree</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">uw</span><span class="o">.</span><span class="n">cython</span><span class="o">.</span><span class="n">petsc_discretisation</span><span class="o">.</span><span class="n">petsc_dm_set_periodicity</span><span class="p">(</span>
@@ -600,7 +589,7 @@ document.write(`
 <span class="n">meshball</span><span class="o">.</span><span class="n">dm</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
 
 <span class="n">meshball_xyz</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span>
-    <span class="n">radiusOuter</span><span class="o">=</span><span class="n">r_o</span><span class="p">,</span> <span class="n">radiusInner</span><span class="o">=</span><span class="n">r_i</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">qdegree</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">radiusOuter</span><span class="o">=</span><span class="n">r_o</span><span class="p">,</span> <span class="n">radiusInner</span><span class="o">=</span><span class="n">r_i</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">qdegree</span><span class="o">=</span><span class="mi">3</span>
 <span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">meshball_xyz</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
@@ -623,7 +612,6 @@ document.write(`
 <span class="n">v_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">p_soln</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">p_cont</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;Pc&quot;</span><span class="p">,</span> <span class="n">meshball</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
 
 <span class="n">v_soln_xy</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span><span class="s2">&quot;Uxy&quot;</span><span class="p">,</span> <span class="n">meshball_xyz</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">p_soln_xy</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">discretisation</span><span class="o">.</span><span class="n">MeshVariable</span><span class="p">(</span>
@@ -662,7 +650,7 @@ document.write(`
     <span class="n">meshball</span><span class="p">,</span> <span class="n">velocityField</span><span class="o">=</span><span class="n">v_soln</span><span class="p">,</span> <span class="n">pressureField</span><span class="o">=</span><span class="n">p_soln</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;stokes&quot;</span>
 <span class="p">)</span>
 
-<span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-3</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-6</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
@@ -678,7 +666,14 @@ document.write(`
     <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;Upper&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;Lower&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;Lower&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># stokes.add_dirichlet_bc(0.0, &quot;Lower&quot;, 1)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -728,19 +723,27 @@ document.write(`
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Free slip !&quot;</span><span class="p">)</span>
     <span class="n">penalty</span> <span class="o">=</span> <span class="mi">100000</span>
     <span class="n">stokes_xy</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span>
-            <span class="n">penalty</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln_xy</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span> <span class="n">unit_rvec</span><span class="p">,</span> <span class="s2">&quot;Upper&quot;</span>
+            <span class="n">penalty</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln_xy</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="p">,</span> <span class="s2">&quot;Upper&quot;</span>
+        <span class="p">)</span>
+    <span class="n">stokes_xy</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span>
+            <span class="n">penalty</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln_xy</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="p">,</span> <span class="s2">&quot;Lower&quot;</span>
         <span class="p">)</span>
 
-<span class="n">stokes_xy</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+<span class="c1"># stokes_xy.add_dirichlet_bc([0.0, 0.0], &quot;Lower&quot;)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pressure_solver = uw.systems.Projection(meshball, p_cont)</span>
-<span class="c1"># pressure_solver.uw_function = p_soln.sym[0]</span>
-<span class="c1"># pressure_solver.smoothing = 1.0e-3</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">unit_rvec_xy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">penalty</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln_xy</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span> <span class="o">*</span> <span class="n">unit_rvec_xy</span>
 </pre></div>
 </div>
 </div>
@@ -752,10 +755,16 @@ document.write(`
 <span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="n">Rayleigh</span> <span class="o">*</span> <span class="n">t_init</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
 
 <span class="c1"># ----</span>
-
 <span class="n">t_init_xy</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">meshball_xyz</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">xR</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">unit_rvec</span> <span class="o">=</span> <span class="n">meshball_xyz</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span>
 <span class="n">stokes_xy</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">Rayleigh</span> <span class="o">*</span> <span class="n">t_init_xy</span> <span class="o">*</span> <span class="n">unit_rvec</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes_xy</span><span class="o">.</span><span class="n">bodyforce</span>
 </pre></div>
 </div>
 </div>
@@ -863,6 +872,7 @@ document.write(`
 <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetClippingRange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">)</span>
 
 <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
 </pre></div>
 </div>
 </div>

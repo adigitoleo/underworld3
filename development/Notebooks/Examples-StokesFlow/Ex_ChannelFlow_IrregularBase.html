@@ -55,18 +55,10 @@
     <script async="async" kind="hypothesis" src="https://hypothes.is/embed.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../../_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-StokesFlow/Ex_ChannelFlow_IrregularBase';</script>
     <script src="../../_static/font_button.js?v=3ec2d3a6"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -456,6 +448,10 @@ import sys
 
 if uw.mpi.size == 1:
     import matplotlib.pyplot as plt 
+
+
+
+resolution = 0.05
 </pre></div>
 </div>
 </div>
@@ -495,12 +491,15 @@ def tag(i, j):
     return (N + 1) * i + j + 1
 
 for i in range(N + 1):
+    X = float(i) / N
     for j in range(N + 1):
+        Y = float(j) / N
+        
         nodes.append(tag(i, j))
         coords.extend([
-            2 * float(i) / N,
-            float(j) / N, 
-            0.1 * math.sin(20 * float(i + j) / N)
+            2 * X,
+            Y, 
+            0.05 * math.sin(20 * (X + 0.1 * Y)) * math.cos(sympy.pi * Y) - 0.1 * math.sin(sympy.pi * Y)
         ])
         if i &gt; 0 and j &gt; 0:
             tris.extend([tag(i - 1, j - 1), tag(i, j - 1), tag(i - 1, j)])
@@ -555,30 +554,16 @@ gmsh.model.mesh.createGeometry()
 # one volume on top; beware that only built-in CAD entities can be hybrid,
 # i.e. have discrete entities on their boundary: OpenCASCADE does not support
 # this feature
-# p1 = gmsh.model.geo.addPoint(0, 0, -0.5)
-# p2 = gmsh.model.geo.addPoint(1, 0, -0.5)
-# p3 = gmsh.model.geo.addPoint(1, 1, -0.5)
-# p4 = gmsh.model.geo.addPoint(0, 1, -0.5)
 
 p5 = gmsh.model.geo.addPoint(0, 0, 0.5)
 p6 = gmsh.model.geo.addPoint(2, 0, 0.5)
 p7 = gmsh.model.geo.addPoint(2, 1, 0.5)
 p8 = gmsh.model.geo.addPoint(0, 1, 0.5)
 
-# c1 = gmsh.model.geo.addLine(p1, p2)
-# c2 = gmsh.model.geo.addLine(p2, p3)
-# c3 = gmsh.model.geo.addLine(p3, p4)
-# c4 = gmsh.model.geo.addLine(p4, p1)
-
 c5 = gmsh.model.geo.addLine(p5, p6)
 c6 = gmsh.model.geo.addLine(p6, p7)
 c7 = gmsh.model.geo.addLine(p7, p8)
 c8 = gmsh.model.geo.addLine(p8, p5)
-
-# c10 = gmsh.model.geo.addLine(p1, 1)
-# c11 = gmsh.model.geo.addLine(p2, 2)
-# c12 = gmsh.model.geo.addLine(p3, 3)
-# c13 = gmsh.model.geo.addLine(p4, 4)
 
 c14 = gmsh.model.geo.addLine(1, p5)
 c15 = gmsh.model.geo.addLine(2, p6)
@@ -591,18 +576,6 @@ c17 = gmsh.model.geo.addLine(4, p8)
 
 ll2 = gmsh.model.geo.addCurveLoop([c5, c6, c7, c8])
 s2 = gmsh.model.geo.addPlaneSurface([ll2])
-
-# # lower
-# ll3 = gmsh.model.geo.addCurveLoop([c1, c11, -1, -c10])
-# s3 = gmsh.model.geo.addPlaneSurface([ll3])
-# ll4 = gmsh.model.geo.addCurveLoop([c2, c12, -2, -c11])
-# s4 = gmsh.model.geo.addPlaneSurface([ll4])
-# ll5 = gmsh.model.geo.addCurveLoop([c3, c13, 3, -c12])
-# s5 = gmsh.model.geo.addPlaneSurface([ll5])
-# ll6 = gmsh.model.geo.addCurveLoop([c4, c10, 4, -c13])
-# s6 = gmsh.model.geo.addPlaneSurface([ll6])
-# sl1 = gmsh.model.geo.addSurfaceLoop([s1, s3, s4, s5, s6, 1])
-# v1 = gmsh.model.geo.addVolume([sl1])
 
 # upper
 ll7 = gmsh.model.geo.addCurveLoop([c5, -c15, -1, c14])
@@ -627,7 +600,6 @@ gmsh.model.addPhysicalGroup(2, [s10], boundaries.Left.value, name=boundaries.Lef
 
 gmsh.model.addPhysicalGroup(2, [topo], boundaries.Lower.value, name=boundaries.Lower.name,)
 
-
 gmsh.model.addPhysicalGroup(3, [v2], 666666, &quot;Elements&quot;)
 
 
@@ -645,8 +617,8 @@ if transfinite:
         gmsh.model.mesh.setSmoothing(s[0], s[1], 100)
     gmsh.model.mesh.setTransfiniteVolume(v2)
 else:
-    gmsh.option.setNumber(&#39;Mesh.MeshSizeMin&#39;, 0.075)
-    gmsh.option.setNumber(&#39;Mesh.MeshSizeMax&#39;, 0.075)
+    gmsh.option.setNumber(&#39;Mesh.MeshSizeMin&#39;, resolution)
+    gmsh.option.setNumber(&#39;Mesh.MeshSizeMax&#39;, resolution)
 
 gmsh.model.mesh.generate(3)
 gmsh.write(&#39;.meshes/tmp_terrain.msh&#39;)
@@ -708,7 +680,6 @@ p = stokes.Unknowns.p
 
 stokes.add_essential_bc( [sympy.oo, 0.0, 0.0 ], &quot;Left&quot;) 
 stokes.add_essential_bc( [sympy.oo, 0.0, 0.0 ], &quot;Right&quot;) 
-
 stokes.add_essential_bc( [0.0, 0.0, 0.0 ], &quot;Front&quot;) 
 stokes.add_essential_bc( [0.0, 0.0, 0.0 ], &quot;Back&quot;) 
 
@@ -717,7 +688,9 @@ stokes.add_essential_bc( [sympy.oo, sympy.oo, 0.0 ], &quot;Upper&quot;)
 
 ## Free slip base
 Gamma = terrain_mesh.Gamma
-stokes.add_natural_bc(10000 * Gamma.dot(v.sym) *  Gamma, &quot;Lower&quot;)
+height_mask = sympy.Piecewise((1.0, z &lt; -0.09), (0.0, True))
+stokes.add_natural_bc(10000 * Gamma.dot(v.sym) *  Gamma * height_mask, &quot;Lower&quot;)
+stokes.add_natural_bc(10000 * v.sym * (1-height_mask), &quot;Lower&quot;)
 
 ## Buoyancy
 
@@ -764,7 +737,6 @@ stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;
 stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
 
 # # # mg, multiplicative - very robust ... similar to gamg, additive
-
 # stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;mg&quot;)
 # stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;multiplicative&quot;)
 # stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
@@ -792,24 +764,31 @@ if uw.mpi.size == 1:
     velocity_points = vis.meshVariable_to_pv_cloud(v)
     velocity_points.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(velocity_points, v.sym)
 
-    clipped = pvmesh.clip(origin=(0.0, 0.0, 0.1), normal=(0.0, 0, 1), invert=True)
-    clipped2 = pvmesh.clip(origin=(0.0, 0.0, 0.4), normal=(0.0, 0, 1), invert=False)
+    clipped = pvmesh.clip(origin=(0.0, 0.0, -0.09), normal=(0.0, 0, 1), invert=True)
+    clipped.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(clipped, v.sym)
+
+    clipped2 = pvmesh.clip(origin=(0.0, 0.0, -0.05), normal=(0.0, 0, 1), invert=True)
     clipped2.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(clipped2, v.sym)
+    
+    clipped3 = pvmesh.clip(origin=(0.0, 0.0, 0.4), normal=(0.0, 0, 1), invert=False)
+    clipped3.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(clipped3, v.sym)
 
-    points = np.zeros((terrain_mesh._centroids.shape[0], 3))
-    points[:, 0] = terrain_mesh._centroids[:, 0]
-    points[:, 1] = terrain_mesh._centroids[:, 1]
-    points[:, 2] = terrain_mesh._centroids[:, 2]
 
-    point_cloud = pv.PolyData(points[np.logical_and(points[:, 2] &lt; 0.125, points[:, 2] &gt; 0.075)]  )
+    skip = 50
+    points = np.zeros((terrain_mesh._centroids[::skip].shape[0], 3))
+    points[:, 0] = terrain_mesh._centroids[::skip, 0]
+    points[:, 1] = terrain_mesh._centroids[::skip, 1]
+    points[:, 2] = terrain_mesh._centroids[::skip, 2]
+
+    point_cloud = pv.PolyData(points[np.logical_and(points[:, 0] &lt; 2.0, points[:, 0] &gt; 0.0)]  )
 
     pvstream = pvmesh.streamlines_from_source(
         point_cloud, vectors=&quot;V&quot;, 
         integration_direction=&quot;forward&quot;, 
         integrator_type=45,
         surface_streamlines=False,
-        initial_step_length=0.01,
-        max_time=1.0,
+        initial_step_length=0.1,
+        max_time=0.5,
         max_steps=1000
     )
 
@@ -821,28 +800,28 @@ if uw.mpi.size == 1:
         integrator_type=45,
         surface_streamlines=False,
         initial_step_length=0.01,
-        max_time=1.0,
+        max_time=0.5,
         max_steps=1000
     )
 
     pl = pv.Plotter(window_size=[1000, 1000])
     pl.add_axes()
 
-    pl.add_mesh(pvmesh,&#39;Grey&#39;, &#39;wireframe&#39;, opacity=0.25)
-    pl.add_mesh(clipped2,&#39;white&#39;, show_edges=False, opacity=0.5)
+    pl.add_mesh(pvmesh,&#39;Grey&#39;, &#39;wireframe&#39;, opacity=0.1)
+    pl.add_mesh(clipped,&#39;Blue&#39;, show_edges=False, opacity=0.25)
     # pl.add_mesh(pvmesh, &#39;white&#39;, show_edges=True, opacity=0.5)
 
-    pl.add_mesh(pvstream)
-    # pl.add_mesh(pvstream2)
+    #pl.add_mesh(pvstream)
+    pl.add_mesh(pvstream2)
 
 
-    # arrows = pl.add_arrows(velocity_points.points, velocity_points.point_data[&quot;V&quot;], 
-    #                        show_scalar_bar = False, opacity=1,
-    #                        mag=100, )
-    
     arrows = pl.add_arrows(clipped2.points, clipped2.point_data[&quot;V&quot;], 
                            show_scalar_bar = False, opacity=1,
-                           mag=33, )
+                           mag=100, )
+    
+    # arrows = pl.add_arrows(clipped3.points, clipped3.point_data[&quot;V&quot;], 
+    #                        show_scalar_bar = False, opacity=1,
+    #                        mag=33, )
 
 
     # pl.screenshot(filename=&quot;sphere.png&quot;, window_size=(1000, 1000), return_img=False)
@@ -851,6 +830,13 @@ if uw.mpi.size == 1:
     pl.show(cpos=&quot;xy&quot;)
 
 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>terrain_mesh.data[:,2].min()
 </pre></div>
 </div>
 </div>
