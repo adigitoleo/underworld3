@@ -528,6 +528,7 @@ document.write(`
 <span class="p">)</span>
 
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh1</span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">X</span>
 </pre></div>
 </div>
 </div>
@@ -555,14 +556,8 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">divergence</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">X</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;V0&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{v_0}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;V1&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{v_1}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -577,7 +572,8 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">eta_0</span> <span class="o">=</span> <span class="mf">1.0</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">eta_0</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="n">x_c</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="n">f_0</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
@@ -612,10 +608,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># free slip.</span>
-<span class="c1"># note with petsc we always need to provide a vector of correct cardinality.</span>
 
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Top&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">)</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Top&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Left&quot;</span><span class="p">)</span>
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Right&quot;</span><span class="p">)</span>
 </pre></div>
@@ -760,28 +755,32 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">_setup_pointwise_functions</span><span class="p">()</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">_setup_discretisation</span><span class="p">()</span>
-<span class="n">stokes</span><span class="o">.</span><span class="n">_uu_G3</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">timing</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">timing</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
 <span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
 <span class="n">timing</span><span class="o">.</span><span class="n">print_table</span><span class="p">(</span><span class="n">display_fraction</span><span class="o">=</span><span class="mf">0.999</span><span class="p">)</span>
+
+<span class="c1"># Save this solution</span>
+
+<span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v0</span><span class="p">):</span>
+    <span class="n">v0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+
+<span class="c1"># reset and re-do with natural bcs</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1.0e-6</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1e6</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="s2">&quot;Top&quot;</span><span class="p">)</span> 
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Left&quot;</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="n">sympy</span><span class="o">.</span><span class="n">oo</span><span class="p">),</span> <span class="s2">&quot;Right&quot;</span><span class="p">)</span>
+<span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -797,10 +796,14 @@ document.write(`
 
     <span class="n">pvmesh</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
     <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">sym</span> <span class="o">*</span> <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">sym</span> <span class="o">*</span> <span class="n">stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">shear_viscosity_0</span><span class="p">)</span>
+    <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;dV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">]</span>
     <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Vmag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="p">))</span>
 
     <span class="n">velocity_points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">meshVariable_to_pv_cloud</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
     <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">velocity_points</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+    <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">vector_fn_to_pv_points</span><span class="p">(</span><span class="n">velocity_points</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+    <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;dV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">]</span>
 
     <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
 
@@ -814,7 +817,7 @@ document.write(`
         <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">arrows</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">arrows</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;dV&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">1000000.0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">)</span>
 </pre></div>
