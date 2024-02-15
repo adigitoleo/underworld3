@@ -503,20 +503,11 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">SNES_Scalar</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create Darcy Solver</span>
 <span class="n">darcy</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">SteadyStateDarcy</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 
 <span class="n">p_soln</span> <span class="o">=</span> <span class="n">darcy</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">u</span>
 <span class="n">v_soln</span> <span class="o">=</span> <span class="n">darcy</span><span class="o">.</span><span class="n">v</span>
-
-
 
 <span class="n">darcy</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span>
     <span class="s2">&quot;snes_rtol&quot;</span>
@@ -524,6 +515,14 @@ document.write(`
 
 <span class="n">darcy</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">DarcyFlowModel</span>
 <span class="n">darcy</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">permeability</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p_soln_0</span> <span class="o">=</span> <span class="n">p_soln</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;P_no_g&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;{p_\textrm{no g}}&quot;</span><span class="p">)</span>
+<span class="n">v_soln_0</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;V_no_g&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;{v_\textrm{no g}}&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -552,7 +551,6 @@ document.write(`
 <span class="n">kFunc</span> <span class="o">=</span> <span class="n">Piecewise</span><span class="p">((</span><span class="n">k1</span><span class="p">,</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">interfaceY</span><span class="p">),</span> <span class="p">(</span><span class="n">k2</span><span class="p">,</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">interfaceY</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 
 <span class="c1"># A smooth version</span>
-<span class="c1"># kFunc = k2 + (k1-k2) * (0.5 + 0.5 * sympy.tanh(100.0*(y-interfaceY)))</span>
 
 <span class="n">darcy</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">permeability</span> <span class="o">=</span> <span class="n">kFunc</span>
 <span class="n">darcy</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
@@ -561,10 +559,6 @@ document.write(`
 <span class="c1"># set up boundary conditions</span>
 <span class="n">darcy</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;Top&quot;</span><span class="p">)</span>
 <span class="n">darcy</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">minY</span> <span class="o">*</span> <span class="n">max_pressure</span><span class="p">,</span> <span class="s2">&quot;Bottom&quot;</span><span class="p">)</span>
-
-<span class="c1"># # Zero pressure gradient at sides / base (implied bc)</span>
-
-<span class="c1"># darcy._v_projector.petsc_options[&quot;snes_rtol&quot;] = 1.0e-6</span>
 </pre></div>
 </div>
 </div>
@@ -572,6 +566,19 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solve time</span>
+<span class="n">darcy</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">p_soln_0</span><span class="p">,</span> <span class="n">v_soln_0</span><span class="p">):</span>
+    <span class="n">p_soln_0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">v_soln_0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># now switch on gravity</span>
+
+<span class="n">darcy</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
 <span class="n">darcy</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -638,6 +645,7 @@ document.write(`
 <span class="n">xy_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">xcoords</span><span class="p">,</span> <span class="n">ycoords</span><span class="p">])</span>
 
 <span class="n">pressure_interp</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">p_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy_coords</span><span class="p">)</span>
+<span class="n">pressure_interp_0</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">p_soln_0</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy_coords</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -682,6 +690,7 @@ document.write(`
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Pressure&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Depth&quot;</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressure_interp</span><span class="p">,</span> <span class="n">ycoords</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Numerical solution&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pressure_interp_0</span><span class="p">,</span> <span class="n">ycoords</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Numerical solution (no G)&quot;</span><span class="p">)</span>
 <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">pressure_analytic</span><span class="p">,</span> <span class="n">ycoords</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Analytic solution&quot;</span>
 <span class="p">)</span>

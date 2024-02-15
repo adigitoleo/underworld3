@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Surface integral / natural boundary conditions &#8212; Underworld 3</title>
+    <title>Annulus Benchmark: Isoviscous Incompressible Stokes &#8212; Underworld 3</title>
   
   
   
@@ -59,7 +59,9 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Utilities/Ex_SurfaceIntegrals_BCs';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Utilities/Ex_Stokes_Annulus_Benchmark_Thieulot';</script>
     <script src="../../_static/font_button.js?v=3ec2d3a6"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -334,7 +336,7 @@
       
       
       
-      <li><a href="../../_sources/Notebooks/Examples-Utilities/Ex_SurfaceIntegrals_BCs.py" target="_blank"
+      <li><a href="../../_sources/Notebooks/Examples-Utilities/Ex_Stokes_Annulus_Benchmark_Thieulot.py" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -418,7 +420,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Surface integral / natural boundary conditions</h1>
+    <h1>Annulus Benchmark: Isoviscous Incompressible Stokes</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -428,10 +430,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Surface integral / natural boundary conditions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-infinitely-thin-density-anomaly-at-r-r">Case: Infinitely thin density anomaly at <span class="math notranslate nohighlight">\(r = r'\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-paper">Benchmark paper</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-solution">Analytical Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mesh-for-numerical-solution">Create Mesh for Numerical Solution</a></li>
+</ul>
             </nav>
         </div>
     </div>
@@ -442,18 +447,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="surface-integral-natural-boundary-conditions">
-<h1>Surface integral / natural boundary conditions<a class="headerlink" href="#surface-integral-natural-boundary-conditions" title="Link to this heading">#</a></h1>
+  <section id="annulus-benchmark-isoviscous-incompressible-stokes">
+<h1>Annulus Benchmark: Isoviscous Incompressible Stokes<a class="headerlink" href="#annulus-benchmark-isoviscous-incompressible-stokes" title="Link to this heading">#</a></h1>
+<section id="case-infinitely-thin-density-anomaly-at-r-r">
+<h2>Case: Infinitely thin density anomaly at <span class="math notranslate nohighlight">\(r = r'\)</span><a class="headerlink" href="#case-infinitely-thin-density-anomaly-at-r-r" title="Link to this heading">#</a></h2>
+<section id="benchmark-paper">
+<h3><a class="reference external" href="https://gmd.copernicus.org/articles/14/1899/2021/">Benchmark paper</a><a class="headerlink" href="#benchmark-paper" title="Link to this heading">#</a></h3>
+<p><em>Author: <a class="reference external" href="https://github.com/gthyagi">Thyagarajulu Gollapalli</a></em></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import underworld3 as uw
-import numpy as np
-import sympy
-import os
-import sys
-import petsc4py
-import matplotlib.pyplot as plt
-
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># to fix trame issue
 import nest_asyncio
 nest_asyncio.apply()
 </pre></div>
@@ -462,323 +465,456 @@ nest_asyncio.apply()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>minX = -1.0
-maxX = 1.0
-minY = -1.0
-maxY = 1.0
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import underworld3 as uw
+from underworld3.systems import Stokes
 
-resX = 4
-resY = 4
-
-cell_height = maxY / resY
-cell_width = maxX / resX
-
-meshQuad = uw.meshing.StructuredQuadBox(
-        elementRes=(resX, resY), 
-        minCoords=(minX, minY), 
-        maxCoords=(maxX, maxY), qdegree=3)
-
-meshTri = uw.meshing.UnstructuredSimplexBox(
-        regular=True,
-        cellSize=1/2, 
-        minCoords=(minX, minY), 
-        maxCoords=(maxX, maxY), qdegree=3)
-
-mesh = meshTri
-x,y = mesh.X
+import numpy as np
+import sympy
+from sympy import lambdify
+import os
+import matplotlib.pyplot as plt
+import cmcrameri.cm as cmc
+import assess
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>uw.systems.Stokes.view()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>os.environ[&quot;SYMPY_USE_CACHE&quot;] = &quot;no&quot;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
-stokes0 = uw.systems.Stokes(mesh, solver_name=&quot;Stokes0&quot;)
-stokes0.constitutive_model = uw.constitutive_models.ViscousFlowModel
-
-v0 = stokes0.Unknowns.u
-p0 = stokes0.Unknowns.p
-
-stokes0.add_essential_bc( [0.,0.], &quot;Bottom&quot;)  # no slip on the base
-stokes0.add_essential_bc( [0.,sympy.oo], &quot;Left&quot;)     # free slip Left/Right
-stokes0.add_essential_bc( [0.,sympy.oo], &quot;Right&quot;)     # no slip on the top
-stokes0.bodyforce = sympy.Matrix([0, sympy.sin(x*sympy.pi)])
-
-### see the SNES output
-stokes0.petsc_options[&quot;snes_converged_reason&quot;] = None
-stokes0.petsc_options[&quot;snes_monitor_short&quot;] = None
-stokes0.tolerance = 1.0e-4
-
-stokes0.solve()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1:
+    import pyvista as pv
+    import underworld3.visualisation as vis
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def JacViewer(stokes_solver):
-
-    Jac, JacP, _ = stokes_solver.snes.getJacobian()
-    ii,jj = Jac.getSize()
-
-    ## Let&#39;s take a look (Sorry, Matt, using python for this)
-
-    Jm = Jac.getValues(range(0,ii),range(0,jj))
-    JPm = JacP.getValues(range(0,ii),range(0,jj))
-
-    fig = plt.figure(figsize=(12,6), facecolor=&quot;none&quot;)
-    ax  = plt.subplot(131)   # 2x1 array of plots, ax refers to the 1st of them
-    ax2  = plt.subplot(132)   # 1x1 array of plots, ax refers to the 1st of them
-    ax3  = plt.subplot(133)   # 1x1 array of plots, ax refers to the 1st of them
-    
-    ax.imshow(Jm, vmin=-1, vmax=1, cmap=&quot;coolwarm&quot;)
-    ax2.imshow(JPm, vmin=-1, vmax=1, cmap=&quot;coolwarm&quot;)
-    ax3.imshow(JPm-Jm, vmin=-0.01, vmax=0.01, cmap=&quot;coolwarm&quot;)
-    
-def JacDiffViewer(stokes_solver1, stokes_solver2):
-
-    Jac1, JacP1, _ = stokes_solver1.snes.getJacobian()
-    ii,jj = Jac1.getSize()
-
-    Jac2, JacP2, _ = stokes_solver2.snes.getJacobian()
-
-    
-    ## Let&#39;s take a look (Sorry, Matt, using python for this)
-
-    Jm1 = Jac1.getValues(range(0,ii),range(0,jj))
-    JPm1 = JacP1.getValues(range(0,ii),range(0,jj))
-    
-    Jm2 = Jac2.getValues(range(0,ii),range(0,jj))
-    JPm2 = JacP2.getValues(range(0,ii),range(0,jj))
-
-    fig = plt.figure(figsize=(12,6), facecolor=&quot;none&quot;)
-    ax  = plt.subplot(121)   # 2x1 array of plots, ax refers to the 1st of them
-    ax2  = plt.subplot(122)   # 1x1 array of plots, ax refers to the 1st of them
-    # ax3  = plt.subplot(133)   # 1x1 array of plots, ax refers to the 1st of them
-
-    JmaxD = np.abs(Jm1-Jm2).max()
-    JPmaxD = np.abs(JPm1-JPm2).max()
-
-    print(f&quot;Jac: min {(Jm1-Jm2).min()} / max {(Jm1-Jm2).max()}&quot;) 
-    print(f&quot;JacP: min {(JPm1-JPm2).min()} / max {(JPm1-JPm2).max()}&quot;) 
-    
-    ax.imshow(Jm1-Jm2,  vmin=-JmaxD, vmax=JmaxD, cmap=&quot;coolwarm&quot;)
-    ax2.imshow(JPm1-JPm2, vmin=-JPmaxD, vmax=JPmaxD,  cmap=&quot;coolwarm&quot;)
-
-JacViewer(stokes0)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mesh options
+res = 1/32
+res_int_fac = 1/2
+r_o = 2.0
+r_int = 1.8
+r_i = 1.0
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Now try adding a null natural bc - Expect no changes to J, P though 
-## the surface terms should be active if we check the debug output
-
-stokes1 = uw.systems.Stokes(mesh, solver_name=&quot;Stokes1&quot;)
-stokes1.constitutive_model = uw.constitutive_models.ViscousFlowModel
-
-v1 = stokes1.Unknowns.u
-p1 = stokes1.Unknowns.p
-
-stokes1.petsc_options[&quot;snes_converged_reason&quot;] = None
-stokes1.petsc_options[&quot;snes_monitor_short&quot;] = None
-stokes1.tolerance = 1.0e-4
-
-stokes1.add_essential_bc( [0.,0.], &quot;Bottom&quot;)         # no slip on the base
-stokes1.add_essential_bc( [0.,sympy.oo], &quot;Left&quot;)     # free slip Left/Right
-stokes1.add_essential_bc( [0.,sympy.oo], &quot;Right&quot;)    # free slip Left/Right
-stokes1.add_natural_bc( [0.,0.], &quot;Top&quot;)              # Top is open (still)
-
-stokes1.bodyforce = sympy.Matrix([0, sympy.sin(x*sympy.pi)])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>stokes1._setup_pointwise_functions()
-stokes1._setup_discretisation()
-stokes1._setup_problem_description()
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
-stokes1.solve(verbose=False, debug=False, zero_init_guess=True, picard=0, _force_setup=False)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JacViewer(stokes1)
-JacDiffViewer(stokes0, stokes1)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Now try adding a constant natural bc - Still expect no changes to J, P though 
-## the surface terms should be active if we check the debug output
-
-stokes2 = uw.systems.Stokes(mesh, solver_name=&quot;Stokes2&quot;)
-stokes2.constitutive_model = uw.constitutive_models.ViscousFlowModel
-
-v2 = stokes2.Unknowns.u
-p2 = stokes2.Unknowns.p
-
-stokes2.petsc_options[&quot;snes_converged_reason&quot;] = None
-stokes2.petsc_options[&quot;snes_monitor_short&quot;] = None
-stokes2.tolerance = 1.0e-4
-
-stokes2.add_essential_bc( [0.,0.], &quot;Bottom&quot;)         # no slip on the base
-stokes2.add_essential_bc( [0.,sympy.oo], &quot;Left&quot;)     # free slip Left/Right
-stokes2.add_essential_bc( [0.,sympy.oo], &quot;Right&quot;)    # free slip Left/Right
-stokes2.add_natural_bc( [1.,0.], &quot;Top&quot;)              # Top is driven (constant)
-
-stokes2.bodyforce = sympy.Matrix([0, sympy.sin(x*sympy.pi)])
-
-stokes2.solve(verbose=False, debug=False, zero_init_guess=True, picard=5, _force_setup=False)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JacViewer(stokes2)
-JacDiffViewer(stokes0, stokes2)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Now try adding a constant natural bc. J, P should be unchanged as this is 
-## linear, but we should see a different RHS reflected in the SNES norms
-
-stokes3 = uw.systems.Stokes(mesh, solver_name=&quot;Stokes3&quot;)
-stokes3.constitutive_model = uw.constitutive_models.ViscousFlowModel
-stokes3.petsc_options.setValue(&quot;snes_monitor&quot;, None)
-
-v3 = stokes3.Unknowns.u
-p3 = stokes3.Unknowns.p
-
-stokes3.add_essential_bc( [0.,0.], &quot;Bottom&quot;)         # no slip on the base
-stokes3.add_essential_bc( [0.,sympy.oo], &quot;Left&quot;)     # free slip Left/Right
-stokes3.add_essential_bc( [0.,sympy.oo], &quot;Right&quot;)    # free slip Left/Right
-# stokes3.add_natural_bc(   [0.,1000000*v3.sym[1]], &quot;Top&quot;)              # Top &quot;free slip / penalty&quot;
-
-Gamma = mesh.Gamma # sympy.Piecewise((mesh.Gamma, x &lt; 0.5), mesh.CoordinateSystem.unit_j
-stokes3.add_natural_bc( 1.0e6 *  Gamma.dot(v3.sym) * Gamma, &quot;Top&quot;)              # Top &quot;free slip / penalty&quot;
-
-stokes3.bodyforce = sympy.Matrix([0, sympy.sin(x*sympy.pi)])
-
-# Set verbose / debug to True to see the functions being executed
-stokes3.solve(verbose=False, debug=False, zero_init_guess=True, picard=2)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JacViewer(stokes3)
-# JacDiffViewer(stokes3, stokes0)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## Validation step - Did the penalty approach actually work
-
-stokesN = uw.systems.Stokes(mesh, solver_name=&quot;StokesN&quot;)
-stokesN.constitutive_model = uw.constitutive_models.ViscousFlowModel
-vN = stokesN.Unknowns.u
-
-stokesN.tolerance = 1.0e-3
-stokesN.petsc_options.setValue(&quot;snes_monitor&quot;, None)
-stokesN.petsc_options.setValue(&quot;ksp_monitor&quot;, None)
-
-stokesN.add_essential_bc( [0.,0.], &quot;Bottom&quot;)         # no slip on the base
-stokesN.add_essential_bc( [0.,sympy.oo], &quot;Left&quot;)     # free slip Left/Right
-stokesN.add_essential_bc( [0.,sympy.oo], &quot;Right&quot;)    # free slip Left/Right
-stokesN.add_essential_bc( [sympy.oo, 0.], &quot;Top&quot;)     # Top &quot;free slip / penalty&quot;
-
-
-stokesN.bodyforce = sympy.Matrix([0, sympy.sin(x*sympy.pi)])
-
-stokesN.solve(verbose=False, debug=False, zero_init_guess=True)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Visuals
-
-# This creates a plot of the true free-surface solution, the penalized velocity solution, 
-# and their difference
-
-
-import underworld3 as uw
-import pyvista as pv
-import underworld3.visualisation
-
-pl = pv.Plotter(window_size=(1000, 500))
-
-pvmesh = uw.visualisation.mesh_to_pv_mesh(mesh)
-pvmesh.point_data[&quot;V0&quot;] = uw.visualisation.vector_fn_to_pv_points(pvmesh, vN.sym)
-pvmesh.point_data[&quot;V3&quot;] = uw.visualisation.vector_fn_to_pv_points(pvmesh, v3.sym)
-pvmesh.point_data[&quot;P&quot;] = uw.visualisation.scalar_fn_to_pv_points(pvmesh, p3.sym)
-# pvmesh.point_data[&quot;Vmag&quot;] = uw.visualisation.scalar_fn_to_pv_points(pvmesh, v.sym.dot(v.sym))
-
-velocity_points = underworld3.visualisation.meshVariable_to_pv_cloud(v0)
-velocity_points.point_data[&quot;V0&quot;] = uw.visualisation.vector_fn_to_pv_points(velocity_points, vN.sym)
-velocity_points.point_data[&quot;V3&quot;] = uw.visualisation.vector_fn_to_pv_points(velocity_points, v3.sym)
-
-pl.add_mesh(
-    pvmesh,
-    cmap=&quot;coolwarm&quot;,
-    edge_color=&quot;Black&quot;,
-    show_edges=True,
-    scalars=&quot;P&quot;,
-    use_transparency=False,
-    opacity=1.0,
-)
-
-
-pl.add_arrows(velocity_points.points, velocity_points.point_data[&quot;V3&quot;]-velocity_points.point_data[&quot;V0&quot;], mag=100000, opacity=0.75)
-pl.add_arrows(velocity_points.points+(0.01,0.0,0.0), velocity_points.point_data[&quot;V3&quot;], mag=1.0, opacity=0.75)
-pl.add_arrows(velocity_points.points+(0.00,0.0,0.0), velocity_points.point_data[&quot;V0&quot;], mag=1.0, opacity=0.75)
-# pl.add_mesh(pvstream)
-
-pl.camera.SetPosition(0.75, 0.2, 1.5)
-pl.camera.SetFocalPoint(0.75, 0.2, 0.0)
-pl.camera.SetClippingRange(1.0, 8.0)
-
-# pl.remove_scalar_bar(&quot;Omega&quot;)
-# pl.remove_scalar_bar(&quot;mag&quot;)
-# pl.remove_scalar_bar(&quot;V&quot;)
-
-pl.show()
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># visualize analytical solutions
+plot_ana = True
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="id1">
-<h1><a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+</section>
+<section id="analytical-solution">
+<h2>Analytical Solution<a class="headerlink" href="#analytical-solution" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if plot_ana:
+    n = 2 # wave number
+    solution_above = assess.CylindricalStokesSolutionDeltaFreeSlip(n, +1, Rp=r_o, Rm=r_i, rp=r_int, nu=1.0, g=-1.0)
+    solution_below = assess.CylindricalStokesSolutionDeltaFreeSlip(n, -1, Rp=r_o, Rm=r_i, rp=r_int, nu=1.0, g=-1.0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if plot_ana:
+    mesh_ana = uw.meshing.AnnulusInternalBoundary(radiusOuter=r_o, 
+                                                  radiusInternal=r_int, 
+                                                  radiusInner=r_i, 
+                                                  cellSize_Inner=res,
+                                                  cellSize_Internal=res*res_int_fac,
+                                                  cellSize_Outer=res,)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if plot_ana:
+    v_ana = uw.discretisation.MeshVariable(r&quot;\mathbf{u_a}&quot;, mesh_ana, 2, degree=2)
+    p_ana = uw.discretisation.MeshVariable(r&quot;p_a&quot;, mesh_ana, 1, degree=1)
+    rho_ana = uw.discretisation.MeshVariable(r&quot;rho_a&quot;, mesh_ana, 1, degree=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1 and plot_ana:
+
+    pvmesh = vis.mesh_to_pv_mesh(mesh_ana)
+   
+    pl = pv.Plotter(window_size=(750, 750))
+
+    pl.add_mesh(pvmesh, edge_color=&quot;Grey&quot;, show_edges=True, use_transparency=False, opacity=1.0, )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if plot_ana:
+    r_ana, th_ana = mesh_ana.CoordinateSystem.xR
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if plot_ana:
+    with mesh_ana.access(v_ana, p_ana, rho_ana):
+        # velocities
+        r = uw.function.evalf(r_ana, v_ana.coords)
+        for i, coord in enumerate(v_ana.coords):
+            if r[i]&gt;r_int:
+                v_ana.data[i] = solution_above.velocity_cartesian(coord)
+            else:
+                v_ana.data[i] = solution_below.velocity_cartesian(coord)
+        
+        
+        # pressure 
+        r = uw.function.evalf(r_ana, p_ana.coords)
+        for i, coord in enumerate(p_ana.coords):
+            if r[i]&gt;r_int:
+                p_ana.data[i] = solution_above.pressure_cartesian(coord)
+            else:
+                p_ana.data[i] = solution_below.pressure_cartesian(coord)
+    
+        # density
+        r = uw.function.evalf(r_ana, rho_ana.coords)
+        for i, coord in enumerate(rho_ana.coords):
+            if r[i]&gt;r_int:
+                rho_ana.data[i] = solution_above.radial_stress_cartesian(coord)
+            else:
+                rho_ana.data[i] = solution_below.radial_stress_cartesian(coord)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1 and plot_ana:
+    pvmesh_ana = vis.mesh_to_pv_mesh(mesh_ana)
+    pvmesh_ana.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(pvmesh_ana, v_ana.sym)
+    pvmesh_ana.point_data[&quot;Vmag&quot;] = vis.scalar_fn_to_pv_points(pvmesh_ana, 
+                                                               sympy.sqrt(v_ana.sym.dot(v_ana.sym)))
+    
+    print(pvmesh_ana.point_data[&quot;Vmag&quot;].min(), pvmesh_ana.point_data[&quot;Vmag&quot;].max())
+    
+    velocity_points_ana = vis.meshVariable_to_pv_cloud(v_ana)
+    velocity_points_ana.point_data[&quot;V&quot;] = vis.vector_fn_to_pv_points(velocity_points_ana, v_ana.sym)
+    
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh_ana, cmap=cmc.lapaz.resampled(11), edge_color=&quot;Grey&quot;,
+                scalars=&quot;Vmag&quot;, show_edges=False, use_transparency=False,
+                opacity=0.7, clim=[0., 0.05] )
+    pl.add_arrows(velocity_points_ana.points[::10], velocity_points_ana.point_data[&quot;V&quot;][::10], 
+                  mag=5, color=&#39;k&#39;)
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1 and plot_ana:
+    pvmesh_ana = vis.mesh_to_pv_mesh(mesh_ana)
+    pvmesh_ana.point_data[&quot;P&quot;] = vis.scalar_fn_to_pv_points(pvmesh_ana, p_ana.sym)
+
+    print(pvmesh_ana.point_data[&quot;P&quot;].min(), pvmesh_ana.point_data[&quot;P&quot;].max())
+   
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh_ana, cmap=cmc.vik.resampled(41), edge_color=&quot;Grey&quot;,
+                scalars=&quot;P&quot;, show_edges=False, use_transparency=False,
+                opacity=1.0, clim=[-0.65, 0.65] )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1 and plot_ana:
+    pvmesh_ana = vis.mesh_to_pv_mesh(mesh_ana)
+    pvmesh_ana.point_data[&quot;rho&quot;] = vis.scalar_fn_to_pv_points(pvmesh_ana, rho_ana.sym)
+
+    print(pvmesh_ana.point_data[&quot;rho&quot;].min(), pvmesh_ana.point_data[&quot;rho&quot;].max())
+    
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh_ana, cmap=cmc.roma.resampled(41), edge_color=&quot;Grey&quot;,
+                scalars=&quot;rho&quot;, show_edges=False, use_transparency=False,
+                opacity=1.0, clim=[-0.8, 0.8] )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-mesh-for-numerical-solution">
+<h2>Create Mesh for Numerical Solution<a class="headerlink" href="#create-mesh-for-numerical-solution" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mesh
+mesh_uw = uw.meshing.AnnulusInternalBoundary(radiusOuter=r_o, 
+                                             radiusInternal=r_int, 
+                                             radiusInner=r_i, 
+                                             cellSize_Inner=res,
+                                             cellSize_Internal=res*res_int_fac,
+                                             cellSize_Outer=res,)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># mesh variables
+v_uw = uw.discretisation.MeshVariable(r&quot;\mathbf{u}&quot;, mesh_uw, 2, degree=2)
+p_uw = uw.discretisation.MeshVariable(r&quot;p&quot;, mesh_uw, 1, degree=1)
+v_err = uw.discretisation.MeshVariable(r&quot;\mathbf{u_e}&quot;, mesh_uw, 2, degree=2)
+p_err = uw.discretisation.MeshVariable(r&quot;p_e&quot;, mesh_uw, 1, degree=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Some useful coordinate stuff
+unit_rvec = mesh_uw.CoordinateSystem.unit_e_0
+r_uw, th_uw = mesh_uw.CoordinateSystem.xR
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Create Stokes object
+
+stokes = Stokes(mesh_uw, velocityField=v_uw, pressureField=p_uw, solver_name=&quot;stokes&quot;)
+
+stokes.constitutive_model = uw.constitutive_models.ViscousFlowModel
+stokes.constitutive_model.Parameters.viscosity = 1.0
+stokes.saddle_preconditioner = 1.0
+
+rho = sympy.cos(n*th_uw) * sympy.exp(-1e5 * ((r_uw - r_int) ** 2)) 
+
+penalty = 1e7
+Gamma = mesh_uw.Gamma
+stokes.add_natural_bc(penalty * Gamma.dot(v_uw.sym) *  Gamma, &quot;Upper&quot;)
+stokes.add_natural_bc(penalty * Gamma.dot(v_uw.sym) *  Gamma, &quot;Lower&quot;)
+stokes.add_natural_bc(-rho * unit_rvec, &quot;Internal&quot;)
+
+stokes.bodyforce = sympy.Matrix([0,0])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>if uw.mpi.size == 1:
+    pvmesh = vis.mesh_to_pv_mesh(mesh_uw)
+    pvmesh.point_data[&quot;rho&quot;] = vis.scalar_fn_to_pv_points(pvmesh, rho)
+
+    print(pvmesh.point_data[&quot;rho&quot;].min(), pvmesh.point_data[&quot;rho&quot;].max())
+    
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh, cmap=cmc.roma.resampled(31), edge_color=&quot;Grey&quot;,
+                scalars=&quot;rho&quot;, show_edges=False, use_transparency=False,
+                opacity=1.0, clim=[-1, 1] )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Stokes settings
+
+stokes.tolerance = 1.0e-6
+stokes.petsc_options[&quot;ksp_monitor&quot;] = None
+
+stokes.petsc_options[&quot;snes_type&quot;] = &quot;newtonls&quot;
+stokes.petsc_options[&quot;ksp_type&quot;] = &quot;fgmres&quot;
+
+# stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_type&quot;, &quot;mg&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_mg_type&quot;, &quot;kaskade&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_velocity_pc_mg_cycle_type&quot;, &quot;w&quot;)
+
+stokes.petsc_options[&quot;fieldsplit_velocity_mg_coarse_pc_type&quot;] = &quot;svd&quot;
+
+stokes.petsc_options[f&quot;fieldsplit_velocity_ksp_type&quot;] = &quot;fcg&quot;
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_type&quot;] = &quot;chebyshev&quot;
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_max_it&quot;] = 5
+stokes.petsc_options[f&quot;fieldsplit_velocity_mg_levels_ksp_converged_maxits&quot;] = None
+
+# gasm is super-fast ... but mg seems to be bulletproof
+# gamg is toughest wrt viscosity
+
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;gamg&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;additive&quot;)
+stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
+
+# # # mg, multiplicative - very robust ... similar to gamg, additive
+
+# stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_type&quot;, &quot;mg&quot;)
+# stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_type&quot;, &quot;multiplicative&quot;)
+# stokes.petsc_options.setValue(&quot;fieldsplit_pressure_pc_mg_cycle_type&quot;, &quot;v&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>stokes.solve()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with mesh_uw.access(v_uw, p_uw, v_err, p_err):
+        # velocities
+        r = uw.function.evalf(r_uw, v_err.coords)
+        for i, coord in enumerate(v_err.coords):
+            if r[i]&gt;r_int:
+                v_err.data[i] = v_uw.data[i] - solution_above.velocity_cartesian(coord)
+            else:
+                v_err.data[i] = v_uw.data[i] - solution_below.velocity_cartesian(coord)
+        
+        
+        # pressure 
+        r = uw.function.evalf(r_uw, p_err.coords)
+        for i, coord in enumerate(p_err.coords):
+            if r[i]&gt;r_int:
+                p_err.data[i] = p_uw.data[i] - solution_above.pressure_cartesian(coord)
+            else:
+                p_err.data[i] = p_uw.data[i] - solution_below.pressure_cartesian(coord)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># plotting velocities from uw
+if uw.mpi.size == 1:
+    pvmesh = vis.mesh_to_pv_mesh(mesh_uw)
+    pvmesh.point_data[&quot;V_uw&quot;] = vis.vector_fn_to_pv_points(pvmesh, v_uw.sym)
+    pvmesh.point_data[&quot;Vmag_uw&quot;] = vis.scalar_fn_to_pv_points(pvmesh, sympy.sqrt(v_uw.sym.dot(v_uw.sym)))
+
+    print(pvmesh.point_data[&quot;Vmag_uw&quot;].min(), pvmesh.point_data[&quot;Vmag_uw&quot;].max())
+    
+    velocity_points = vis.meshVariable_to_pv_cloud(v_uw)
+    velocity_points.point_data[&quot;V_uw&quot;] = vis.vector_fn_to_pv_points(velocity_points, v_uw.sym)
+
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh, cmap=cmc.lapaz.resampled(11), edge_color=&quot;Grey&quot;,
+                scalars=&quot;Vmag_uw&quot;, show_edges=False, use_transparency=False,
+                opacity=0.1, clim=[0., 0.05] )
+    pl.add_arrows(velocity_points.points[::10], velocity_points.point_data[&quot;V_uw&quot;][::10], mag=1e1, color=&#39;k&#39;)
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># plotting errror in velocities
+if uw.mpi.size == 1:
+    pvmesh = vis.mesh_to_pv_mesh(mesh_uw)
+    
+    pvmesh.point_data[&quot;V_err&quot;] = vis.vector_fn_to_pv_points(pvmesh, v_err.sym)
+    pvmesh.point_data[&quot;Vmag_err&quot;] = vis.scalar_fn_to_pv_points(pvmesh, sympy.sqrt(v_err.sym.dot(v_err.sym)))
+
+    print(pvmesh.point_data[&quot;Vmag_err&quot;].min(), pvmesh.point_data[&quot;Vmag_err&quot;].max())
+    
+    velocity_points = vis.meshVariable_to_pv_cloud(v_uw)
+    velocity_points.point_data[&quot;V_err&quot;] = vis.vector_fn_to_pv_points(velocity_points, v_err.sym)
+
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh, cmap=cmc.lapaz.resampled(11), edge_color=&quot;Grey&quot;,
+                scalars=&quot;Vmag_err&quot;, show_edges=False, use_transparency=False,
+                opacity=0.7, clim=[0., 0.005] )
+    pl.add_arrows(velocity_points.points[::50], velocity_points.point_data[&quot;V_err&quot;][::50], mag=1e-1, color=&#39;k&#39;)
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># plotting pressure from uw
+if uw.mpi.size == 1:
+    pvmesh = vis.mesh_to_pv_mesh(mesh_uw)
+    pvmesh.point_data[&quot;P_uw&quot;] = vis.scalar_fn_to_pv_points(pvmesh, p_uw.sym)
+
+    print(pvmesh.point_data[&quot;P_uw&quot;].min(), pvmesh.point_data[&quot;P_uw&quot;].max())
+   
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh, cmap=cmc.vik.resampled(41), edge_color=&quot;Grey&quot;,
+                scalars=&quot;P_uw&quot;, show_edges=False, use_transparency=False,
+                opacity=1.0, clim=[-0.85, 0.85] )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># plotting error in uw
+if uw.mpi.size == 1:
+    pvmesh = vis.mesh_to_pv_mesh(mesh_uw)
+    pvmesh.point_data[&quot;P_err&quot;] = vis.scalar_fn_to_pv_points(pvmesh, p_err.sym)
+
+    print(pvmesh.point_data[&quot;P_err&quot;].min(), pvmesh.point_data[&quot;P_err&quot;].max())
+   
+    pl = pv.Plotter(window_size=(750, 750))
+    pl.add_mesh(pvmesh, cmap=cmc.vik.resampled(41), edge_color=&quot;Grey&quot;,
+                scalars=&quot;P_err&quot;, show_edges=False, use_transparency=False,
+                opacity=1.0, clim=[-0.085, 0.085] )
+
+    pl.show(cpos=&quot;xy&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># pressure error (L2 norm)
+p_err.stats()[5]/p_ana.stats()[5]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mesh_uw.dm.view()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -827,10 +963,13 @@ pl.show()
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Surface integral / natural boundary conditions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-infinitely-thin-density-anomaly-at-r-r">Case: Infinitely thin density anomaly at <span class="math notranslate nohighlight">\(r = r'\)</span></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-paper">Benchmark paper</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-solution">Analytical Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mesh-for-numerical-solution">Create Mesh for Numerical Solution</a></li>
+</ul>
   </nav></div>
 
 </div></div>

@@ -530,11 +530,26 @@ document.write(`
 </div>
 </div>
 </div>
+<p>with meshball.access(norm_v):
+norm_v.data[:,0] = uw.function.evaluate(meshball.CoordinateSystem.unit_e_0[0], norm_v.coords)
+norm_v.data[:,1] = uw.function.evaluate(meshball.CoordinateSystem.unit_e_0[1], norm_v.coords)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">norm_v</span><span class="p">):</span>
-    <span class="n">norm_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">norm_v</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
-    <span class="n">norm_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">norm_v</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">projection</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">systems</span><span class="o">.</span><span class="n">Vector_Projection</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">norm_v</span><span class="p">)</span>
+<span class="n">projection</span><span class="o">.</span><span class="n">uw_function</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">projection</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">=</span> <span class="mf">1.0e-3</span>
+
+<span class="c1"># Point in a consistent direction wrt vertical </span>
+<span class="n">GammaNorm</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span><span class="p">))</span>
+
+<span class="n">projection</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span> <span class="o">*</span> <span class="n">GammaNorm</span><span class="p">,</span> <span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+<span class="n">projection</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span> <span class="o">*</span> <span class="n">GammaNorm</span><span class="p">,</span> <span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+<span class="n">projection</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="n">meshball</span><span class="o">.</span><span class="n">Gamma</span> <span class="o">*</span> <span class="n">GammaNorm</span><span class="p">,</span> <span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
+
+<span class="n">projection</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">norm_v</span><span class="p">):</span>
+    <span class="n">norm_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,:]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">norm_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -555,16 +570,9 @@ document.write(`
 <span class="n">r</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">xR</span>
 
 <span class="c1"># Null space in velocity (constant v_theta) expressed in x,y coordinates</span>
-<span class="n">v_theta_fn_xy</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">rRotN</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">v_theta_fn_xy</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">rRotN</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 
 <span class="n">Rayleigh</span> <span class="o">=</span> <span class="mf">1.0e5</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v_theta_fn_xy</span>
 </pre></div>
 </div>
 </div>
@@ -600,7 +608,9 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## First solve with known normals</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">Gamma</span> <span class="o">=</span> <span class="n">meshball</span><span class="o">.</span><span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">unit_e_0</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">add_natural_bc</span><span class="p">(</span><span class="o">-</span><span class="n">t_init</span> <span class="o">*</span> <span class="n">unit_rvec</span><span class="p">,</span> <span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
@@ -616,9 +626,6 @@ document.write(`
     <span class="n">stokes</span><span class="o">.</span><span class="n">add_essential_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-<span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v_soln1</span><span class="p">):</span>
-    <span class="n">v_soln1</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-
 </pre></div>
 </div>
 </div>
@@ -629,11 +636,17 @@ document.write(`
 
 <span class="n">I0</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">v_theta_fn_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">))</span>
 <span class="n">norm</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-<span class="n">I0</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
-<span class="n">vnorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>
+<span class="n">I0</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">v_theta_fn_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_theta_fn_xy</span><span class="p">)</span>
+<span class="n">vnorm</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
 
+<span class="nb">print</span><span class="p">(</span><span class="n">norm</span><span class="o">/</span><span class="n">vnorm</span><span class="p">,</span> <span class="n">vnorm</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">vnorm</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v_soln</span><span class="p">):</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">norm</span> <span class="o">*</span> <span class="n">v_theta_fn_xy</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="o">/</span> <span class="n">vnorm</span>
+    <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">-=</span> <span class="n">dv</span> 
+
+<span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v_soln1</span><span class="p">):</span>
+    <span class="n">v_soln1</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -649,7 +662,9 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stokes</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Now solve with normals from nodal projection</span>
+
+<span class="n">stokes</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
 
 <span class="n">stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="c1"># Gamma = meshball.Gamma / sympy.sqrt(meshball.Gamma.dot(meshball.Gamma))</span>
@@ -678,12 +693,24 @@ document.write(`
 
 <span class="n">I0</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">v_theta_fn_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">))</span>
 <span class="n">norm</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
-<span class="n">I0</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
-<span class="n">vnorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">())</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">vnorm</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">meshball</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v_soln</span><span class="p">):</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">norm</span> <span class="o">*</span> <span class="n">v_theta_fn_xy</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="o">/</span> <span class="n">vnorm</span>
+    <span class="n">v_soln</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">-=</span> <span class="n">dv</span> 
 
+<span class="nb">print</span><span class="p">(</span><span class="n">norm</span><span class="o">/</span><span class="n">vnorm</span><span class="p">,</span> <span class="n">vnorm</span><span class="p">)</span>
 <span class="c1"># -9.662093930530614e-09 0.024291704747453444</span>
+
+<span class="n">norm</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">I0</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">meshball</span><span class="p">,</span> <span class="n">v_theta_fn_xy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span><span class="p">))</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">I0</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">norm</span><span class="o">/</span><span class="n">vnorm</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -748,8 +775,8 @@ document.write(`
         <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V0&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
@@ -762,6 +789,13 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vsol_rms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">velocity_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="n">vsol_rms</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="o">-</span><span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">),</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
