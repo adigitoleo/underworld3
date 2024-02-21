@@ -59,6 +59,8 @@
     <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Notebooks/Examples-Convection/Ex_AdvectionDiffusion_1dBlock';</script>
     <script src="../../_static/font_button.js?v=3ec2d3a6"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -463,14 +465,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytic-solution">Analytic solution</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-variables-of-the-model">Set up variables of the model</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-mesh">Set up the mesh</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#triangles">triangles</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mesh-variables">Create mesh variables</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-advdiff-solver">Create the advDiff solver</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-properties-of-the-adv-diff-solver">Set up properties of the adv_diff solver</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-points-to-sample-the-uw-results">Create points to sample the UW results</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-the-results">Check the results</a></li>
 </ul>
 </li>
 </ul>
@@ -500,6 +500,13 @@ document.write(`
 </section>
 <section id="analytic-solution">
 <h2>Analytic solution<a class="headerlink" href="#analytic-solution" title="Link to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[
+T(x,t) =
+\frac{\operatorname{erf}{\left(\frac{- \mathrm{x} + v \left(t + {t_0}\right) + \frac{{\delta}}{2} + {x_0}}{2 \sqrt{\kappa \left(t + {t_0}\right)}} \right)}}{2} + \frac{\operatorname{erf}{\left(\frac{\mathrm{x} - v \left(t + {t_0}\right) + \frac{{\delta}}{2} - {x_0}}{2 \sqrt{\kappa \left(t + {t_0}\right)}} \right)}}{2}
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(x,y\)</span> describe the coordinate frame, <span class="math notranslate nohighlight">\(v\)</span> is the horizontal velocity that advects the temperature, <span class="math notranslate nohighlight">\(\delta\)</span> is the width of the temperature anomaly, <span class="math notranslate nohighlight">\(x_0\)</span> is the initial midpoint of the temperature anomaly. <span class="math notranslate nohighlight">\(\kappa\)</span> is the thermal diffusivity, <span class="math notranslate nohighlight">\(t_0\)</span> is the time at which we turn on the horizontal velocity.</p>
+<p>Note: this solution is derived from the diffusion of a step which is applied to the leading and trailing edges of the block. The solution is valid while the diffusion fronts from each interface remain independent of each other. (This is ill-defined from the problem, but the most obvious test is to look a the time that the block temperature drops below 1 to the tolerance of the solver).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">underworld3</span> <span class="k">as</span> <span class="nn">uw</span>
@@ -595,9 +602,6 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="triangles">
-<h3>triangles<a class="headerlink" href="#triangles" title="Link to this heading">#</a></h3>
-</section>
 <section id="create-mesh-variables">
 <h3>Create mesh variables<a class="headerlink" href="#create-mesh-variables" title="Link to this heading">#</a></h3>
 <p>To be used in the solver</p>
@@ -614,6 +618,13 @@ document.write(`
 
 <span class="n">Ts</span> <span class="o">=</span>  <span class="p">(</span> <span class="n">sympy</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">delta</span><span class="o">/</span><span class="mi">2</span>  <span class="o">-</span> <span class="n">x</span><span class="o">+</span><span class="p">(</span><span class="n">vs</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">)))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ks</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">))))</span> <span class="o">+</span> <span class="n">sympy</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="o">-</span><span class="n">x0</span> <span class="o">+</span> <span class="n">delta</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="o">-</span><span class="p">((</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">)</span><span class="o">*</span><span class="n">vs</span><span class="p">))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ks</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">))))</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">Ts</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sympy</span><span class="o">.</span><span class="n">print_latex</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -696,23 +707,7 @@ document.write(`
 <h3>Create points to sample the UW results<a class="headerlink" href="#create-points-to-sample-the-uw-results" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### y coords to sample</span>
-<span class="n">sample_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span> <span class="c1">### get the x coords from the mesh</span>
-
-<span class="c1">### x coords to sample</span>
-<span class="n">sample_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">sample_x</span><span class="p">)</span> 
-
-<span class="n">sample_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">sample_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">sample_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_x</span>
-<span class="n">sample_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_y</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="c1">###  across centre of box</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### get the initial temp profile</span>
-<span class="n">T_orig</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">sym</span><span class="p">,</span> <span class="n">sample_points</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
     <span class="n">T</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evalf</span><span class="p">(</span><span class="n">Ts0</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
@@ -730,14 +725,11 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># adv_diff.petsc_options[&quot;snes_rtol&quot;] = 1.0e-9</span>
-<span class="c1"># adv_diff.petsc_options[&quot;ksp_rtol&quot;] = 1.0e-9</span>
-<span class="c1"># adv_diff.petsc_options[&quot;snes_max_it&quot;] = 100</span>
-
-<span class="n">adv_diff</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor_short&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">adv_diff</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor_short&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
     <span class="n">adv_diff</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s1">&#39;pc_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;lu&#39;</span>
+    
 </pre></div>
 </div>
 </div>
@@ -749,48 +741,6 @@ document.write(`
     <span class="n">model_time</span> <span class="o">+=</span> <span class="n">dt</span><span class="o">/</span><span class="n">steps</span>
     <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timestep: </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    
-    
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#     start = track_time()</span>
-<span class="c1">#     ### print some stuff</span>
-<span class="c1">#     if uw.mpi.rank == 0:</span>
-<span class="c1">#         print(f&quot;Step: {str(step).rjust(3)}, time: {model_time:6.5f}\n&quot;)</span>
-
-    
-    
-<span class="c1">#     dt = adv_diff.estimate_dt()</span>
-
-<span class="c1">#     ### finish at the set final time</span>
-<span class="c1">#     if model_time + dt &gt; final_time:</span>
-<span class="c1">#         dt = final_time - model_time</span>
-
-<span class="c1">#     # print(f&#39;dt: {dt}\n&#39;)</span>
-
-    
-<span class="c1">#     ### diffuse through underworld</span>
-<span class="c1">#     adv_diff.solve(timestep=dt)</span>
-
-<span class="c1">#     step += 1</span>
-<span class="c1">#     model_time += dt</span>
-
-<span class="c1">#     end = track_time()</span>
-
-<span class="c1">#     solve_time = end - start</span>
-<span class="c1">#     if uw.mpi.rank == 0:</span>
-<span class="c1">#         print(f&#39;solve time: {solve_time}\n&#39;)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_time</span>
 </pre></div>
 </div>
 </div>
@@ -852,13 +802,6 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">/</span><span class="mi">0</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;dT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -867,153 +810,6 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Ta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="check-the-results">
-<h3>Check the results<a class="headerlink" href="#check-the-results" title="Link to this heading">#</a></h3>
-<p>Compare numerical and analytic results.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">mesh</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">T_a</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">T_a</span><span class="o">.</span><span class="n">coords</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">T_a</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span> <span class="n">special</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="n">final_x</span>  <span class="o">-</span> <span class="n">x</span><span class="o">+</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">t</span><span class="p">))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span><span class="o">*</span><span class="n">t</span><span class="p">)))</span> <span class="o">+</span> <span class="n">special</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="o">-</span><span class="n">start_x</span> <span class="o">+</span> <span class="n">x</span><span class="o">-</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">t</span><span class="p">))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span><span class="o">*</span><span class="n">t</span><span class="p">)))</span> <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">L1_norm_integration</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">analytical_sol</span><span class="p">):</span>
-    <span class="n">numeric_solution</span>   <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">analytic_solution</span>  <span class="o">=</span> <span class="n">analytical_sol</span><span class="o">.</span><span class="n">sym</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">I</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">maths</span><span class="o">.</span><span class="n">Integral</span><span class="p">(</span><span class="n">solver</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">numeric_solution</span><span class="o">-</span><span class="n">analytic_solution</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">I</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Create columns of file if it doesn&#39;t exist</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">outputPath</span><span class="si">}</span><span class="s1">AdvDiff_kappa=</span><span class="si">{</span><span class="n">kappa</span><span class="si">}</span><span class="s1">_Tdeg=</span><span class="si">{</span><span class="n">Tdegree</span><span class="si">}</span><span class="s1">_Vdeg=</span><span class="si">{</span><span class="n">Vdegree</span><span class="si">}</span><span class="s1">_simplex=</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">isSimplex</span><span class="si">}</span><span class="s1">.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Tdegree,Vdegree,res,cell size,L1_norm&#39;</span><span class="p">)</span>
-<span class="k">except</span><span class="p">:</span>
-    <span class="k">pass</span>
-
-
-
-<span class="c1">### Append the data</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">outputPath</span><span class="si">}</span><span class="s1">AdvDiff_kappa=</span><span class="si">{</span><span class="n">kappa</span><span class="si">}</span><span class="s1">_Tdeg=</span><span class="si">{</span><span class="n">Tdegree</span><span class="si">}</span><span class="s1">_Vdeg=</span><span class="si">{</span><span class="n">Vdegree</span><span class="si">}</span><span class="s1">_simplex=</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">isSimplex</span><span class="si">}</span><span class="s1">.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="n">Tdegree</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">Vdegree</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">get_min_radius</span><span class="p">()</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">L1_norm_integration</span><span class="p">(</span><span class="n">adv_diff</span><span class="p">,</span><span class="w"> </span><span class="n">T_a</span><span class="p">)</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># analytical_solution = 0.5 * ( special.erf( (final_x  - x+(u*t))  / (2*np.sqrt(kappa*t))) + special.erf( (-start_x + x-(u*t))  / (2*np.sqrt(kappa*t))) )</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># with mesh.access(T, l1_norm):</span>
-    
-<span class="c1">#     x_coords = T.coords[:,0]</span>
-<span class="c1">#     y_coords = T.coords[:,1]</span>
-    
-<span class="c1">#     analytical_solution = 0.5 * ( special.erf( (final_x  - x_coords+(u*t))  / (2*np.sqrt(kappa*t))) + special.erf( (-start_x + x_coords-(u*t))  / (2*np.sqrt(kappa*t))) )</span>
-
-<span class="c1">#     numerical_solution  = np.copy(T.data[:,0])</span>
-
-<span class="c1">#     l1_calc = np.abs(numerical_solution - analytical_solution)</span>
-
-<span class="c1">#     l1_norm.data[:,0] = l1_calc</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># if uw.mpi.rank == 0:</span>
-<span class="c1">#     ### save coords and l1 norm</span>
-<span class="c1">#     np.savez(f&#39;{outputPath}l1_norm-D={kappa}-Tdeg={Tdegree}&#39;, x_coords, y_coords, l1_calc)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># if uw.mpi.size == 1:</span>
-<span class="c1">#     plt.scatter(x_coords, y_coords, c=l1_calc)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x = sample_points[:, 0]</span>
-<span class="c1"># u = velocity</span>
-<span class="c1"># t = final_time</span>
-<span class="c1"># start_x = 0.5 - (pipe_thickness/2)</span>
-<span class="c1"># final_x = 0.5 + (pipe_thickness/2)</span>
-
-
-<span class="c1"># T_UW_profile = uw.function.evalf(T.sym[0], sample_points)</span>
-
-<span class="c1"># T_a_profile = 0.5 * ( special.erf( (final_x  - x+(u*t))  / (2*np.sqrt(kappa*t)))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># if uw.mpi.size == 1:</span>
-<span class="c1">#     plt.plot(x, T_UW_profile, ls=&#39;-&#39;)</span>
-<span class="c1">#     plt.plot(x, T_a_profile, ls=&#39;:&#39;, c=&#39;r&#39;)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># if uw.mpi.rank == 0:</span>
-<span class="c1">#     ### save the analytical and numerical profile</span>
-<span class="c1">#     np.savez(f&#39;{outputPath}1D_profile-D={kappa}-Tdeg={Tdegree}&#39;, x, T_a_profile, T_UW_profile)</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &quot;&quot;&quot;compare analytical and UW solutions&quot;&quot;&quot;</span>
-<span class="c1"># if uw.mpi.size == 1:</span>
-<span class="c1">#     from matplotlib import rc</span>
-<span class="c1">#     # Set the global font to be DejaVu Sans, size 10 (or any other sans-serif font of your choice!)</span>
-<span class="c1">#     rc(&#39;font&#39;,**{&#39;family&#39;:&#39;sans-serif&#39;,&#39;sans-serif&#39;:[&#39;Helvetica&#39;],&#39;size&#39;:10})</span>
-    
-<span class="c1">#     # Set the font used for MathJax</span>
-<span class="c1">#     rc(&#39;mathtext&#39;,**{&#39;default&#39;:&#39;regular&#39;})</span>
-<span class="c1">#     rc(&#39;figure&#39;,**{&#39;figsize&#39;:(8,6)})</span>
-    
-<span class="c1">#     ### profile from UW</span>
-<span class="c1">#     plt.plot(sample_points[:, 0], T_UW_profile, ls=&quot;-&quot;, c=&quot;red&quot;, label=&quot;UW numerical solution&quot;)</span>
-<span class="c1">#     ### analytical solution</span>
-<span class="c1">#     plt.plot(x, T_anal_profile, ls=&quot;:&quot;, c=&quot;k&quot;, label=&quot;1D analytical solution&quot;)</span>
-    
-    
-<span class="c1">#     plt.title(f&#39;time: {round(model_time, 5)}&#39;, fontsize=8)</span>
-<span class="c1">#     plt.legend()</span>
-
-<span class="c1">#     # plt.savefig(f&#39;benchmark_figs/AdvDiff_HP_benchmark-kappa={kappa}-degree={Tdegree}.pdf&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -1072,14 +868,12 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytic-solution">Analytic solution</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-variables-of-the-model">Set up variables of the model</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-mesh">Set up the mesh</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#triangles">triangles</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mesh-variables">Create mesh variables</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-the-advdiff-solver">Create the advDiff solver</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-properties-of-the-adv-diff-solver">Set up properties of the adv_diff solver</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-points-to-sample-the-uw-results">Create points to sample the UW results</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-the-results">Check the results</a></li>
 </ul>
 </li>
 </ul>
