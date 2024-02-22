@@ -491,6 +491,9 @@ document.write(`
 <li><p>Advection of the rectangular pulse vertically as it also diffuses. The velocity is 0.05 and has a diffusivity value of 1, 0.1 or 0.01</p></li>
 <li><p>Benchmark comparison between 1D analytical solution and 2D UW numerical model.</p></li>
 </ul>
+<p><img alt="" src="../../_images/AdvectionTestFigure.png" /></p>
+<p><em>Figure: typical results from this test. Quad mesh v. unstructured triangles with equivalent
+resolution. <span class="math notranslate nohighlight">\(\kappa=1\)</span>, <span class="math notranslate nohighlight">\(\mathbf{v}=(1000,0)\)</span>, <span class="math notranslate nohighlight">\(t_0 = 0.0001\)</span>, <span class="math notranslate nohighlight">\(\delta t = 0.0003\)</span>. The error looks significantly larger with triangles but you can see that it is dominated by a relatively small</em> phase error <em>where the speed of propagation is slightly different from the analytic case.</em></p>
 <section id="how-to-test-advection-or-diffusion-only">
 <h2>How to test advection or diffusion only<a class="headerlink" href="#how-to-test-advection-or-diffusion-only" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -507,6 +510,14 @@ T(x,t) =
 \]</div>
 <p>Where <span class="math notranslate nohighlight">\(x,y\)</span> describe the coordinate frame, <span class="math notranslate nohighlight">\(v\)</span> is the horizontal velocity that advects the temperature, <span class="math notranslate nohighlight">\(\delta\)</span> is the width of the temperature anomaly, <span class="math notranslate nohighlight">\(x_0\)</span> is the initial midpoint of the temperature anomaly. <span class="math notranslate nohighlight">\(\kappa\)</span> is the thermal diffusivity, <span class="math notranslate nohighlight">\(t_0\)</span> is the time at which we turn on the horizontal velocity.</p>
 <p>Note: this solution is derived from the diffusion of a step which is applied to the leading and trailing edges of the block. The solution is valid while the diffusion fronts from each interface remain independent of each other. (This is ill-defined from the problem, but the most obvious test is to look a the time that the block temperature drops below 1 to the tolerance of the solver).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nest_asyncio</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">underworld3</span> <span class="k">as</span> <span class="nn">uw</span>
@@ -590,9 +601,9 @@ T(x,t) =
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Quads</span>
-<span class="k">if</span> <span class="n">simplex</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">simplex</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">UnstructuredSimplexBox</span><span class="p">(</span>
-    <span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">),</span> <span class="n">cellSize</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">res</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qdegree</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">Tdegree</span><span class="p">,</span> <span class="n">Vdegree</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">),</span> <span class="n">cellSize</span><span class="o">=</span><span class="p">(</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">)</span><span class="o">/</span><span class="n">res</span><span class="p">,</span> <span class="n">regular</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">qdegree</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">Tdegree</span><span class="p">,</span> <span class="n">Vdegree</span><span class="p">)</span> <span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">mesh</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">StructuredQuadBox</span><span class="p">(</span>
         <span class="n">elementRes</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">*</span><span class="mi">5</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">)),</span> <span class="n">minCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">),</span> <span class="n">maxCoords</span><span class="o">=</span><span class="p">(</span><span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">),</span> <span class="n">qdegree</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">Tdegree</span><span class="p">,</span> <span class="n">Vdegree</span><span class="p">),</span>
@@ -618,13 +629,6 @@ T(x,t) =
 
 <span class="n">Ts</span> <span class="o">=</span>  <span class="p">(</span> <span class="n">sympy</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="n">x0</span> <span class="o">+</span> <span class="n">delta</span><span class="o">/</span><span class="mi">2</span>  <span class="o">-</span> <span class="n">x</span><span class="o">+</span><span class="p">(</span><span class="n">vs</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">)))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ks</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">))))</span> <span class="o">+</span> <span class="n">sympy</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span> <span class="p">(</span><span class="o">-</span><span class="n">x0</span> <span class="o">+</span> <span class="n">delta</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="o">-</span><span class="p">((</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">)</span><span class="o">*</span><span class="n">vs</span><span class="p">))</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ks</span><span class="o">*</span><span class="p">(</span><span class="n">ts</span><span class="o">+</span><span class="n">t0</span><span class="p">))))</span> <span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">Ts</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sympy</span><span class="o">.</span><span class="n">print_latex</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -727,8 +731,8 @@ T(x,t) =
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">adv_diff</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s2">&quot;snes_monitor_short&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="n">adv_diff</span><span class="o">.</span><span class="n">petsc_options</span><span class="p">[</span><span class="s1">&#39;pc_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;lu&#39;</span>
+<span class="c1"># if uw.mpi.size == 1:</span>
+<span class="c1">#     adv_diff.petsc_options[&#39;pc_type&#39;] = &#39;lu&#39;</span>
     
 </pre></div>
 </div>
@@ -740,7 +744,7 @@ T(x,t) =
     <span class="n">adv_diff</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="n">dt</span><span class="o">/</span><span class="n">steps</span><span class="p">,</span> <span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">model_time</span> <span class="o">+=</span> <span class="n">dt</span><span class="o">/</span><span class="n">steps</span>
     <span class="n">step</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timestep: </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timestep: </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">, model time </span><span class="si">{</span><span class="n">model_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -766,30 +770,48 @@ T(x,t) =
         <span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Tp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T0&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Ta&quot;</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
         <span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;dT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">T_points</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Ta&quot;</span><span class="p">]</span>
 
+        <span class="n">pvmesh2</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="n">pvmesh2</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh2</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">sym</span><span class="p">)</span>
+        <span class="n">pvmesh2</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;T0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh2</span><span class="p">,</span> <span class="n">Ts0</span><span class="p">)</span>
+        <span class="n">pvmesh2</span><span class="o">.</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.3</span>        
+    
+        <span class="n">pvmesh3</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">mesh_to_pv_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+        <span class="n">pvmesh3</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;Ta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">scalar_fn_to_pv_points</span><span class="p">(</span><span class="n">pvmesh2</span><span class="p">,</span> <span class="n">TsVKT</span><span class="p">)</span>
+        <span class="n">pvmesh3</span><span class="o">.</span><span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="mf">0.3</span>
+
+
         <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
 
-        <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="s2">&quot;Black&quot;</span><span class="p">,</span> <span class="s2">&quot;wireframe&quot;</span><span class="p">)</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
+            <span class="n">pvmesh2</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+            <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
+            <span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;T&quot;</span><span class="p">,</span>
+            <span class="n">use_transparency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="c1"># pvmesh.point_data[&quot;rho&quot;] = uw.function.evaluate(density, mesh.data)</span>
 
-        <span class="c1"># pl.add_mesh(</span>
-        <span class="c1">#     pvmesh,</span>
-        <span class="c1">#     cmap=&quot;coolwarm&quot;,</span>
-        <span class="c1">#     edge_color=&quot;Black&quot;,</span>
-        <span class="c1">#     show_edges=True,</span>
-        <span class="c1">#     scalars=&quot;Ta&quot;,</span>
-        <span class="c1">#     use_transparency=False,</span>
-        <span class="c1">#     opacity=0.01,</span>
-        <span class="c1"># )</span>
-
+        <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span>
+                    
+            <span class="n">pvmesh3</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+            <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;Black&quot;</span><span class="p">,</span>
+            <span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Ta&quot;</span><span class="p">,</span>
+            <span class="n">use_transparency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">pl</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">T_points</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;White&quot;</span><span class="p">,</span>
                       <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;dT&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
                       <span class="n">point_size</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 
-
-        <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">pvmesh</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.00003</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span><span class="n">pvmesh</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">pvmesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">],</span> <span class="n">mag</span><span class="o">=</span><span class="mf">0.00003</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># pl.add_points(pdata)</span>
 
