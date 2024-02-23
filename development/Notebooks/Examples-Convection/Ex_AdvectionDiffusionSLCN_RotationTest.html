@@ -454,12 +454,6 @@ import numpy as np
 import sympy
 
 options = PETSc.Options()
-# options[&quot;help&quot;] = None
-# options[&quot;pc_type&quot;]  = &quot;svd&quot;
-# options[&quot;dm_plex_check_all&quot;] = None
-
-# import os
-# os.environ[&quot;SYMPY_USE_CACHE&quot;]=&quot;no&quot;
 
 # options.getAll()
 </pre></div>
@@ -543,13 +537,6 @@ delta_t = 1.0
     solver_name=&quot;adv_diff&quot;,
     order=2,
 )
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>type(adv_diff.Unknowns)
 </pre></div>
 </div>
 </div>

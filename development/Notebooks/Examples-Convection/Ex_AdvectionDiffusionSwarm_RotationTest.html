@@ -484,7 +484,7 @@ t_0 = uw.discretisation.MeshVariable(&quot;T0&quot;, meshball, 1, degree=3)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DTdt = uw.swarm.Lagrangian_D_Dt(
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DTdt = uw.systems.Lagrangian_DDt(
         meshball,
         psi_fn = t_soln.sym,
         V_fn = v_soln.sym,
@@ -730,7 +730,7 @@ if uw.mpi.size == 1:
         cmap=&quot;coolwarm&quot;,
         render_points_as_spheres=False,
         scalars=&quot;Ts&quot;,
-        point_size=3,
+        point_size=10,
         opacity=0.66,
     )
 

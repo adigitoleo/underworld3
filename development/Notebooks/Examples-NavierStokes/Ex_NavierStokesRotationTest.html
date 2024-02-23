@@ -468,13 +468,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to fix trame issue</span>
 <span class="kn">import</span> <span class="nn">nest_asyncio</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+<span class="n">nest_asyncio</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -491,20 +485,14 @@ document.write(`
 <span class="kn">from</span> <span class="nn">underworld3</span> <span class="kn">import</span> <span class="n">function</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="n">options</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Options</span><span class="p">()</span>
-<span class="c1"># options[&quot;help&quot;] = None</span>
-<span class="c1"># options[&quot;pc_type&quot;]  = &quot;svd&quot;</span>
-<span class="c1"># options[&quot;dm_plex_check_all&quot;] = None</span>
-<span class="c1"># options.getAll()</span>
+<span class="kn">import</span> <span class="nn">sympy</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">meshio</span>
-
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="n">meshball</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">meshing</span><span class="o">.</span><span class="n">Annulus</span><span class="p">(</span>
     <span class="n">radiusOuter</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">radiusInner</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cellSize</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">qdegree</span><span class="o">=</span><span class="mi">3</span>
 <span class="p">)</span>
@@ -536,15 +524,6 @@ document.write(`
 <span class="n">theta_dot</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>  <span class="c1"># i.e one revolution in time 1.0</span>
 <span class="n">v_x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">theta_dot</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>  <span class="c1"># * y # to make a convergent / divergent bc</span>
 <span class="n">v_y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">theta_dot</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>  <span class="c1"># * y</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">swarm</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">swarm</span><span class="o">.</span><span class="n">Swarm</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">meshball</span><span class="p">)</span>
-<span class="n">v_star</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">swarm</span><span class="o">.</span><span class="n">SwarmVariable</span><span class="p">(</span><span class="s2">&quot;Vs&quot;</span><span class="p">,</span> <span class="n">swarm</span><span class="p">,</span> <span class="n">meshball</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="n">proxy_degree</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">swarm</span><span class="o">.</span><span class="n">populate</span><span class="p">(</span><span class="n">fill_param</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -586,23 +565,27 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Constant visc</span>
 
-
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">constitutive_model</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">constitutive_models</span><span class="o">.</span><span class="n">ViscousFlowModel</span>
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">constitutive_model</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">viscosity</span> <span class="o">=</span> <span class="mf">1.0</span>
-
 
 <span class="c1"># Constant visc</span>
 
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="mi">250</span>
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">bodyforce</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="c1"># navier_stokes.bodyforce = unit_rvec * 1.0e-16</span>
 
 <span class="c1"># Velocity boundary conditions</span>
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">),</span> <span class="s2">&quot;Upper&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">navier_stokes</span><span class="o">.</span><span class="n">add_dirichlet_bc</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;Lower&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="n">expt_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cylinder_NS_rho_</span><span class="si">{</span><span class="n">navier_stokes</span><span class="o">.</span><span class="n">rho</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">navier_stokes</span><span class="o">.</span><span class="n">Unknowns</span><span class="o">.</span><span class="n">DuDt</span>
 </pre></div>
 </div>
 </div>
@@ -646,8 +629,6 @@ document.write(`
         <span class="n">velocity_points</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span>
     <span class="p">)</span>
 
-    <span class="n">points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">swarm_to_pv_cloud</span><span class="p">(</span><span class="n">swarm</span><span class="p">)</span>
-    <span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
     <span class="c1"># point sources at cell centres</span>
     <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
@@ -665,7 +646,7 @@ document.write(`
 
     <span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">750</span><span class="p">))</span>
 
-    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Omega&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvmesh</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu&quot;</span><span class="p">,</span> <span class="n">scalars</span><span class="o">=</span><span class="s2">&quot;Omega&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pvstream</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.33</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">add_arrows</span><span class="p">(</span>
         <span class="n">velocity_points</span><span class="o">.</span><span class="n">points</span><span class="p">,</span>
@@ -673,13 +654,7 @@ document.write(`
         <span class="n">mag</span><span class="o">=</span><span class="mf">1.0e-2</span><span class="p">,</span>
         <span class="n">opacity</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="c1"># pl.add_points(</span>
-    <span class="c1">#     passive_swarm_points,</span>
-    <span class="c1">#     color=&quot;Black&quot;,</span>
-    <span class="c1">#     render_points_as_spheres=True,</span>
-    <span class="c1">#     point_size=5,</span>
-    <span class="c1">#     opacity=0.5,</span>
-    <span class="c1"># )</span>
+
 
     <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetPosition</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">SetFocalPoint</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
@@ -689,12 +664,7 @@ document.write(`
     <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;mag&quot;</span><span class="p">)</span>
     <span class="n">pl</span><span class="o">.</span><span class="n">remove_scalar_bar</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">)</span>
 
-    <span class="c1"># pl.camera_position = &quot;xz&quot;</span>
-    <span class="n">pl</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span>
-        <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
-        <span class="n">window_size</span><span class="o">=</span><span class="p">(</span><span class="mi">2560</span><span class="p">,</span> <span class="mi">1280</span><span class="p">),</span>
-        <span class="n">return_img</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -716,8 +686,6 @@ document.write(`
             <span class="n">velocity_points</span><span class="p">,</span> <span class="n">v_soln</span><span class="o">.</span><span class="n">sym</span>
         <span class="p">)</span>
 
-        <span class="n">points</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">swarm_to_pv_cloud</span><span class="p">(</span><span class="n">swarm</span><span class="p">)</span>
-        <span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
         <span class="c1"># point sources at cell centres</span>
         <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">meshball</span><span class="o">.</span><span class="n">_centroids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
@@ -797,18 +765,11 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time evolution model / update in time</span>
 
-
-<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># 250</span>
-    <span class="n">delta_t</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">*</span> <span class="n">navier_stokes</span><span class="o">.</span><span class="n">estimate_dt</span><span class="p">()</span>
-    <span class="n">navier_stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="n">delta_t</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">):</span>  <span class="c1"># 250</span>
+    <span class="n">delta_t</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">navier_stokes</span><span class="o">.</span><span class="n">estimate_dt</span><span class="p">()</span>
+    <span class="n">navier_stokes</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="n">delta_t</span><span class="p">,</span> <span class="n">zero_init_guess</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">nodal_vorticity_from_v</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
-
-    <span class="k">with</span> <span class="n">swarm</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">v_star</span><span class="p">):</span>
-        <span class="n">v_star</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">uw</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">swarm</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-
-    <span class="c1"># advect swarm</span>
-    <span class="n">swarm</span><span class="o">.</span><span class="n">advection</span><span class="p">(</span><span class="n">v_soln</span><span class="o">.</span><span class="n">fn</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">uw</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Timestep </span><span class="si">{}</span><span class="s2">, dt </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">))</span>
