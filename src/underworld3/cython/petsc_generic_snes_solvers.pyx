@@ -1333,8 +1333,7 @@ class SNES_Vector(SolverBaseClass):
         self.snes.setFromOptions()
 
         cdef DM dm = self.dm
-        UW_DMPlexSetSNESLocalFEM(dm.dm, PETSC_FALSE, NULL)
-
+        DMPlexSetSNESLocalFEM(dm.dm, NULL, NULL, NULL)
 
         self.is_setup = True
         self.constitutive_model._solver_is_setup = True
@@ -2301,7 +2300,7 @@ class SNES_Stokes_SaddlePt(SolverBaseClass):
         self.snes.setFromOptions()
 
         cdef DM c_dm = self.dm
-        UW_DMPlexSetSNESLocalFEM(c_dm.dm, PETSC_FALSE, NULL)
+        DMPlexSetSNESLocalFEM(c_dm.dm, NULL, NULL, NULL)
 
         # Setup subdms here too.
         # These will be used to copy back/forth SNES solutions
