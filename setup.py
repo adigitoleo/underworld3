@@ -157,7 +157,7 @@ setup(
     },
     ext_modules=cythonize(
         extensions,
-        compiler_directives={"language_level": "3"},  # or "2" or "3str"
+        compiler_directives={"legacy_implicit_noexcept": True, "language_level": "3"},  # or "2" or "3str"
         build_dir="build",
         annotate=True,
         # gdb_debug=True,
